@@ -197,7 +197,7 @@ namespace glfw
     //init data structure for mesh of every data object
     data().OV = data().V;
     data().OF = data().F;
-    reset();//init data
+    initMeshdata();// reset- init data
     //end comment Ass1
 
     return true;
@@ -383,29 +383,34 @@ namespace glfw
   }
 
 
-  //Ass1 comment
-  void Viewer::reset() {
+  //Ass1 comment - reset - init data
+  void Viewer::initMeshdata() {
       Eigen::MatrixXi F = data().OF;
       Eigen::MatrixXd V = data().OV;
       Eigen::VectorXi EMAP;
       Eigen::MatrixXi E, EF, EI;
       Eigen::MatrixXd C;
       PriorityQueue* Q = new PriorityQueue;
-      std::vector<PriorityQueue::iterator >* Qit = new std::vector<PriorityQueue::iterator >;
+      std::vector<PriorityQueue::iterator >* Qit = new std::vector<PriorityQueue::iterator >;// keep the iterators of edges of Q
+      //so we can interate and find the neighbor edges of the edge e (lets say that we iteratte using edge e's iterator )
       int num_collapsed = 0;
-      edge_flaps(F, E, EMAP, EF, EI);
+      edge_flaps(F, E, EMAP, EF, EI); // filing our data struct object EMAP, EF, EI using E and F(edges and faces)
       Qit->resize(E.rows());
-
-      C.resize(E.rows(), V.cols());
+      //resize to giving the current space we need
+      C.resize(E.rows(), V.cols()); //keep the new vertices location, for each edge e collapsed, keep the new vertex cordinates he became to
+      //cooridate of vertex (example (0,0,1))
       Eigen::VectorXd costs(E.rows());
       Q->clear();
       for (int e = 0; e < E.rows(); e++)
       {
           double cost = e;
           Eigen::RowVectorXd p(1, 3);
-          shortest_edge_and_midpoint(e, V, F, E, EMAP, EF, EI, cost, p);
-          C.row(e) = p;
-          (*Qit)[e] = Q->insert(std::pair<double, int>(cost, e)).first;
+          //the function adjust costs and placements of inital data object, using shortest edge size as cost alg, and  midpoint of collapsed edge as new vertex alg
+          shortest_edge_and_midpoint(e, V, F, E, EMAP, EF, EI, cost, p);//algorithm to calc cost in simplification, and return new vertices
+          //of collapse edges
+
+          C.row(e) = p;//keep new vertex created from edge collapsion
+          (*Qit)[e] = Q->insert(std::pair<double, int>(cost, e)).first;//keep e's iterator
       }
       data().num_collapsed = num_collapsed;
       data().E = E;
@@ -418,13 +423,19 @@ namespace glfw
       data().set_mesh(V, F);
   }
 
-  bool Viewer::simplify() {
+  void Viewer::meshSimplification() {
+      // simplify mesh
+      //TODO : need to add printing of num of edges collapse and cost and new position of vertex
       bool something_collapsed = false;
       // collapse edge
 
-      const int max_iter = std::ceil(0.05 * data().Q->size());
+      const int max_iter = std::ceil(0.05 * data().Q->size());//max edge collapse 5% each time as asked
       for (int j = 0; j < max_iter; j++)
       {
+          //this collapse edge, takes:
+          //priority queue based edge collapse with function handles to adjust costs and placements,
+          //and all other data,
+          //and collapsed edge accordingly and adjust cost and placements according to the collapse
           if (!collapse_edge(shortest_edge_and_midpoint, data().V, data().F, data().E, data().EMAP, data().EF, data().EI, *(data().Q), *(data().Qit), data().C))
           {
               break;
@@ -435,6 +446,7 @@ namespace glfw
 
       if (something_collapsed)
       {
+          //if something collapsed need to update the mesh of our object data to be with less triangles and current vertices and faces
           Eigen::MatrixXd V = data().V;
           Eigen::MatrixXi F = data().F;
           //line asked to be added in Assignment
@@ -445,7 +457,7 @@ namespace glfw
           //end of comment -line asked to be added in Assignment
       }
 
-      return false;
+      //return false;
   }
   //end comment Ass1
 
