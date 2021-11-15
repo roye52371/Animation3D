@@ -32,6 +32,10 @@
 #define IGL_MOD_SUPER           0x0008
 
 
+//Ass1 comment
+typedef std::set<std::pair<double, int>> PriorityQueue;
+//end comment
+
 
 namespace igl
 {
@@ -76,6 +80,13 @@ namespace glfw
     IGL_INLINE void open_dialog_save_mesh();
 
 	IGL_INLINE void draw() {}
+
+
+    //ASS1 comment help function mesh simplification
+    void reset();
+    bool simplify();
+    //end comment Ass1
+
     ////////////////////////
     // Multi-mesh methods //
     ////////////////////////

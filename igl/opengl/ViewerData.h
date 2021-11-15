@@ -17,6 +17,10 @@
 #include <memory>
 #include <vector>
 
+//Ass1 comment
+#include <set>
+//end comment Ass1
+
 
 // Alec: This is a mesh class containing a variety of data types (normals,
 // overlays, material colors, etc.)
@@ -148,6 +152,22 @@ public:
 
   // Copy visualization options from one viewport to another
   //IGL_INLINE void copy_options(const ViewerCore &from, const ViewerCore &to);
+
+
+  //Ass1: Data Structures for Mesh simplification
+  typedef std::set<std::pair<double, int> > PriorityQueue;
+  Eigen::VectorXi EMAP;
+  Eigen::MatrixXi E;
+  Eigen::MatrixXi EF;
+  Eigen::MatrixXi EI;
+  PriorityQueue* Q;
+  std::vector<PriorityQueue::iterator >* Qit;
+  Eigen::MatrixXd C;
+  int num_collapsed;
+
+  Eigen::MatrixXd  OV; //a copy, Vertices of the current mesh (#V x 3)
+  Eigen::MatrixXi  OF; //a copy, Faces of the mesh (#F x 3)
+  //end comment Ass1
 
   Eigen::MatrixXd V; // Vertices of the current mesh (#V x 3)
   Eigen::MatrixXi F; // Faces of the mesh (#F x 3)
