@@ -393,17 +393,13 @@ namespace glfw
       std::vector<std::vector<int> > VF;
       std::vector<std::vector<int> > VFi;
 
-      igl::vertex_triangle_adjacency(V, F, VF, VFi);
+      igl::vertex_triangle_adjacency(V, F, VF, VFi);//returns all the facec that
 
       for (int vi = 0; vi < V.rows(); vi++) {
+          //going over on all of the ventices of curr mesh
           // find edges with this verticie
           std::vector<int> faces;
-          data().Quads[vi] = Eigen::Matrix4d::Zero();
-
-         /* for (int fi = 0; fi < F.rows(); fi++) {
-              if (F.row(fi)[0] == vi || F.row(fi)[1] == vi || F.row(fi)[2] == vi)
-                  faces.push_back(fi);
-          }*/
+          data().Quads[vi] = Eigen::Matrix4d::Zero();//initializing Quads with 0 matrix before giving values
 
           for (int fi = 0; fi < VF[vi].size(); fi++) {
               Eigen::Vector3d norm = data().F_normals.row(VF[vi][fi]).normalized();
@@ -422,7 +418,39 @@ namespace glfw
       }
   }
 
+  void Viewer::calc_cost_and_position(const int e, const Eigen::MatrixXd& V, double& cost, Eigen::Vector3d& p)
+  {
+      int v1_index = data().E(e, 0);
+      int v2_index = data().E(e, 1);
 
+      Eigen::Matrix4d q12 = data().Quads[v1_index] + data().Quads[v2_index];//Q = Q1 + Q2
+      Eigen::Matrix4d qtag = q12;
+      qtag.row(3) = Eigen::Vector4d(0, 0, 0, 1);//4th row vector
+
+      bool invert;
+      Eigen::Vector4d::Scalar det;
+      double a;
+      qtag.computeInverseAndDetWithCheck(qtag, det, invert, a);//inverse,determinant,invertible_bool,Threshold
+      
+      Eigen::Vector4d p4(1, 2, 3, 4);
+      //location of new vertex
+      if (invert) {
+          //minimum quadric error
+          p4 = qtag * (Eigen::Vector4d(0, 0, 0, 1));
+          p[0] = p4[0];
+          p[1] = p4[1];
+          p[2] = p4[2];
+      }
+      else {
+          //avg
+          p = (V.row(v1_index) + V.row(v2_index)) / 2;
+          p4 << p, 1;//@TODO: need to check
+      }
+      cost = formula_cost(p4, q12);
+  }
+  double Viewer::formula_cost(Eigen::Vector4d p4, Eigen::Matrix4d q12) {
+      return p4.transpose() * q12 * p4;
+  }
 
   void Viewer::initMeshdata() {
       Eigen::MatrixXi F = data().OF;

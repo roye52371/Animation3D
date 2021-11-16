@@ -84,8 +84,12 @@ namespace glfw
 
     //ASS1 comment help function mesh simplification
     void calc_obj_quad_error();
+    void calc_cost_and_position
+    (const int e, const Eigen::MatrixXd& V, double& cost, Eigen::Vector3d& p);
+    double Viewer::formula_cost(Eigen::Vector4d p4, Eigen::Matrix4d q12);
     void initMeshdata();
     void meshSimplification(); // simplify mesh
+
     //end comment Ass1
 
     ////////////////////////
