@@ -41,7 +41,7 @@
 #include <igl/snap_to_canonical_view_quat.h>
 #include <igl/unproject.h>
 #include <igl/serialize.h>
-
+#include <igl\vertex_triangle_adjacency.h>
 //Ass1 comment
 #include <igl/edge_flaps.h>
 #include <igl/shortest_edge_and_midpoint.h>
@@ -383,7 +383,47 @@ namespace glfw
   }
 
 
+
   //Ass1 comment - reset - init data
+
+  void Viewer::calc_obj_quad_error() {
+      
+      Eigen::MatrixXd V = data().OV;
+      Eigen::MatrixXi F = data().OF;
+      std::vector<std::vector<int> > VF;
+      std::vector<std::vector<int> > VFi;
+
+      igl::vertex_triangle_adjacency(V, F, VF, VFi);
+
+      for (int vi = 0; vi < V.rows(); vi++) {
+          // find edges with this verticie
+          std::vector<int> faces;
+          data().Quads[vi] = Eigen::Matrix4d::Zero();
+
+         /* for (int fi = 0; fi < F.rows(); fi++) {
+              if (F.row(fi)[0] == vi || F.row(fi)[1] == vi || F.row(fi)[2] == vi)
+                  faces.push_back(fi);
+          }*/
+
+          for (int fi = 0; fi < VF[vi].size(); fi++) {
+              Eigen::Vector3d norm = data().F_normals.row(VF[vi][fi]).normalized();
+              double d = V.row(vi) * norm;
+              double a = norm[0], b = norm[1], c = norm[2];
+              d *= -1;
+
+              Eigen::Matrix4d Kp;
+              Kp.row(0) = Eigen::Vector4d(a * a, a * b, a * c, a * d);
+              Kp.row(1) = Eigen::Vector4d(a * b, b * b, b * c, b * d);
+              Kp.row(2) = Eigen::Vector4d(a * c, b * c, c * c, c * d);
+              Kp.row(3) = Eigen::Vector4d(a * d, d * b, d * c, d * d);
+
+              data().Quads[vi] += Kp;
+          }
+      }
+  }
+
+
+
   void Viewer::initMeshdata() {
       Eigen::MatrixXi F = data().OF;
       Eigen::MatrixXd V = data().OV;

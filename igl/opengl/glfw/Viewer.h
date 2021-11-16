@@ -83,6 +83,7 @@ namespace glfw
 
 
     //ASS1 comment help function mesh simplification
+    void calc_obj_quad_error();
     void initMeshdata();
     void meshSimplification(); // simplify mesh
     //end comment Ass1
