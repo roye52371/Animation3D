@@ -1,4 +1,10 @@
 # Directories
 build
-
 # Files
+external/.cache/eigen/CMakeFiles/3.22.0-rc1/
+external/.cache/eigen/CMakeFiles/328fe59efd4b929d9a8dadb8af2359e8/
+external/.cache/eigen/CMakeFiles/5c612cc5539663690d55ac766762c23e/
+external/.cache/eigen/CMakeFiles/6a75ca29387bd54d5e533835e14c638f/
+external/.cache/glad/CMakeFiles/28f16eb390e321ed54edd3f1bc6576f6/external/.cache/glad/CMakeFiles/3.22.0-rc1/external/.cache/glad/CMakeFiles/beb7e702d670f00cefc4faf45bd54b27/
+external/.cache/glad/CMakeFiles/c185a49b96175713deb3f34b40790c94/external/.cache/glfw/CMakeFiles/3.22.0-rc1/external/.cache/glfw/CMakeFiles/9d4dfaf8f2f6b770658b8b437078df34/external/.cache/glfw/CMakeFiles/cd3d9495776dda8d806a6a5053b05a71/external/.cache/glfw/CMakeFiles/de8c6ac382d537fcd8ebc9edf145ecf3/external/.cache/imgui/CMakeFiles/176710521e107e266827898d51080518/external/.cache/imgui/CMakeFiles/3.22.0-rc1/external/.cache/imgui/CMakeFiles/7e9eebd097451426de2961c38a3fe912/external/.cache/imgui/CMakeFiles/dd29b398158852bcdc4b845da8bbceb9/external/.cache/libigl-imgui/CMakeFiles/3.22.0-rc1/external/.cache/libigl-imgui/CMakeFiles/8ea170d330657c2eddbee2a4553d7196/external/.cache/libigl-imgui/CMakeFiles/a7bbb69c5a4b1ba84a54f0fcbe300c5e/external/.cache/libigl-imgui/CMakeFiles/ad78f98b60148ae0ee8b53d560eed440/external/.cache/libigl-imgui/x64/Debug/libigl-imgui-download/libigl-i.6A528FD4.tlog/external/.cache/stb/CMakeFiles/3.22.0-rc1/external/.cache/stb/CMakeFiles/98db8aad3c3fd681463f7eb86ca291e1/external/.cache/stb/CMakeFiles/df6421fe
+e160020705d283f0f6346cfca/external/.cache/stb/CMakeFiles/e76cef29c40664d9ad94f00810630294/
