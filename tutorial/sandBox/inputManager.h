@@ -179,7 +179,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			break;
 		case ' ':
 			//Ass1 comment
-			scn->meshSimplification();
+			scn->meshSimplification(0.05 * scn->data().Q->size());
 			//end comment Ass1
 			break;
 		
