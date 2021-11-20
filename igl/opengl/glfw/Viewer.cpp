@@ -538,7 +538,8 @@ namespace glfw
           p.first = std::numeric_limits<double>::infinity();
           (*data().Qit)[e] = (*data().Q).insert(p).first;
       }
-      return true;
+      //return if something collapsed
+      return collapsed;
   }
   
   void Viewer::initMeshdata() {
