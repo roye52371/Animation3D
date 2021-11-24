@@ -158,14 +158,18 @@ void Renderer::MouseProcessing(int button)
 			double xToMove = -(double)xrel / core().viewport[3] * (z + 2 * near) * (far) / (far + 2 * near) * 2.0 * tanf(angle / 360 * M_PI) / (core().camera_zoom * core().camera_base_zoom);
 			double yToMove = (double)yrel / core().viewport[3] * (z + 2 * near) * (far) / (far + 2 * near) * 2.0 * tanf(angle / 360 * M_PI) / (core().camera_zoom * core().camera_base_zoom);
 
+			//fixed tranlation object
 			scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(xToMove, 0, 0));
 			scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(0, yToMove, 0));
+			//fixed tranlation object end
 			scn->WhenTranslate();
 		}
 		else
 		{
-			scn->data().RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 180.0);
-			scn->data().RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 180.0);
+			//fixed rotation object
+			scn->data().RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 100.0);
+			scn->data().RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 100.0);
+			//fixed rotation object end
 
 		}
 	}
@@ -180,14 +184,19 @@ void Renderer::MouseProcessing(int button)
 			double xToMove = -(double)xrel / core().viewport[3] * far / z * near * 2.0f * tanf(angle / 360 * M_PI) / (core().camera_zoom * core().camera_base_zoom);
 			double yToMove = (double)yrel / core().viewport[3] * far / z * near * 2.0f * tanf(angle / 360 * M_PI) / (core().camera_zoom * core().camera_base_zoom);
 
+			//if fixing to tranlate in system, sometimes all scene move to different sides then actually mouse moved, so not to change
 			scn->MyTranslate(Eigen::Vector3d(xToMove, 0, 0), true);
 			scn->MyTranslate(Eigen::Vector3d(0, yToMove, 0), true);
+			//comment-if fixing to tranlate in system, sometimes all scene move to different sides then actually mouse moved,
+			//so not to change -end
 
 		}
 		else
 		{
-			scn->MyRotate(Eigen::Vector3d(1, 0, 0), yrel / 180.0);
-			scn->MyRotate(Eigen::Vector3d(0, 1, 0), xrel / 180.0);
+			//fixed rotation scene
+			scn->RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 100.0);
+			scn->RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 100.0);
+			//fixed rotation scene end
 		}
 	}
 }
