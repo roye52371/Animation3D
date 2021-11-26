@@ -469,30 +469,33 @@ namespace glfw
           // no edges to collapse
           return false;
       }
-      std::pair<double, int> p = *(data().Q->begin());
+      //stage a
+      std::pair<double, int> p = *(data().Q->begin());//pop the edge to collapse by Q elements order
       if (p.first == std::numeric_limits<double>::infinity())
       {
           // min cost edge is infinite cost
           return false;
       }
-      data().Q->erase(data().Q->begin());
+      data().Q->erase(data().Q->begin());//erasing the minimum cost edge
 
-      int e = p.second;
+      int e = p.second;//edge index
 
-      (*data().Qit)[e] = data().Q->end();
+      (*data().Qit)[e] = data().Q->end();//reset\delete the removed edge iterator
+      
+      std::vector<int> N = circulation(e, true, data().EMAP, data().EF, data().EI);//Return list of faces around the end point of an edge e(in direction of e1 when e = (e1,e2))
+      std::vector<int> Nd = circulation(e, false, data().EMAP, data().EF, data().EI);//Return list of faces the around the end point of an edge e (in direction of e2 when e = (e1,e2))
+      N.insert(N.begin(), Nd.begin(), Nd.end());//inserting all faces the around the end point of an edge e to one vector N(insert ND to the begin of N)
 
-      std::vector<int> N = circulation(e, true, data().EMAP, data().EF, data().EI);
-      std::vector<int> Nd = circulation(e, false, data().EMAP, data().EF, data().EI);
-      N.insert(N.begin(), Nd.begin(), Nd.end());
-
-      int vid1 = data().E.row(e)[0], vid2 = data().E.row(e)[1];
+      int vid1 = data().E.row(e)[0], vid2 = data().E.row(e)[1];//vertex index1
 
       int e1, e2, f1, f2;
       Vector3d new_v = data().C.row(e);
-      bool collapsed = igl::collapse_edge(e, data().C.row(e), V, F, data().E, data().EMAP, data().EF, data().EI, e1, e2, f1, f2);
+      //stage b + c + d of 11 is written by the library function collapse_edge
+      bool collapsed = igl::collapse_edge(e, data().C.row(e), V, F, data().E, data().EMAP, data().EF, data().EI, e1, e2, f1, f2);//If valid, then parameters are adjusted accordingly(703example)
 
       if (collapsed)
       {
+          //stage e
           // update the quad of the new vertex		
           data().Quads[vid1] = data().Quads[vid1] + data().Quads[vid2];
           data().Quads[vid2] = data().Quads[vid1] + data().Quads[vid2];
@@ -508,9 +511,9 @@ namespace glfw
           {
               if (F(n, 0) != IGL_COLLAPSE_EDGE_NULL ||
                   F(n, 1) != IGL_COLLAPSE_EDGE_NULL ||
-                  F(n, 2) != IGL_COLLAPSE_EDGE_NULL)
+                  F(n, 2) != IGL_COLLAPSE_EDGE_NULL)//checking for original edges of face neighbor existance
               {
-                  for (int v = 0; v < 3; v++)
+                  for (int v = 0; v < 3; v++)//updating all neighbores of the deleted edge
                   {
                       // get edge id
                       const int ei = data().EMAP(v* F.rows() + n);
@@ -526,8 +529,8 @@ namespace glfw
                   }
               }
           }
-
-          
+          //@TODO: check if print cost and position is good enough
+          //stage f
           std::cout << "edge " << e << ", cost = " << p.first << ", new v position (" << new_v[0] << "," << new_v[1] << "," << new_v[2] << ")" << endl;
           
       }
@@ -544,7 +547,6 @@ namespace glfw
   
   void Viewer::initMeshdata() {
       
-      printf("in init\n");
       Eigen::MatrixXi F = data().OF;
       Eigen::MatrixXd V = data().OV;
       Eigen::VectorXi EMAP;
@@ -553,7 +555,6 @@ namespace glfw
       PriorityQueue* Q = new PriorityQueue;
       std::vector<PriorityQueue::iterator >* Qit = new std::vector<PriorityQueue::iterator >;// keep the iterators of edges of Q
       //so we can interate and find the neighbor edges of the edge e (lets say that we iteratte using edge e's iterator )
-      int num_collapsed = 0;
 
       //second oart Ass1
       data().Quads.resize(V.rows());
@@ -586,46 +587,30 @@ namespace glfw
 
       for (int e = 0; e < data().E.rows(); e++)
       {
-          //printf("1\n");
           double cost = e;
-          //printf("2\n");
-          //Eigen::RowVectorXd p(1, 3);
+
           Eigen::Vector3d p(0,0,0);
-          //printf("3\n");
 
           //the function adjust costs and placements of inital data object, using shortest edge size as cost alg, and  midpoint of collapsed edge as new vertex alg
           // shortest_edge_and_midpoint(e, V, F, E, EMAP, EF, EI, cost, p);//algorithm to calc cost in simplification, and return new vertices
           //of collapse edges
 
           //second oart Ass1
-          //printf("before cost\n");
           calc_cost_and_position(e, data().V, cost, p);//algorithm to calc cost in simplification
           //end cimmwnt secind oart Ass
-          //printf("after cost\n");
 
 
           data().C.row(e) = p;//keep new vertex created from edge collapsion
           (*data().Qit)[e] = data().Q->insert(std::pair<double, int>(cost, e)).first;//keep e's iterator
       }
-      data().num_collapsed = num_collapsed;
-      /*data().E = E;
-      data().EF = EF;
-      data().EI = EI;
-      data().EMAP = EMAP;
-      data().Q = Q;
-      data().Qit = Qit;
-      data().C = C;*/
-      data().set_mesh(data().V, data().F);
-      //printf("in init\n");
-     
+      data().set_mesh(data().V, data().F);     
   }
 
   void Viewer::meshSimplification(double num_iter) {
-      // simplify mesh
-      //TODO : need to add printing of num of edges collapse and cost and new position of vertex
+      // simplifying the mesh
       bool something_collapsed = false;
       // collapse edge
-      const int max_iter = std::ceil(num_iter);//max edge collapse 5% each time as asked
+      const int max_iter = std::ceil(num_iter);//max edge collapse num_iter each time as asked
       for (int j = 0; j < max_iter; j++)
       {
           //this collapse edge, takes:
@@ -638,7 +623,6 @@ namespace glfw
               break;
           }
           something_collapsed = true;
-          data().num_collapsed++;
       }
 
       if (something_collapsed)
