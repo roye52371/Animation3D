@@ -389,23 +389,23 @@ namespace glfw
 
   //Ass1 comment - reset - init data
 
-  void Viewer::calc_obj_quad_error() {
+  void Viewer::comp_obj_quad_error() {
       
       Eigen::MatrixXd V = data().OV;
       Eigen::MatrixXi F = data().OF;
       std::vector<std::vector<int> > VF;
       std::vector<std::vector<int> > VFi;
 
-      igl::vertex_triangle_adjacency(V, F, VF, VFi);//returns all the faces that
+      igl::vertex_triangle_adjacency(V, F, VF, VFi);//update adjacency list for each vertex which contains its adjacent faces
 
       for (int vi = 0; vi < V.rows(); vi++) {
-          //going over on all of the ventices of curr mesh
-          // find edges with this verticie
+          //going over on all of the vertexes of curr mesh
+          // find edges with this vertex
           std::vector<int> faces;
           data().Quads[vi] = Eigen::Matrix4d::Zero();//initializing Quads with 0 matrix before giving values
 
           for (int fj = 0; fj < VF[vi].size(); fj++) {
-              Eigen::Vector3d norm = data().F_normals.row(VF[vi][fj]).normalized();
+              Eigen::Vector3d norm = data().F_normals.row(VF[vi][fj]).normalized();//stage 10
               //VF[vi][fi] take the j face of the i vertex, compute its normal
               double d = V.row(vi) * norm;
               double a = norm[0], b = norm[1], c = norm[2];
@@ -421,75 +421,75 @@ namespace glfw
           }
       }
   }
-  void Viewer:: calc_cost_and_position(const int e, const Eigen::MatrixXd& V, double& cost, Eigen::Vector3d& p)
+  void Viewer:: comp_opt_cost_position(const int e, const Eigen::MatrixXd& V, double& cost, Eigen::Vector3d& p)
   {
       
-      //printf("first line in calc_cost_position\n");
-      //printf("e: %d\n", e);
+      //printf("first line in comp_opt_cost_position\n");
       int v1_index = data().E(e,0);
-      //printf("2\n");
       int v2_index = data().E(e, 1);
-     // printf("4\n");
       Eigen::Matrix4d q12 = data().Quads[v1_index] + data().Quads[v2_index];//Q = Q1 + Q2
       Eigen::Matrix4d qtag = q12;
       qtag.row(3) = Eigen::Vector4d(0, 0, 0, 1);//4th row vector
-      //printf("5\n");
       bool invert;
       Eigen::Vector4d::Scalar det;
       double a;
-      //printf("5\n");
       qtag.computeInverseAndDetWithCheck(qtag, det, invert, a);//inverse,determinant,invertible_bool,Threshold
-      //printf("6\n");
-      Eigen::Vector4d p4;//declaring 4d vector for cost
+      Eigen::Vector4d p_cost;//declaring 4d vector for cost
       //location of new vertex
       if (invert) {
           //minimum quadric error
-          p4 = qtag * (Eigen::Vector4d(0, 0, 0, 1));
-          p[0] = p4[0];
-          p[1] = p4[1];
-          p[2] = p4[2];
+          caseInverible(p_cost, qtag, p);
       }
       else {
-          //avg
-          p = (V.row(v1_index) + V.row(v2_index)) / 2;
-          //p4 << p, 1;//putting the p vector in p4, but p4 is 4 vector so put 1 in p4(3)
-          p4[0] = p[0];
-          p4[1] = p[1];
-          p4[2] = p[2];
-          p4[3] = 1;
+          //avg_case
+          caseNotInvertible(p, V, v1_index, v2_index, p_cost);
       }
-      cost = formula_cost(p4, q12);
+      cost = formula_cost(p_cost, q12);
   }
-  double Viewer::formula_cost(Eigen::Vector4d p4, Eigen::Matrix4d q12) {
-      return p4.transpose() * q12 * p4;
+  void Viewer::caseInverible(Eigen::Vector4d& p1, Eigen::Matrix4d& qtag, Eigen::Vector3d& p2) {
+      p1 = qtag * (Eigen::Vector4d(0, 0, 0, 1));
+      p2[0] = p1[0];
+      p2[1] = p1[1];
+      p2[2] = p1[2];
+  }
+  void Viewer::caseNotInvertible(Eigen::Vector3d& p1, const Eigen::MatrixXd& V, int v1, int v2, Eigen::Vector4d& p2) {
+      p1 = (V.row(v1) + V.row(v2)) / 2;
+      p2[0] = p1[0];
+      p2[1] = p1[1];
+      p2[2] = p1[2];
+      p2[3] = 1;
+  }
+  double Viewer::formula_cost(Eigen::Vector4d p_cost, Eigen::Matrix4d q12) {
+      return p_cost.transpose() * q12 * p_cost;
   }
   bool Viewer::new_collapse_edge(Eigen::MatrixXd& V, Eigen::MatrixXi& F) {
       if (data().Q->empty())
       {
-          // no edges to collapse
+          //no more edges in the priority q
           return false;
       }
       //stage a
       std::pair<double, int> p = *(data().Q->begin());//pop the edge to collapse by Q elements order
       if (p.first == std::numeric_limits<double>::infinity())
       {
-          // min cost edge is infinite cost
+          //no more edges to remove cause minimum has infinite cost
           return false;
       }
       data().Q->erase(data().Q->begin());//erasing the minimum cost edge
 
       int e = p.second;//edge index
 
-      (*data().Qit)[e] = data().Q->end();//reset\delete the removed edge iterator
+      (*data().Qit)[e] = data().Q->end();//reset delete the removed edge iterator
       
-      std::vector<int> N = circulation(e, true, data().EMAP, data().EF, data().EI);//Return list of faces around the end point of an edge e(in direction of e1 when e = (e1,e2))
-      std::vector<int> Nd = circulation(e, false, data().EMAP, data().EF, data().EI);//Return list of faces the around the end point of an edge e (in direction of e2 when e = (e1,e2))
-      N.insert(N.begin(), Nd.begin(), Nd.end());//inserting all faces the around the end point of an edge e to one vector N(insert ND to the begin of N)
+      std::vector<int> neighbor_faces = circulation(e, true, data().EMAP, data().EF, data().EI);//Return list of faces around the end point of an edge e(in direction of e1 when e = (e1,e2))
+      std::vector<int> neighbor_opposite_dir = circulation(e, false, data().EMAP, data().EF, data().EI);//Return list of faces the around the end point of an edge e (in direction of e2 when e = (e1,e2))
+      neighbor_faces.insert(neighbor_faces.begin(), neighbor_opposite_dir.begin(), neighbor_opposite_dir.end());//inserting all faces the around the end point of an edge e to one vector N(insert ND to the begin of N)
 
-      int vid1 = data().E.row(e)[0], vid2 = data().E.row(e)[1];//vertex index1
+      int v1_index = data().E.row(e)[0];
+      int v2_index = data().E.row(e)[1];
 
       int e1, e2, f1, f2;
-      Vector3d new_v = data().C.row(e);
+      Vector3d v_newpos = data().C.row(e);//updating the new vertex position
       //stage b + c + d of 11 is written by the library function collapse_edge
       bool collapsed = igl::collapse_edge(e, data().C.row(e), V, F, data().E, data().EMAP, data().EF, data().EI, e1, e2, f1, f2);//If valid, then parameters are adjusted accordingly(703example)
 
@@ -497,54 +497,55 @@ namespace glfw
       {
           //stage e
           // update the quad of the new vertex		
-          data().Quads[vid1] = data().Quads[vid1] + data().Quads[vid2];
-          data().Quads[vid2] = data().Quads[vid1] + data().Quads[vid2];
+          data().Quads[v1_index] = data().Quads[v1_index] + data().Quads[v2_index];
+          data().Quads[v2_index] = data().Quads[v1_index];
 
-          // Erase the two, other collapsed edges
+          // delete the others collapse edges
           (*data().Q).erase((*data().Qit)[e1]);
           (*data().Qit)[e1] = (*data().Q).end();
           (*data().Q).erase((*data().Qit)[e2]);
           (*data().Qit)[e2] = (*data().Q).end();
           // update local neighbors
           // loop over original face neighbors
-          for (auto n : N)
+          for (auto neighbor_index : neighbor_faces)
           {
-              if (F(n, 0) != IGL_COLLAPSE_EDGE_NULL ||
-                  F(n, 1) != IGL_COLLAPSE_EDGE_NULL ||
-                  F(n, 2) != IGL_COLLAPSE_EDGE_NULL)//checking for original edges of face neighbor existance
-              {
-                  for (int v = 0; v < 3; v++)//updating all neighbores of the deleted edge
-                  {
-                      // get edge id
-                      const int ei = data().EMAP(v* F.rows() + n);
-                      // erase old entry
-                      (*data().Q).erase((*data().Qit)[ei]);
-                      // compute cost and potential placement
-                      double cost;
-                      Vector3d place;
-                      calc_cost_and_position (ei, V, cost, place);
-                      // Replace in queue
-                      (*data().Qit)[ei] = (*data().Q).insert(std::pair<double, int>(cost, ei)).first;
-                      data().C.row(ei) = place;
-                  }
-              }
+                for (int v_index = 0; v_index < 3 && check_existance(neighbor_index, F); v_index++)
+                //updating all neighbores of the deleted edge
+                {
+                    // edge index
+                    int e_index = data().EMAP(v_index * F.rows() + neighbor_index);
+                    // delete not updated cost
+                    (*data().Q).erase((*data().Qit)[e_index]);
+                    double cost;
+                    Vector3d newpos;
+                    //computing the optimal cost and new position
+                    comp_opt_cost_position(e_index, V, cost, newpos);
+                    // insert updated cost to Q and updating the iterator
+                    (*data().Qit)[e_index] = (*data().Q).insert(std::pair<double, int>(cost, e_index)).first;
+                    data().C.row(e_index) = newpos;
+                }
+              
           }
           //@TODO: check if print cost and position is good enough
           //stage f
-          std::cout << "edge " << e << ", cost = " << p.first << ", new v position (" << new_v[0] << "," << new_v[1] << "," << new_v[2] << ")" << endl;
+          std::cout << "edge " << e << ", cost = " << p.first << ", new v position (" << v_newpos[0] << "," << v_newpos[1] << "," << v_newpos[2] << ")" << endl;
           
       }
       else
       {
-          // reinsert with infinite weight (the provided cost function must **not**
-          // have given this un-collapsable edge inf cost already)
+          //insert infinite weight if not collapsed
           p.first = std::numeric_limits<double>::infinity();
           (*data().Qit)[e] = (*data().Q).insert(p).first;
       }
       //return if something collapsed
       return collapsed;
   }
-  
+  bool Viewer::check_existance(int neighbor_index, Eigen::MatrixXi &F) {
+      //checking for original edge of face neighbor existance
+      return ((F(neighbor_index, 0) != IGL_COLLAPSE_EDGE_NULL) ||
+          (F(neighbor_index, 1) != IGL_COLLAPSE_EDGE_NULL) ||
+          (F(neighbor_index, 2) != IGL_COLLAPSE_EDGE_NULL));
+  }
   void Viewer::initMeshdata() {
       
       Eigen::MatrixXi F = data().OF;
@@ -556,7 +557,7 @@ namespace glfw
       std::vector<PriorityQueue::iterator >* Qit = new std::vector<PriorityQueue::iterator >;// keep the iterators of edges of Q
       //so we can interate and find the neighbor edges of the edge e (lets say that we iteratte using edge e's iterator )
 
-      //second oart Ass1
+      //second part Ass1
       data().Quads.resize(V.rows());
 
       //
@@ -571,8 +572,7 @@ namespace glfw
       data().C = C;
       //
 
-
-      calc_obj_quad_error();
+      comp_obj_quad_error();
       //printf("after quad_error\n");
       //end cimmwnt secind oart Ass
 
@@ -596,7 +596,7 @@ namespace glfw
           //of collapse edges
 
           //second oart Ass1
-          calc_cost_and_position(e, data().V, cost, p);//algorithm to calc cost in simplification
+          comp_opt_cost_position(e, data().V, cost, p);//algorithm to calc cost in simplification
           //end cimmwnt secind oart Ass
 
 

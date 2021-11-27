@@ -83,10 +83,13 @@ namespace glfw
 
 
     //ASS1 comment help function mesh simplification
-    void calc_obj_quad_error();
-    void calc_cost_and_position( const int e, const Eigen::MatrixXd& V, double& cost, Eigen::Vector3d& p);
-    double formula_cost(Eigen::Vector4d p4, Eigen::Matrix4d q12);
+    void comp_obj_quad_error();
+    void caseInverible(Eigen::Vector4d& p1, Eigen::Matrix4d& qtag, Eigen::Vector3d& p2);
+    void caseNotInvertible(Eigen::Vector3d& p1, const Eigen::MatrixXd& V, int v1, int v2, Eigen::Vector4d& p2);    
+    void comp_opt_cost_position(const int e, const Eigen::MatrixXd& V, double& cost, Eigen::Vector3d& p);
+    double formula_cost(Eigen::Vector4d p_cost, Eigen::Matrix4d q12);
     bool new_collapse_edge(Eigen::MatrixXd& V, Eigen::MatrixXi& F);
+    bool check_existance(int neighbor_index, Eigen::MatrixXi& F);
     void initMeshdata();
     void meshSimplification(double num_iter); // simplify mesh
 
