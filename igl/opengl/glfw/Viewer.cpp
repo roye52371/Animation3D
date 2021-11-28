@@ -489,7 +489,6 @@ namespace glfw
       int v2_index = data().E.row(e)[1];
 
       int e1, e2, f1, f2;
-      Vector3d v_newpos = data().C.row(e);//updating the new vertex position
       //stage b + c + d of 11 is written by the library function collapse_edge
       bool collapsed = igl::collapse_edge(e, data().C.row(e), V, F, data().E, data().EMAP, data().EF, data().EI, e1, e2, f1, f2);//If valid, then parameters are adjusted accordingly(703example)
 
@@ -526,8 +525,9 @@ namespace glfw
                 }
               
           }
-          //@TODO: check if print cost and position is good enough
+          
           //stage f
+          Vector3d v_newpos = data().C.row(e);
           std::cout << "edge " << e << ", cost = " << p.first << ", new v position (" << v_newpos[0] << "," << v_newpos[1] << "," << v_newpos[2] << ")" << endl;
           
       }
