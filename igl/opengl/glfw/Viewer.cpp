@@ -678,10 +678,9 @@ namespace glfw
 
   //Returns true if box 1 and box 2 collide
   bool Viewer::checkTermsForBoxesCollision(Eigen::AlignedBox<double, 3>& box1, Eigen::AlignedBox<double, 3>& box2) {
-      //return false;
       double R, R0, R1;
 
-      //parameters from page 28 of "Separating Axis Theorem for Oriented Bounding Boxes"
+      //parameters from page 35 of "Separating Axis Theorem for Oriented Bounding Boxes"
       //A parameters
       Eigen::RowVector3d Ax = data_list[0].GetRotation() * Eigen::Vector3d(1, 0, 0);
       Eigen::RowVector3d Ay = data_list[0].GetRotation() * Eigen::Vector3d(0, 1, 0);
@@ -719,6 +718,7 @@ namespace glfw
       Eigen::Vector3d T = P_B - P_A;
       //ALL CASES WERE TAKEN FROM "Separating Axis Theorem for Oriented Bounding Boxes"
       //OPTIMIZED VERSION PAGE 35 -37
+      // Dot product = mahkpela scalarit
       // CASE 1: Ax
       R0 = W_A;
       R1 = W_B * abs(Rij(0, 0)) + H_B * abs(Rij(0, 1)) + D_B * abs(Rij(0, 2));
@@ -814,11 +814,11 @@ namespace glfw
   }
 
   //Recursion call for checking collision, retruns true if node1 and node2 collide (checking untill leafs recursivly)
-  //If they collide, populate leaf field in each data items
+  //If they collide, draw the box of the leaf in each data items
   bool Viewer::recursiveCheckCollision(igl::AABB<Eigen::MatrixXd, 3>* node1, igl::AABB<Eigen::MatrixXd, 3>* node2) {
       if (checkTermsForBoxesCollision(node1->m_box, node2->m_box))
       {
-          //No children, this is a leaf! populate field
+          //No children, this is a leaf, drawing the box
           if (node1->is_leaf() && node2->is_leaf())
           {
               data_list[0].drawBox(node1->m_box, 1);
@@ -848,13 +848,7 @@ namespace glfw
           return false;
   }
 
-  //Main collision checking function, inits leaf for each box to NULL
-  //Call recursion func and let it do all the work
-  //Leafs should be populated at the end, in case of collision
   void Viewer::checkCollision() {
-      //igl::AABB<Eigen::MatrixXd, 3>* node1 = &scn->data_list[0].tree;
-      //igl::AABB<Eigen::MatrixXd, 3>* node2 = &scn->data_list[1].tree;
-
       if (recursiveCheckCollision(&data_list[0].tree, &data_list[1].tree)) {
           cout << "Objects had a collision !" << endl;
           isActive = false;

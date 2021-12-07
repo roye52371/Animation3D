@@ -50,8 +50,8 @@ IGL_INLINE void igl::opengl::ViewerData::set_face_based(bool newvalue)
 
 //Ass2 comment
 void igl::opengl::ViewerData::drawBox(Eigen::AlignedBox<double, 3> box, int color) {
-    point_size = 10;
-    line_width = 2;
+    /*point_size = 10;
+    line_width = 2;*/
     Eigen::RowVector3d colorVec;
     if (color == 1) {
          colorVec = Eigen::RowVector3d(255,255, 255);//white
