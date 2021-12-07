@@ -646,9 +646,9 @@ namespace glfw
   //Ass 2 comment
   void Viewer:: initTreesAndDrawForCollision() {
       //moving the scene and the object, for start of collision simulation
-      MyTranslate(Eigen::Vector3d(0, 0, -1), true);//for seening the object smaller so we have space to move more
-      data_list[0].MyTranslate(Eigen::Vector3d(1, 0, 0), true);//moving the objects so they won't be on each other at initial running time
-      data_list[1].MyTranslate(Eigen::Vector3d(-1, 0, 0), true);
+      MyTranslate(Eigen::Vector3d(0, 0, -0.4), true);//for seening the object smaller so we have space to move more
+      data_list[0].MyTranslate(Eigen::Vector3d(0.6, 0, 0), true);//moving the objects so they won't be on each other at initial running time
+      data_list[1].MyTranslate(Eigen::Vector3d(-0.6, 0, 0), true);
       /*viewer.data_list[0].show_overlay = 1;
       viewer.data_list[1].show_overlay = 1;
       viewer.data_list[0].show_overlay_depth = 1;
@@ -671,7 +671,7 @@ namespace glfw
 
 
   void Viewer::setMovingButton() {
-      isAvailableMoving = !isAvailableMoving;
+      isActive = !isActive;
   }
 
   using namespace std;
@@ -857,7 +857,7 @@ namespace glfw
 
       if (recursiveCheckCollision(&data_list[0].tree, &data_list[1].tree)) {
           cout << "Objects had a collision !" << endl;
-          isAvailableMoving = false;
+          isActive = false;
       }
   }
   //end comment Ass 2

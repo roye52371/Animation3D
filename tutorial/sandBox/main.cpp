@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
   viewer.Init("configuration.txt");
 
   //Ass 2 comment
+  viewer.isActive = false;//make it false at the begining, so we cam control when to start the collision simulation
   viewer.initTreesAndDrawForCollision();
   //end Ass 2 comment
   

@@ -117,6 +117,12 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer, int coresNum, 
 			core().toggle(scn->data_list[i].show_faces);
 			core().toggle(scn->data_list[i].show_lines);
 			core().toggle(scn->data_list[i].show_texture);
+			
+			//Ass 2 comment
+			core().toggle(scn->data_list[i].show_overlay);
+			core().toggle(scn->data_list[i].show_overlay_depth);
+			//end comment Ass 2
+
 		}
 		//Eigen::Vector3d v = -scn->GetCameraPosition();
 		//TranslateCamera(v.cast<float>());
@@ -228,16 +234,16 @@ void Renderer::changeMovingDirection(int dir) {
 	double velocity = 0.004;
 	switch (dir) {
 	case GLFW_KEY_UP:
-		moveDir = Eigen::Vector3d(0, velocity, 0);
+		GetScene()->moveDir = Eigen::Vector3d(0, velocity, 0);
 		break;
 	case GLFW_KEY_DOWN:
-		moveDir = Eigen::Vector3d(0, -velocity, 0);
+		GetScene()->moveDir = Eigen::Vector3d(0, -velocity, 0);
 		break;
 	case GLFW_KEY_LEFT:
-		moveDir = Eigen::Vector3d(-velocity, 0, 0);
+		GetScene()->moveDir = Eigen::Vector3d(-velocity, 0, 0);
 		break;
 	case GLFW_KEY_RIGHT:
-		moveDir = Eigen::Vector3d(velocity, 0, 0);
+		GetScene()->moveDir = Eigen::Vector3d(velocity, 0, 0);
 		break;
 	default: break;
 	}

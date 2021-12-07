@@ -56,7 +56,13 @@ void SandBox::Animate()
 {
 	if (isActive)
 	{
-		
+		//Ass 2 comment
+		// using isActive as the key for knowing if we can move object[0] or not, in Assignment 2-Collision
+		//my translate with pretranslate true
+		//data_list[0].MyTranslate(moveDir,true);
+		data_list[0].MyTranslateInSystem(GetRotation(), moveDir);
+		checkCollision();
+		//Ass2 comment end
 		
 		
 	}

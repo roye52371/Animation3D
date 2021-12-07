@@ -201,7 +201,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			break;
 		//Ass 2 comment
 		// case to change moving to  true(it is initialized to false, so we can also init to true and change the code down here)
-		//and case when collison accured, if we want to move the object again, so we need to make is moving true again,(togglemove do it)
+		//and case when collison accured, if we want to move the object again, so we need to make is moving true again,(setMovingButton do it)
 		case 'k':
 		case 'K':
 			// 'k' and 'K' activating or deactivating the object movemant

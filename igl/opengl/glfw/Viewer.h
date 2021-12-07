@@ -96,7 +96,8 @@ namespace glfw
     //end comment Ass1
 
     //Ass 2 comment
-    bool isAvailableMoving = false;
+    Eigen::Vector3d moveDir = Eigen::Vector3d(-0.004, 0, 0);//initial of velocity*dircetion = (0.004*(-1,0,0))= (-0.004, 0, 0)
+    // (-1,0,0) moving the movable object to left side of X's Axe.
     void initTreesAndDrawForCollision();
     void setMovingButton();
     void checkCollision();//main checkeer

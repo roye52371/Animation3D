@@ -125,17 +125,6 @@ bool Display::launch_rendering(bool loop)
 		double tic = igl::get_seconds();
 		renderer->Animate();
 		renderer->draw(window);
-		//Ass 2 comment
-		if (renderer->GetScene()->isAvailableMoving) {
-			//my translate with pretranslate true
-			//renderer->GetScene()->data_list[0].MyTranslate(renderer->moveDir,true);
-			renderer->GetScene()->data_list[0].MyTranslateInSystem(renderer->GetScene()->GetRotation(),renderer->moveDir);
-			renderer->GetScene()->checkCollision();
-		}
-		//end comment Ass 2
-
-
-
 		glfwSwapBuffers(window);
 		if (renderer->core().is_animating || frame_counter++ < num_extra_frames)
 		{//motion
