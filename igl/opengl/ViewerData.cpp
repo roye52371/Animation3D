@@ -47,6 +47,44 @@ IGL_INLINE void igl::opengl::ViewerData::set_face_based(bool newvalue)
   }
 }
 
+
+//Ass2 comment
+void igl::opengl::ViewerData::drawBox(Eigen::AlignedBox<double, 3> box, int color) {
+    point_size = 10;
+    line_width = 2;
+    Eigen::RowVector3d colorVec;
+    if (color == 1) {
+         colorVec = Eigen::RowVector3d(255,255, 255);//white
+    }
+    else 
+        colorVec = Eigen::RowVector3d(0, 255, 0);//green
+    //parameters in order to minimize run-time
+    Eigen::RowVector3d BottomRightCeil = box.corner(box.BottomRightCeil);
+    Eigen::RowVector3d BottomRightFloor = box.corner(box.BottomRightFloor);
+    Eigen::RowVector3d BottomLeftCeil = box.corner(box.BottomLeftCeil);
+    Eigen::RowVector3d BottomLeftFloor = box.corner(box.BottomLeftFloor);
+    Eigen::RowVector3d TopRightCeil = box.corner(box.TopRightCeil);
+    Eigen::RowVector3d TopRightFloor = box.corner(box.TopRightFloor);
+    Eigen::RowVector3d TopLeftCeil = box.corner(box.TopLeftCeil);
+    Eigen::RowVector3d TopLeftFloor = box.corner(box.TopLeftFloor);
+
+    //add_edges(n1,n2,col)- draws edge from n1 to n2 in color col
+    add_edges(BottomLeftCeil, BottomRightCeil, colorVec);
+    add_edges(BottomLeftCeil, BottomLeftFloor, colorVec);
+    add_edges(BottomRightCeil, BottomRightFloor, colorVec);
+    add_edges(BottomLeftFloor, BottomRightFloor, colorVec);
+    add_edges(TopLeftCeil, TopRightCeil, colorVec);
+    add_edges(TopRightCeil, TopRightFloor, colorVec);
+    add_edges(TopLeftCeil, TopLeftFloor, colorVec);
+    add_edges(TopLeftFloor, TopRightFloor, colorVec);
+    add_edges(TopLeftCeil, BottomLeftCeil, colorVec);
+    add_edges(TopRightFloor, BottomRightFloor, colorVec);
+    add_edges(TopRightCeil, BottomRightCeil, colorVec);
+    add_edges(TopLeftFloor, BottomLeftFloor, colorVec); 
+}
+//end comment Ass2
+
+
 // Helpers that draws the most common meshes
 IGL_INLINE void igl::opengl::ViewerData::set_mesh(
     const Eigen::MatrixXd& _V, const Eigen::MatrixXi& _F)
@@ -74,7 +112,7 @@ IGL_INLINE void igl::opengl::ViewerData::set_mesh(
       Eigen::Vector3d(GOLD_AMBIENT[0], GOLD_AMBIENT[1], GOLD_AMBIENT[2]),
       Eigen::Vector3d(GOLD_DIFFUSE[0], GOLD_DIFFUSE[1], GOLD_DIFFUSE[2]),
       Eigen::Vector3d(GOLD_SPECULAR[0], GOLD_SPECULAR[1], GOLD_SPECULAR[2]));
-	image_texture("C:/Users/97254/Desktop/animation/Animation3D/tutorial/textures/snake1.png");
+	image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake1.png");
 //    grid_texture();
   }
   else
@@ -328,7 +366,6 @@ IGL_INLINE void igl::opengl::ViewerData::add_edges(const Eigen::MatrixXd& P1, co
     P1_temp = P1;
     P2_temp = P2;
   }
-
   int lastid = lines.rows();
   lines.conservativeResize(lines.rows() + P1_temp.rows(),9);
   for (unsigned i=0; i<P1_temp.rows(); ++i)

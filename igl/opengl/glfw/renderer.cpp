@@ -221,6 +221,33 @@ Renderer::~Renderer()
 	//	delete scn;
 }
 
+
+//Ass 2 comment
+void Renderer::changeMovingDirection(int dir) {
+	//having a velocity for each direction the object is moving
+	double velocity = 0.004;
+	switch (dir) {
+	case GLFW_KEY_UP:
+		moveDir = Eigen::Vector3d(0, velocity, 0);
+		break;
+	case GLFW_KEY_DOWN:
+		moveDir = Eigen::Vector3d(0, -velocity, 0);
+		break;
+	case GLFW_KEY_LEFT:
+		moveDir = Eigen::Vector3d(-velocity, 0, 0);
+		break;
+	case GLFW_KEY_RIGHT:
+		moveDir = Eigen::Vector3d(velocity, 0, 0);
+		break;
+	default: break;
+	}
+}
+//end comment Ass 2
+
+
+
+
+
 double Renderer::Picking(double newx, double newy)
 {
 	int fid;

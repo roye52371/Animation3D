@@ -165,23 +165,49 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			rndr->TranslateCamera(Eigen::Vector3f(0, 0, -0.03f));
 			break;
 		case GLFW_KEY_UP:
-			rndr->TranslateCamera(Eigen::Vector3f(0, 0.01f,0));
+			//Ass2 comment
+			//moving up
+			rndr->changeMovingDirection(GLFW_KEY_UP);
+			//end comment Ass 2
+			//rndr->TranslateCamera(Eigen::Vector3f(0, 0.01f,0));
 			break;
 		case GLFW_KEY_DOWN:
-			rndr->TranslateCamera(Eigen::Vector3f(0, -0.01f,0));
+			//Ass2 comment
+			//moving down
+			rndr->changeMovingDirection(GLFW_KEY_DOWN);
+			//end comment Ass 2
+			//rndr->TranslateCamera(Eigen::Vector3f(0, -0.01f,0));
 
 			break;
 		case GLFW_KEY_LEFT:
-				rndr->TranslateCamera(Eigen::Vector3f(-0.01f, 0,0));
+			//Ass2 comment , return translate camera comment if not use this code, or use translate camera also
+			//moving left
+			rndr->changeMovingDirection(GLFW_KEY_LEFT);
+			//end comment Ass 2
+			//rndr->TranslateCamera(Eigen::Vector3f(-0.01f, 0,0));
 			break;
 		case GLFW_KEY_RIGHT:
-			rndr->TranslateCamera(Eigen::Vector3f(0.01f, 0, 0));
+			//Ass2 comment, return translate camera comment if not use this code, or use translate camera also
+			//moving right
+			rndr->changeMovingDirection(GLFW_KEY_RIGHT);
+			//end comment Ass 2, return translate camera comment if not use this code, or use translate camera also
+			//rndr->TranslateCamera(Eigen::Vector3f(0.01f, 0, 0));
 			break;
 		case ' ':
-			//Ass1 comment
+			//Ass1 comment, return translate camera comment if not use this code, or use translate camera also
+			//Simplification from ass1
 			scn->meshSimplification(0.05 * scn->data().Q->size());
 			//end comment Ass1
 			break;
+		//Ass 2 comment
+		// case to change moving to  true(it is initialized to false, so we can also init to true and change the code down here)
+		//and case when collison accured, if we want to move the object again, so we need to make is moving true again,(togglemove do it)
+		case 'k':
+		case 'K':
+			// 'k' and 'K' activating or deactivating the object movemant
+			scn->setMovingButton();
+			break;
+		// end comment Ass 2
 		
 		default: 
 			Eigen::Vector3f shift;

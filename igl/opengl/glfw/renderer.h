@@ -101,6 +101,14 @@ public:
 			(selected_core_index + core_list.size() + (unicode_key == ']' ? 1 : -1)) % core_list.size();
 
 	}
+
+	//Ass 2 comment
+	Eigen::Vector3d moveDir = Eigen::Vector3d(-0.004, 0, 0);//initial of velocity*dircetion = (0.004*(-1,0,0))= (-0.004, 0, 0)
+	// (-1,0,0) moving the movable object to left side of X's Axe.
+	void changeMovingDirection(int dir);//changing moving direction of object according to direction vector and initial velocity
+	//end comment Ass 2
+
+
 	void TranslateCamera(Eigen::Vector3f amt);
 	void RotateCamera(float amtX, float amtY);
 	inline bool IsPicked() { return scn->isPicked; }

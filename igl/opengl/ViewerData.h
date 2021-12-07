@@ -21,6 +21,10 @@
 #include <set>
 //end comment Ass1
 
+//Ass 2 comment
+#include "igl/AABB.h"
+//end comment Ass 2
+
 
 // Alec: This is a mesh class containing a variety of data types (normals,
 // overlays, material colors, etc.)
@@ -169,6 +173,11 @@ public:
   Eigen::MatrixXi  OF; //a copy, Faces of the mesh (#F x 3)
   std::vector <Eigen::Matrix4d> Quads; //each vertex has his Q
   //end comment Ass1
+
+  //Ass 2 comment
+  void drawBox(Eigen::AlignedBox<double, 3> box, int color);
+  igl::AABB<Eigen::MatrixXd, 3> tree;
+  //end Ass2 comment
 
   Eigen::MatrixXd V; // Vertices of the current mesh (#V x 3)
   Eigen::MatrixXi F; // Faces of the mesh (#F x 3)
