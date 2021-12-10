@@ -645,6 +645,7 @@ namespace glfw
 
   //Ass 2 comment
   void Viewer:: initTreesAndDrawForCollision() {
+      isActive = false;//make it false at the begining, so we cam control when to start the collision simulation
       //moving the scene and the object, for start of collision simulation
       MyTranslate(Eigen::Vector3d(0, 0, -0.4), true);//for seening the object smaller so we have space to move more
       data_list[0].MyTranslate(Eigen::Vector3d(0.6, 0, 0), true);//moving the objects so they won't be on each other at initial running time
