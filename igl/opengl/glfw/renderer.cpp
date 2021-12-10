@@ -245,6 +245,12 @@ void Renderer::changeMovingDirection(int dir) {
 	case GLFW_KEY_RIGHT:
 		GetScene()->moveDir = Eigen::Vector3d(velocity, 0, 0);
 		break;
+	case 'w':
+		GetScene()->moveDir = Eigen::Vector3d(0, 0, -velocity);
+		break;
+	case 's':
+		GetScene()->moveDir = Eigen::Vector3d(0, 0, velocity);
+		break;
 	default: break;
 	}
 }
