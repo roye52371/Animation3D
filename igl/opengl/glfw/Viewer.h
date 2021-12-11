@@ -96,7 +96,7 @@ namespace glfw
     //end comment Ass1
 
     //Ass 2 comment
-    Eigen::Vector3d moveDir = Eigen::Vector3d(-0.004, 0, 0);//initial of velocity*dircetion = (0.004*(-1,0,0))= (-0.004, 0, 0)
+    //Eigen::Vector3d moveDir = Eigen::Vector3d(-0.004, 0, 0);//initial of velocity*dircetion = (0.004*(-1,0,0))= (-0.004, 0, 0)
     // (-1,0,0) moving the movable object to left side of X's Axe.
     int moving_index = 0;
     void initTreesAndDrawForCollision();

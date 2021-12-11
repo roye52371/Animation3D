@@ -648,8 +648,8 @@ namespace glfw
       isActive = false;//make it false at the begining, so we cam control when to start the collision simulation
       //moving the scene and the object, for start of collision simulation
       MyTranslate(Eigen::Vector3d(0, 0, -0.4), true);//for seening the object smaller so we have space to move more
-      data_list[0].MyTranslate(Eigen::Vector3d(0.6, 0, 0), true);//moving the objects so they won't be on each other at initial running time
-      data_list[1].MyTranslate(Eigen::Vector3d(-0.6, 0, 0), true);
+      data_list[0].MyTranslate(Eigen::Vector3d(0.65, 0, 0), true);//moving the objects so they won't be on each other at initial running time
+      data_list[1].MyTranslate(Eigen::Vector3d(-0.65, 0, 0), true);
       /*viewer.data_list[0].show_overlay = 1;
       viewer.data_list[1].show_overlay = 1;
       viewer.data_list[0].show_overlay_depth = 1;

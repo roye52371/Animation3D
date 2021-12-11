@@ -234,22 +234,22 @@ void Renderer::changeMovingDirection(int dir) {
 	double velocity = 0.004;
 	switch (dir) {
 	case GLFW_KEY_UP:
-		GetScene()->moveDir = Eigen::Vector3d(0, velocity, 0);
+		GetScene()->data_list[GetScene()->moving_index].moveDir = Eigen::Vector3d(0, velocity, 0);
 		break;
 	case GLFW_KEY_DOWN:
-		GetScene()->moveDir = Eigen::Vector3d(0, -velocity, 0);
+		GetScene()->data_list[GetScene()->moving_index].moveDir = Eigen::Vector3d(0, -velocity, 0);
 		break;
 	case GLFW_KEY_LEFT:
-		GetScene()->moveDir = Eigen::Vector3d(-velocity, 0, 0);
+		GetScene()->data_list[GetScene()->moving_index].moveDir = Eigen::Vector3d(-velocity, 0, 0);
 		break;
 	case GLFW_KEY_RIGHT:
-		GetScene()->moveDir = Eigen::Vector3d(velocity, 0, 0);
+		GetScene()->data_list[GetScene()->moving_index].moveDir = Eigen::Vector3d(velocity, 0, 0);
 		break;
 	case 'w':
-		GetScene()->moveDir = Eigen::Vector3d(0, 0, -velocity);
+		GetScene()->data_list[GetScene()->moving_index].moveDir = Eigen::Vector3d(0, 0, -velocity);
 		break;
 	case 's':
-		GetScene()->moveDir = Eigen::Vector3d(0, 0, velocity);
+		GetScene()->data_list[GetScene()->moving_index].moveDir = Eigen::Vector3d(0, 0, velocity);
 		break;
 	default: break;
 	}
