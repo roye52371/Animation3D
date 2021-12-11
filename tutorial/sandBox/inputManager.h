@@ -216,6 +216,13 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			scn->setMovingButton();
 			break;
 		// end comment Ass 2
+		//Ass 2 comment
+		//changing moving object between 2 objects
+		case 'j':
+		case 'J':
+			scn->moving_index = (scn->moving_index + 1) % 2;
+			break;
+			// end comment Ass 2
 		
 		default: 
 			Eigen::Vector3f shift;
