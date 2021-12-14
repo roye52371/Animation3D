@@ -283,12 +283,15 @@ namespace glfw
 
   IGL_INLINE void Viewer::open_dialog_load_mesh()
   {
+      /*    //Ass 3 comment
+
     std::string fname = igl::file_dialog_open();
 
     if (fname.length() == 0)
-      return;
-    
-    this->load_mesh_from_file(fname.c_str());
+      return;*/
+    //this->load_mesh_from_file(fname.c_str());
+    this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
+    //end comment Ass 3
   }
 
   IGL_INLINE void Viewer::open_dialog_save_mesh()
