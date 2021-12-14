@@ -27,7 +27,7 @@ void SandBox::Init(const std::string &config)
 	data().MyTranslateInSystem(data().GetRotation(), center);
 	//data().SetCenterOfRotation(center.transpose());
 
-	MyTranslateInSystem(GetRotation(), Eigen::RowVector3d(-5, 0, -5));
+	MyTranslateInSystem(GetRotation(), Eigen::RowVector3d(0, 0, -8));
 	data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
 	//Ass 3
 }

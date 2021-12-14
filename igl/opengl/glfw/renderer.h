@@ -105,7 +105,10 @@ public:
 	//Ass 2 comment
 	void changeMovingDirection(int dir);//changing moving direction of object according to direction vector and initial velocity
 	//end comment Ass 2
-
+	
+	//Ass3
+	void changeRotateAxis(int rotate);
+	//end Ass3
 
 	void TranslateCamera(Eigen::Vector3f amt);
 	void RotateCamera(float amtX, float amtY);

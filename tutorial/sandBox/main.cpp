@@ -17,8 +17,12 @@ static void drawDotsAndLines(igl::opengl::glfw::Viewer& viewer) {
 			//viewer.data_list.back().show_faces = 3;
 			viewer.selected_data_index = savedIndx;
 			//Ass3
-			int last_index = viewer.data_list.size() - 1;
-			viewer.parents[last_index] = last_index - 1;
+			if(i!=1) // below does not needed because we don't want to connect sphere to zcylinders
+			//(we dont want sphere to be father of zcylinder in index 1)
+			{ 
+				int last_index = viewer.data_list.size() - 1;
+				viewer.parents[last_index] = last_index - 1;
+			 }
 			//end Ass3
 		}
 	}

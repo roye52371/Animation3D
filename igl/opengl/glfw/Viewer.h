@@ -108,7 +108,9 @@ namespace glfw
 
     //Ass 3
         int link_num;
-        Eigen::RowVector3d tip_position;
+        Eigen::RowVector4d tip_position;
+        Eigen::RowVector3d destination_position;
+        bool ikAnimation;
     // end Ass3
     ////////////////////////
     // Multi-mesh methods //

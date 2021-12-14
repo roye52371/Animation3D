@@ -256,7 +256,50 @@ void Renderer::changeMovingDirection(int dir) {
 }
 //end comment Ass 2
 
+//Ass3
+void Renderer::changeRotateAxis(int rotate) {
+	if (scn->selected_data_index != -1) {
+		switch (rotate)
+		{
+			case GLFW_KEY_UP:
+					scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), 0.1);
+					break;
+			case GLFW_KEY_DOWN:
+					scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), -0.1);
+					break;
+			case GLFW_KEY_LEFT:
+					scn->data().MyRotate(Eigen::Vector3d(0, 1, 0), -0.1);
+					break;
+			case GLFW_KEY_RIGHT:
+					scn->data().MyRotate(Eigen::Vector3d(0, 1, 0), 0.1);
+					break;
+			default:
+				break;
+		}
+	}
+	else
+	{
+		switch (rotate)
+		{
+			case GLFW_KEY_UP:
+				scn->MyRotate(Eigen::Vector3d(1, 0, 0), 0.1);
+				break;
+			case GLFW_KEY_DOWN:
+				scn->MyRotate(Eigen::Vector3d(1, 0, 0), -0.1);
+				break;
+			case GLFW_KEY_LEFT:
+				scn->MyRotate(Eigen::Vector3d(0, 1, 0), -0.1);
+				break;
+			case GLFW_KEY_RIGHT:
+				scn->MyRotate(Eigen::Vector3d(0, 1, 0), 0.1);
+				break;
+			default:
+				break;
+		}
+	}
 
+}
+//end Ass3
 
 
 

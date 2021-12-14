@@ -141,8 +141,17 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case 'T':
 		case 't':
 		{
-			rndr->core().toggle(scn->data().show_faces);
+			//rndr->core().toggle(scn->data().show_faces);
+			//Ass3
+			int lastLinkidx = scn->link_num;
+			scn->tip_position = scn->CalcParentsTrans(lastLinkidx) *
+				scn->data(lastLinkidx).MakeTransd() *
+				Eigen::Vector4d(scn->data(lastLinkidx).V.colwise().mean()[0], 
+				scn->data(lastLinkidx).V.colwise().maxCoeff()[1], scn->data(lastLinkidx).V.colwise().mean()[2], 1);
+
+			std::cout << "tip: (" << scn->tip_position.transpose()[0] <<","<< scn->tip_position.transpose()[1]<<","<< scn->tip_position.transpose()[2] << ")" << std::endl;
 			break;
+
 		}
 		case '[':
 		case ']':
@@ -175,55 +184,89 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case GLFW_KEY_UP:
 			//Ass2 comment
 			//moving up
-			rndr->changeMovingDirection(GLFW_KEY_UP);
+			//rndr->changeMovingDirection(GLFW_KEY_UP);
 			//end comment Ass 2
 			//rndr->TranslateCamera(Eigen::Vector3f(0, 0.01f,0));
+			//Ass3
+			rndr->changeRotateAxis(GLFW_KEY_UP);
+			//end Ass3
 			break;
 		case GLFW_KEY_DOWN:
 			//Ass2 comment
 			//moving down
-			rndr->changeMovingDirection(GLFW_KEY_DOWN);
+			//rndr->changeMovingDirection(GLFW_KEY_DOWN);
 			//end comment Ass 2
 			//rndr->TranslateCamera(Eigen::Vector3f(0, -0.01f,0));
-
+			//Ass3
+			rndr->changeRotateAxis(GLFW_KEY_DOWN);
+			//end Ass3
 			break;
 		case GLFW_KEY_LEFT:
 			//Ass2 comment , return translate camera comment if not use this code, or use translate camera also
 			//moving left
-			rndr->changeMovingDirection(GLFW_KEY_LEFT);
+			//rndr->changeMovingDirection(GLFW_KEY_LEFT);
 			//end comment Ass 2
 			//rndr->TranslateCamera(Eigen::Vector3f(-0.01f, 0,0));
+			//Ass3
+			rndr->changeRotateAxis(GLFW_KEY_LEFT);
+			//end Ass3
 			break;
 		case GLFW_KEY_RIGHT:
 			//Ass2 comment, return translate camera comment if not use this code, or use translate camera also
 			//moving right
-			rndr->changeMovingDirection(GLFW_KEY_RIGHT);
+			//rndr->changeMovingDirection(GLFW_KEY_RIGHT);
 			//end comment Ass 2, return translate camera comment if not use this code, or use translate camera also
 			//rndr->TranslateCamera(Eigen::Vector3f(0.01f, 0, 0));
+			//Ass3
+			rndr->changeRotateAxis(GLFW_KEY_RIGHT);
+			//end Ass3
 			break;
 		case ' ':
 			//Ass1 comment, return translate camera comment if not use this code, or use translate camera also
 			//Simplification from ass1
-			scn->meshSimplification(0.05 * scn->data().Q->size());
+			//scn->meshSimplification(0.05 * scn->data().Q->size());
 			//end comment Ass1
+			//Ass3
+			// toggle ik solver aniimation
+			scn->ikAnimation = !scn->ikAnimation;
 			break;
-		//Ass 2 comment
-		// case to change moving to  true(it is initialized to false, so we can also init to true and change the code down here)
-		//and case when collison accured, if we want to move the object again, so we need to make is moving true again,(setMovingButton do it)
+			//end Ass3
+			break;
+			//Ass 2 comment
+			// case to change moving to  true(it is initialized to false, so we can also init to true and change the code down here)
+			//and case when collison accured, if we want to move the object again, so we need to make is moving true again,(setMovingButton do it)
 		case 'k':
 		case 'K':
 			// 'k' and 'K' activating or deactivating the object movemant
 			scn->setMovingButton();
 			break;
-		// end comment Ass 2
-		//Ass 2 comment
-		//changing moving object between 2 objects
+			// end comment Ass 2
+			//Ass 2 comment
+			//changing moving object between 2 objects
 		case 'j':
 		case 'J':
 			scn->moving_index = (scn->moving_index + 1) % 2;
 			break;
 			// end comment Ass 2
-		
+		//Ass3
+		case'P':
+		case 'p': 
+		{
+				int idx = scn->selected_data_index;
+				Eigen::Matrix3d mat = idx == -1 ?
+					scn->MakeTransd().block(0, 0, 3, 3) :
+					scn->data().MakeTransd().block(0, 0, 3, 3);
+
+				std::cout << "rotation of " << idx << ": " << std::endl;
+				std::cout << mat << std::endl;
+				break;
+		}
+		case 'D':
+		case 'd':
+			scn->destination_position = scn->data(0).MakeTransd().col(3).head(3);
+			std::cout << "destination: (" << scn->destination_position.transpose() << ")" << std::endl;
+			break;
+		//end Ass3
 		default: 
 			Eigen::Vector3f shift;
 			float scale;
