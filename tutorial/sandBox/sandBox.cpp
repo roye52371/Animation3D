@@ -14,37 +14,22 @@ SandBox::SandBox()
 
 void SandBox::Init(const std::string &config)
 {
-	std::string item_name;
-	std::ifstream nameFileout;
-	doubleVariable = 0;
-	nameFileout.open(config);
-	if (!nameFileout.is_open())
-	{
-		std::cout << "Can't open file "<<config << std::endl;
-	}
-	else
-	{
-		
-		while (nameFileout >> item_name)
-		{
-			std::cout << "openning " << item_name << std::endl;
-			load_mesh_from_file(item_name);
-			
-			parents.push_back(-1);
-			data().add_points(Eigen::RowVector3d(0, 0, 0), Eigen::RowVector3d(0, 0, 1));
-			data().show_overlay_depth = false;
-			data().point_size = 10;
-			data().line_width = 2;
-			data().set_visible(false, 1);
+	//Ass 3
+	load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
 
-			
-		}
-		nameFileout.close();
-	}
-	MyTranslate(Eigen::Vector3d(0, 0, -1), true);
-	
+	Eigen::RowVector3d center(5, 0, 0);
+	parents.push_back(-1);
+	// data().add_points(center, Eigen::RowVector3d(0, 0, 1));
+	data().show_overlay_depth = false;
+	data().point_size = 10;
+	data().line_width = 2;
+	data().set_visible(false, 1);
+	data().MyTranslateInSystem(data().GetRotation(), center);
+	//data().SetCenterOfRotation(center.transpose());
+
+	MyTranslateInSystem(GetRotation(), Eigen::RowVector3d(-5, 0, -5));
 	data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
-
+	//Ass 3
 }
 
 SandBox::~SandBox()
@@ -62,9 +47,7 @@ void SandBox::Animate()
 		//data_list[0].MyTranslate(moveDir,true);
 		data_list[moving_index].MyTranslateInSystem(GetRotation(), data_list[moving_index].moveDir);
 		checkCollision();
-		//Ass2 comment end
-		
-		
+		//Ass2 comment end	
 	}
 }
 

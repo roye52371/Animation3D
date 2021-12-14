@@ -51,7 +51,7 @@ class ViewerData : public Movable
 {
 public:
   ViewerData();
-  
+  void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& alignedBox);
   // Empty all fields
   IGL_INLINE void clear();
 

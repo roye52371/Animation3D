@@ -47,6 +47,59 @@ IGL_INLINE void igl::opengl::ViewerData::set_face_based(bool newvalue)
   }
 }
 
+//Ass3
+void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& alignedBox) {
+    line_width = 3.0f;
+    point_size = 15;
+
+    Eigen::MatrixXd V_box(8, 3); // Corners of the bounding box
+    Eigen::MatrixXd V_boxz(2, 3); // Corners of the bounding box
+    Eigen::MatrixXd V_boxy(2, 3); // Corners of the bounding box
+    Eigen::MatrixXd V_boxx(2, 3); // Corners of the bounding box
+
+    V_box.row(0) = alignedBox.corner(alignedBox.BottomRightCeil);
+    V_box.row(1) = alignedBox.corner(alignedBox.BottomRightFloor);
+    V_box.row(2) = alignedBox.corner(alignedBox.BottomLeftCeil);
+    V_box.row(3) = alignedBox.corner(alignedBox.BottomLeftFloor);
+    V_box.row(4) = alignedBox.corner(alignedBox.TopRightCeil);
+    V_box.row(5) = alignedBox.corner(alignedBox.TopRightFloor);
+    V_box.row(6) = alignedBox.corner(alignedBox.TopLeftCeil);
+    V_box.row(7) = alignedBox.corner(alignedBox.TopLeftFloor);
+
+    V_boxz.row(0) = (V_box.row(0) + V_box.row(2) + V_box.row(4) + V_box.row(6)) / 4;
+    V_boxz.row(1) = (V_box.row(1) + V_box.row(3) + V_box.row(5) + V_box.row(7)) / 4;
+
+    add_points(V_boxz, Eigen::RowVector3d(0, 0, 0));
+
+    V_boxy.row(0) = (V_box.row(0) + V_box.row(1) + V_box.row(2) + V_box.row(3)) / 4;
+    V_boxy.row(1) = (V_box.row(4) + V_box.row(5) + V_box.row(6) + V_box.row(7)) / 4;
+
+    V_boxx.row(0) = (V_box.row(0) + V_box.row(1) + V_box.row(4) + V_box.row(5)) / 4;
+    V_boxx.row(1) = (V_box.row(2) + V_box.row(3) + V_box.row(6) + V_box.row(7)) / 4;
+
+    add_edges
+    (
+        V_boxz.row(0) * 1.5,
+        V_boxz.row(1) * 1.5,
+        Eigen::RowVector3d(0, 0, 1)
+    );
+
+    add_edges
+    (
+        V_boxy.row(0) * 2,
+        V_boxy.row(1) * 2,
+        Eigen::RowVector3d(0, 1, 0)
+    );
+
+    add_edges
+    (
+        V_boxx.row(0) * 2,
+        V_boxx.row(1) * 2,
+        Eigen::RowVector3d(1, 0, 0)
+    );
+
+}
+//end Ass3
 
 //Ass2 comment
 void igl::opengl::ViewerData::drawBox(Eigen::AlignedBox<double, 3> box, int color) {
@@ -112,7 +165,7 @@ IGL_INLINE void igl::opengl::ViewerData::set_mesh(
       Eigen::Vector3d(GOLD_AMBIENT[0], GOLD_AMBIENT[1], GOLD_AMBIENT[2]),
       Eigen::Vector3d(GOLD_DIFFUSE[0], GOLD_DIFFUSE[1], GOLD_DIFFUSE[2]),
       Eigen::Vector3d(GOLD_SPECULAR[0], GOLD_SPECULAR[1], GOLD_SPECULAR[2]));
-	image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake1.png");
+	image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake1.png");
 //    grid_texture();
   }
   else

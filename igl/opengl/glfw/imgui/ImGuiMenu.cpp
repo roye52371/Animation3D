@@ -236,6 +236,10 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
           viewer->data_list.back().set_visible(true, 2);
           viewer->data_list.back().show_faces = 3;
           viewer->selected_data_index = savedIndx;
+          //Ass3
+          int last_index = viewer->data_list.size() - 1;
+          viewer->parents[last_index] = last_index - 1;
+          //end Ass3
       }
     }
     ImGui::SameLine(0, p);

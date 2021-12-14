@@ -106,6 +106,10 @@ namespace glfw
     bool checkTermsForBoxesCollision(Eigen::AlignedBox<double, 3>& box1, Eigen::AlignedBox<double, 3>& box2);//check 15 terms for boxes collision, called by recursive checker
     //end comment Ass 2
 
+    //Ass 3
+        int link_num;
+        Eigen::RowVector3d tip_position;
+    // end Ass3
     ////////////////////////
     // Multi-mesh methods //
     ////////////////////////
