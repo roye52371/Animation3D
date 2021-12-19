@@ -207,7 +207,8 @@ namespace glfw
     initMeshdata();// reset- init data
     //end comment Ass1
     //Ass3
-    bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
+    //bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
+    bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
     bool first_link_num = link_num == 0;
     if (first_link_num && iszcylinder) {
         data().MyTranslateInSystem(data().GetRotation(), Eigen::RowVector3d(0, 0, 1.45));
@@ -311,7 +312,9 @@ namespace glfw
     if (fname.length() == 0)
       return;*/
     //this->load_mesh_from_file(fname.c_str());
-    this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
+    //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
+    this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
+
     //end comment Ass 3
   }
 

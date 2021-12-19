@@ -8,7 +8,8 @@ static void drawDotsAndLines(igl::opengl::glfw::Viewer& viewer) {
 	for (int i = 1; i <= 4; i++) {
 
 		int savedIndx = viewer.selected_data_index;
-		viewer.load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
+		//viewer.load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
+		viewer.load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
 		if (viewer.data_list.size() > viewer.parents.size())
 		{
 			viewer.parents.push_back(-1);
