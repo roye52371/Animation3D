@@ -185,8 +185,12 @@ void Renderer::MouseProcessing(int button)
 		{
 			//fixed rotation object
 			//Ass3
+			/*
 			scn->data().RotateInSystem(Eigen::Vector3d(-1, 0, 0), yrel / 100.0);
 			scn->data().RotateInSystem(Eigen::Vector3d(0, -1, 0), xrel / 100.0);
+			*/
+			scn->data().MyRotate(Eigen::Vector3d(0, -1, 0), xrel / 100.0, true);
+			scn->data().MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
 			//end Ass3
 			//fixed rotation object end
 
@@ -213,8 +217,12 @@ void Renderer::MouseProcessing(int button)
 		else
 		{
 			//fixed rotation scene
+			/*
 			scn->RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 100.0);
 			scn->RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 100.0);
+			*/
+			scn->MyRotate(Eigen::Vector3d(0, -1, 0), xrel / 100.0, true);
+			scn->MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
 			//fixed rotation scene end
 		}
 	}
@@ -271,6 +279,7 @@ void Renderer::changeMovingDirection(int dir) {
 
 //Ass3
 void Renderer::changeRotateAxis(int rotate) {
+	/*
 	if (scn->selected_data_index != -1) {
 		switch (rotate)
 		{
@@ -309,6 +318,47 @@ void Renderer::changeRotateAxis(int rotate) {
 			default:
 				break;
 		}
+	}
+		*/
+	if (scn->selected_data_index != -1) {
+		switch (rotate)
+		{
+		case GLFW_KEY_UP:
+			scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), -0.1, false);
+			break;
+		case GLFW_KEY_DOWN:
+			scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), 0.1, false);
+			break;
+		case GLFW_KEY_LEFT:
+			scn->data().MyRotate(Eigen::Vector3d(0, 1, 0), -0.1,true);
+			break;
+		case GLFW_KEY_RIGHT:
+			scn->data().MyRotate(Eigen::Vector3d(0, 1, 0), 0.1,true);
+			break;
+		default:
+			break;
+		}
+		
+	}
+	else {
+		switch (rotate)
+		{
+		case GLFW_KEY_UP:
+			scn->MyRotate(Eigen::Vector3d(1, 0, 0), -0.1, false);
+			break;
+		case GLFW_KEY_DOWN:
+			scn->MyRotate(Eigen::Vector3d(1, 0, 0), 0.1,false);
+			break;
+		case GLFW_KEY_LEFT:
+			scn->MyRotate(Eigen::Vector3d(0, 1, 0), -0.1, true);
+			break;
+		case GLFW_KEY_RIGHT:
+			scn->MyRotate(Eigen::Vector3d(0, 1, 0), 0.1, true);
+			break;
+		default:
+			break;
+		}
+		
 	}
 
 }
