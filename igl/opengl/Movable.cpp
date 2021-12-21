@@ -49,6 +49,19 @@ void Movable::MyRotate(const Eigen::Matrix3d& rot)
 	Tout.rotate(rot);
 }
 
+//Ass 3 comment
+void Movable::MyRotate(Eigen::Vector3d rotAxis, double angle, bool yAxis)
+{
+	Eigen::Matrix3d mat = Tout.rotation().matrix();
+	mat.transposeInPlace();
+	if (yAxis)
+		Tout.rotate(Eigen::AngleAxisd(angle, mat * rotAxis));
+	else
+		Tout.rotate(Eigen::AngleAxisd(angle, rotAxis));
+}
+//end Ass3 comment
+
+
 void Movable::MyScale(Eigen::Vector3d amt)
 {
 	Tin.scale(amt);

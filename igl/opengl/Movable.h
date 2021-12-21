@@ -15,6 +15,12 @@ public:
 	void MyTranslate(Eigen::Vector3d amt, bool preRotation);
 	void MyRotate(Eigen::Vector3d rotAxis, double angle);
 	void MyRotate(const Eigen::Matrix3d &rot);
+
+	//Ass 3 comment
+	void Movable::MyRotate(Eigen::Vector3d rotAxis, double angle, bool yAxis);
+	//end Ass3 comment
+
+
 	void MyScale(Eigen::Vector3d amt);
 
 	void SetCenterOfRotation(Eigen::Vector3d amt);

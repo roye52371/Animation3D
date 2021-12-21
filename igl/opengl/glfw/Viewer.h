@@ -111,6 +111,14 @@ namespace glfw
         Eigen::RowVector4d tip_position;
         Eigen::RowVector3d destination_position;
         bool ikAnimation;
+        //ASS3:
+        Eigen::Matrix4d ParentsTrans(int index);
+        Eigen::Matrix3d ParentsInverseRot(int index);
+        
+        void animateIK();
+        void toggleIK();
+        void fixAxis();
+
     // end Ass3
     ////////////////////////
     // Multi-mesh methods //

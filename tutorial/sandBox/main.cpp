@@ -37,10 +37,10 @@ int main(int argc, char *argv[])
   Renderer renderer;
 
   SandBox viewer;
-std::cout << "aaaaaaaaa\n" ;
+  //std::cout << "aaaaaaaaa\n" ;
   igl::opengl::glfw::imgui::ImGuiMenu* menu = new igl::opengl::glfw::imgui::ImGuiMenu();
   viewer.Init("configuration.txt");
-  std::cout << "bbbbbbbbbb\n";
+  //std::cout << "bbbbbbbbbb\n";
   //Ass 2 comment
   //viewer.isActive = false;//make it false at the begining, so we cam control when to start the collision simulation
   //viewer.initTreesAndDrawForCollision();
@@ -51,23 +51,23 @@ std::cout << "aaaaaaaaa\n" ;
   for (int i = 0; i < viewer.data_list.size(); i++) {
 	  viewer.data_list[i].tree.init(viewer.data_list[i].V, viewer.data_list[i].F);
   }
-  std::cout << "cccccccccccc\n";
+  //std::cout << "cccccccccccc\n";
   //viewer.MyTranslate(Eigen::Vector3d(0, 0, -8),true);
   //viewer.data_list[0].MyTranslate(Eigen::Vector3d(5, 0, 0),true);
   //viewer.data_list[0].show_lines = false;
 
   drawDotsAndLines(viewer);
-  std::cout << "ddddddddd\n";
+  //std::cout << "ddddddddd\n";
   //end comment Ass3
   
   Init(*disp, menu);
   renderer.init(&viewer,2,menu);
-  std::cout << "tttttttttttttttt\n";
+  //std::cout << "tttttttttttttttt\n";
   disp->SetRenderer(&renderer);
-  std::cout << "1wwwwwwwwww\n";
+  //std::cout << "1wwwwwwwwww\n";
 
   disp->launch_rendering(true);
-  std::cout << "2wwwwwwwwww\n";
+  //std::cout << "2wwwwwwwwww\n";
   delete menu;
   delete disp;
 }

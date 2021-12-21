@@ -46,9 +46,12 @@ void SandBox::Animate()
 		// using isActive as the key for knowing if we can move object[0] or not, in Assignment 2-Collision
 		//my translate with pretranslate true
 		//data_list[0].MyTranslate(moveDir,true);
-		data_list[moving_index].MyTranslateInSystem(GetRotation(), data_list[moving_index].moveDir);
-		checkCollision();
+		//data_list[moving_index].MyTranslateInSystem(GetRotation(), data_list[moving_index].moveDir);
+		//checkCollision();
 		//Ass2 comment end	
+		//Ass3 comment
+		animateIK();
+		//end comment Ass3
 	}
 }
 
