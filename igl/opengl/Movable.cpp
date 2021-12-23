@@ -50,11 +50,11 @@ void Movable::MyRotate(const Eigen::Matrix3d& rot)
 }
 
 //Ass 3 comment
-void Movable::MyRotate(Eigen::Vector3d rotAxis, double angle, bool yAxis)
+void Movable::MyRotate(Eigen::Vector3d rotAxis, double angle, bool zAxis)
 {
 	Eigen::Matrix3d mat = Tout.rotation().matrix();
 	mat.transposeInPlace();
-	if (yAxis)
+	if (zAxis)
 		Tout.rotate(Eigen::AngleAxisd(angle, mat * rotAxis));
 	else
 		Tout.rotate(Eigen::AngleAxisd(angle, rotAxis));
