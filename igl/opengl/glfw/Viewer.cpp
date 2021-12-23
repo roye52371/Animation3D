@@ -51,6 +51,8 @@
 #include <Eigen/Core>
 #include <igl/collapse_edge.h>
 #include <set>
+//Ass3 include
+#include <math.h> 
 //end comment Ass1
 
 // Internal global variables used for glfw event handling
@@ -121,6 +123,8 @@ namespace glfw
 
   IGL_INLINE Viewer::~Viewer()
   {
+      delta = 0.1;
+      maxDistance = (data_list.size() - 1) * 1.6;
   }
 
   IGL_INLINE bool Viewer::load_mesh_from_file(
@@ -207,8 +211,8 @@ namespace glfw
     initMeshdata();// reset- init data
     //end comment Ass1
     //Ass3
-    //bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
-    bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
+    bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
+    //bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
     bool first_link_num = link_num == 0;
     if (first_link_num && iszcylinder) {
         data().MyTranslateInSystem(data().GetRotation(), Eigen::RowVector3d(0, 0, 1.6));
@@ -312,8 +316,8 @@ namespace glfw
     if (fname.length() == 0)
       return;*/
     //this->load_mesh_from_file(fname.c_str());
-    //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
-    this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
+    this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
+    //this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
 
     //end comment Ass 3
   }
@@ -993,6 +997,263 @@ namespace glfw
       }
       return rot;
   }
+
+  /////////////////
+  
+  
+  Eigen::Matrix4d Viewer::maketranslatetoshape(int indx)
+	{
+		return data_list[indx].MakeTransd();
+	}
+  
+  void Viewer::calculateStep(std::vector<Eigen::Vector3d> before, std::vector<Eigen::Vector3d> points)
+  {
+      Eigen::Vector4d E4;
+      Eigen::Vector3d E;
+      Eigen::Vector3d Zaxis;
+      Eigen::Vector3d Xaxis;
+      Eigen::Vector3d Vp;
+      Eigen::Vector3d V;
+
+      Eigen::Vector3d a, b, newZ;
+      double theta, phi, cosPhi, cosTheta, sinPhi, sinTheta;
+      Eigen::Vector4d root4 = data_list[1].MakeTransd() * Eigen::Vector4d(0, 0, -0.8, 1);
+      Eigen::Vector3d root = Eigen::Vector3d(root4[0], root4[1], root4[2]);
+
+      Eigen::Vector4d ball4 = data_list[0].MakeTransd() * Eigen::Vector4d(0, 0, 0, 1);
+      Eigen::Vector3d ball = Eigen::Vector3d(ball4[0], ball4[1], ball4[2]);
+
+      double dist = (root - ball).norm();
+
+      //if (dist > 6.4) { //6.4 is arm length fully extended
+      if (dist > (data_list.size() - 1) * 1.6) { // its arm length fully extended(with out taking the sphere)
+          //cout<<data_list.size() - 2<<endl;
+          cout << "cannot reach" << endl;
+          isActive = false;
+          return;
+      }
+
+
+
+      int linknum = data_list.size() - 1;
+      for (int i = 1; i < linknum; i++) {
+          double signX = 1;
+          double signZ = 1;
+          if (before.at(data_list.size())(0) - points.at(1)(0) > 0)
+              signX = -1;
+          double r, gamma;;
+          Eigen::Vector3d Zaxis;
+          Eigen::Vector3d Xaxis;
+
+          Eigen::Matrix4d axiesMat = Eigen::Matrix4d::Ones();
+          for (int j = 0; j < i; j++)
+          {
+              axiesMat = axiesMat * maketranslatetoshape(j);
+          }
+           
+          Xaxis = Eigen::Vector3d(axiesMat.row(0)(1),axiesMat.row(0)(1),axiesMat.row(0)(2));
+          Zaxis = Eigen::Vector3d(axiesMat.row(2)(1),axiesMat.row(2)(1),axiesMat.row(2)(2));
+
+
+          Eigen::Vector3d Vp = points[i + 1] - points[i];
+          Zaxis.normalize();
+          Xaxis.normalize();
+          if (Vp != Eigen::Vector3d(0, 0, 0))
+              Vp.normalize();
+          Eigen::Vector3d V = Zaxis.cross(Vp);
+          if (V != Eigen::Vector3d(0, 0, 0))
+              V.normalize();
+
+            
+          double theta = acos(Zaxis.dot(Vp));
+          theta = theta < -1.0 ? -1.0 : theta;
+          theta = theta > 1.0 ? 1.0 : theta; //acos(clamp(Zaxis.dot(Vp), -1.0, 1.0));
+
+          double phi =  -acos(Xaxis.dot(V));
+          phi = phi < -1.0 ? -1.0 : phi;
+          phi = phi > 1.0 ? 1.0 : phi; //-acos(clamp(Xaxis.dot(V), -1.0, 1.0));
+
+
+
+
+          double alphaRad = theta; //alpah in radians
+          if (dist > 0.3)
+              alphaRad = alphaRad / 20;
+
+           data_list[i].MyRotate(Zaxis, alphaRad, true);
+
+           alphaRad = phi; //alpah in radians
+          if (dist > 0.3)
+              alphaRad = alphaRad / 20;
+
+          data_list[i].MyRotate(Xaxis, alphaRad, false);
+          /*
+          alphaRad = theta; //alpah in radians
+          if (dist > 0.3)
+              alphaRad = alphaRad / 20;
+
+           data_list[i].MyRotate(Zaxis, alphaRad, true);
+           */
+          E4 = ParentsTrans(data_list.size() - 1) * data_list[data_list.size() - 1].MakeTransd() * Eigen::Vector4d(0,0, 0.8, 1);
+          E = Eigen::Vector3d(E4[0], E4[1], E4[2]);
+          double dist = (E - ball).norm();
+          if (dist < 0.1 || isActive == false) {
+              isActive = false;
+              fixAxis();
+      }
+
+
+           
+          //build_new_rotate(i, zAxis1, cos(phi), sin(signX * phi));
+          //build_new_rotate(i, xAxis1, cos(theta), sin(theta));
+      }
+  }
+  
+
+  void Viewer::makeChange()
+  {
+      printf("1\n");
+      Eigen::Vector3d b;
+      vector<Eigen::Vector3d> before;
+      vector<Eigen::Vector3d> new_points;
+      Eigen::Vector3d target = getDistination(0);
+      double di;
+      double ri;
+      double lambda;
+      
+      for (int i = 0; i < data_list.size(); i++) {
+          before.push_back(getDistination(i));
+      }
+      before.push_back(getTipPosition(data_list.size() - 1));
+      printf("2\n");
+      if (maxDistance < distToTarget(0)) {
+          new_points.push_back(before.at(0));
+          printf("2.5\n");
+          for (int i = 1; i < data_list.size(); i++) {
+              di = dist_p1Tonextp1(i);
+              ri = distToTarget(i);
+              lambda = di / ri;
+              Eigen::Vector3d tmp(0,0,0);
+              tmp += lambda * target;
+
+              tmp += (1 - lambda) * new_points.at(i - 1);
+
+          
+
+              new_points.push_back(tmp);
+          }
+          printf("3\n");
+          calculateStep(before, new_points);
+
+      }
+      else {
+          for (int i = 0; i < data_list.size(); i++)
+          {
+              new_points.push_back(getDistination(i));
+          }
+          printf("4\n");
+          new_points.push_back(getTipPosition(data_list.size() - 1));
+          b = new_points.at(0);
+          float difa = distance_2Points(new_points.at(new_points.size() - 1), target);
+
+          while (delta < difa) {
+              new_points.at(new_points.size() - 1) = target;
+              for (int i = data_list.size() - 1; i > 0; i--)
+              {
+                  di = dist_p1Tonextp1(i);
+                  ri = distance_2Points(new_points.at(i + 1), new_points.at(i));
+                  lambda = di / ri;
+                  new_points.at(i) = (1 - lambda) * new_points.at(i + 1) + lambda * new_points.at(i);
+              }
+              printf("5\n");
+
+              new_points.at(0) = b;
+              new_points.push_back(target);
+              for (int i = 1; i < data_list.size(); i++)
+              {
+                  di = dist_p1Tonextp1(i);
+                  ri = distance_2Points(new_points.at(i + 1), new_points.at(i));
+                  lambda = di / ri;
+                  new_points.at(i + 1) = (1 - lambda) * new_points.at(i) + lambda * new_points.at(i + 1);
+              }
+              difa = distance_2Points(new_points.at(new_points.size() - 1), target);
+              calculateStep(before, new_points);
+          }
+          printf("6\n");
+      }
+  }
+
+  double Viewer::distance_2Points(Eigen::Vector3d p1, Eigen::Vector3d p2) {
+      //euclidian distance between 2 3D points
+      return sqrt(pow((p1(0) - p2(0)),2) + pow((p1(1) - p2(1)), 2) + pow((p1(2) - p2(2)), 2));
+  }
+  void Viewer::printTipPositions() {
+      for (int i = 0; i < data_list.size(); i++)
+      {
+          std::cout << "i is: " << i << ", and tip i is: " << getTipPosition(i)(0) << "," << getTipPosition(i)(1) << "," << getTipPosition(i)(2) << std::endl;
+      }
+  }
+
+  double Viewer::distToTarget(int linkInd) {
+      // getting the relevant link tip position coordinates
+      Vector3d linkTip = getTipPosition(linkInd);
+      Vector3d sphereCenter = getDistination(0);
+      return distance_2Points(linkTip, sphereCenter);
+  }
+  double Viewer::dist_p1Tonextp1(int p1_ind) {
+      // PRE assumption p1_ind + 1 < data_list.size()
+      return distance_2Points(getTipPosition(p1_ind), getTipPosition(p1_ind - 1));
+  }
+
+  Vector3d Viewer::getTipPosition(int indx)
+  {
+      Matrix4d Normal1 = Eigen::Matrix4d::Ones();
+      if (indx > -1)
+      {
+          for (int j = indx; parents[j] > -1; j = parents[j])
+          {
+              Normal1 = data_list[parents[j]].MakeTransd() * Normal1;
+          }
+          return getPointInSystem(indx, Vector3d(0, 0, 1));
+      }
+      else
+      {
+          return getPointInSystem(0, Vector3d(0, 0, -1));
+      }
+  }
+
+
+  Vector3d Viewer::getDistination(int indx)
+  {
+      Matrix4d Normal1 = Eigen::Matrix4d::Ones();
+      if (indx > -1)
+      {
+          for (int j = indx; parents[j] > -1; j = parents[j])
+          {
+              Normal1 = data_list[parents[j]].MakeTransd() * Normal1;
+          }
+          return getPointInSystem(indx, Vector3d(0, 0, 0));
+      }
+      else
+      {
+          return Vector3d(0, 0, 0);
+      }
+  }
+
+  Vector3d Viewer::getPointInSystem(int indx,Vector3d point)
+  {
+      Matrix4d scaled_mat = ParentsTrans(indx)* data_list[indx].MakeTransScaled();
+      Vector4d vec = scaled_mat * Vector4d(point(0), point(1), point(2), 1);
+      return Vector3d(vec(0), vec(1), vec(2));
+  }
+
+/*
+  void Viewer::build_new_rotate(int index, int axis, float cos, float sin) {		
+		data_list[index].rot(axis,cos,sin);
+	}
+*/
+
+
 
   //end Ass3 comment
 

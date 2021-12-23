@@ -46,6 +46,11 @@ namespace glfw
   // GLFW-based mesh viewer
   class Viewer : public Movable
   {
+      //Ass3
+      double delta;
+      double maxDistance;
+      //end Ass3
+
   public:
     // UI Enumerations
    // enum class MouseButton {Left, Middle, Right};
@@ -118,7 +123,17 @@ namespace glfw
         void animateIK();
         void toggleIK();
         void fixAxis();
-
+        
+        Eigen::Matrix4d maketranslatetoshape(int indx);
+        void calculateStep(std::vector<Eigen::Vector3d> before, std::vector<Eigen::Vector3d> points);
+        void makeChange();
+        double distance_2Points(Eigen::Vector3d p1, Eigen::Vector3d p2);
+        void printTipPositions();
+        double distToTarget(int linkInd);
+        double dist_p1Tonextp1(int p1_ind);
+        Eigen::Vector3d getTipPosition(int indx);
+        Eigen::Vector3d getDistination(int indx);
+        Eigen::Vector3d getPointInSystem(int indx, Eigen::Vector3d point);
     // end Ass3
     ////////////////////////
     // Multi-mesh methods //
