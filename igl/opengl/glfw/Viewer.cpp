@@ -1253,7 +1253,7 @@ namespace glfw
 	}
 */
 
-  void Viewer::FabricAlgo() {
+  void Viewer::FabrikAlgo() {
       //printf("starting fabric algo\n");
       Eigen::Vector3d b;
       vector<Eigen::Vector3d> before;// array to save old  points position of the links( links+1 points) 
@@ -1351,6 +1351,7 @@ namespace glfw
               //cout << new_points.size() << endl;
               //printf("lala1\n");
               //calculateStep(before, new_points);
+              transformfab(new_points);
               //need to to calc and rotate, will not stop this loop  without it, because difa will not change because we didnt change the points and moved it yet
               //printf("lala2\n");
           }
@@ -1383,6 +1384,48 @@ namespace glfw
       Eigen::Vector3d tipospoint = Eigen::Vector3d(tiposvec[0], tiposvec[1], tiposvec[2]);
       return tipospoint;
 
+  }
+
+  void Viewer::transformfab(vector<Eigen::Vector3d>& p)
+  {
+      Eigen::Vector3d z_axis = Eigen::Vector3d(0, 0, 1);
+      Eigen::Vector3d y_axis = Eigen::Vector3d(0, 1, 0);
+      for (auto i = 1; i < data_list.size(); i++)
+      {
+          //clear_rotation(i);
+
+          Eigen::Vector3d next_z = p[i + 1] - p[i];
+          next_z.normalize();
+          Eigen::Vector3d r_axis = z_axis.cross(next_z);
+          r_axis.normalize();
+          if (r_axis.norm() > 0.0001) {
+              Eigen::Vector3d x_axis = y_axis.cross(z_axis);
+              Eigen::Vector3d proj = (next_z - (next_z.dot(z_axis) * z_axis));
+              proj.normalize();
+
+              double z_deg = acos(y_axis.dot(proj));
+              z_deg = z_deg < -1.0 ? -1.0 : z_deg;
+              z_deg = z_deg > 1.0 ? 1.0 : z_deg; //acos(clamp(Zaxis.dot(Vp), -1.0, 1.0));
+
+              double tmpdeg = proj.dot(x_axis) > 0 ? -1 : 1;
+
+              z_deg = z_deg * tmpdeg;
+
+              double x_deg = acos(z_axis.dot(next_z));
+              x_deg = x_deg < -1.0 ? -1.0 : x_deg;
+              x_deg = x_deg > 1.0 ? 1.0 : x_deg; //acos(clamp(Zaxis.dot(Vp), -1.0, 1.0));
+
+
+              //double z_deg = degrees(glm::acos(clamp(dot(y_axis, proj), -1.0f, 1.0f))) * (dot(proj, x_axis) > 0 ? -1 : 1);
+              //double x_deg = degrees(glm::acos(clamp(dot(z_axis, next_z), -1.0f, 1.0f)));
+              //rot
+              //y_axis = Eigen::Vector3d(MyRotate(r_axis, x_deg) * Vector4d(y_axis, 0));
+              z_axis = next_z;
+              data_list[i].MyRotate(r_axis,x_deg, false);
+              data_list[i].MyRotate(r_axis, z_deg, true);
+              //shapeRotation(z_deg, -x_deg, i);
+          }
+      }
   }
 
 

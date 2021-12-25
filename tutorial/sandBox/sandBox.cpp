@@ -52,7 +52,7 @@ void SandBox::Animate()
 		//Ass3 comment
 		//animateIK();
 		//makeChange();
-		FabricAlgo();
+		FabrikAlgo();
 		//end comment Ass3
 	}
 }

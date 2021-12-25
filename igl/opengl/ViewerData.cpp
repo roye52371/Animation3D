@@ -71,6 +71,55 @@ void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& aligned
 
     add_points(V_boxz, Eigen::RowVector3d(0, 0, 0));
 
+    V_boxy.row(0) = (V_box.row(0) + V_box.row(2)) / 2;
+    V_boxy.row(1) = (V_box.row(4) + V_box.row(6)) / 2;
+
+    V_boxx.row(0) = (V_box.row(0) + V_box.row(4)) / 2;
+    V_boxx.row(1) = (V_box.row(2) + V_box.row(6)) / 2;
+
+    add_edges
+    (
+        V_boxz.row(0) * 3,
+        V_boxz.row(1),
+        Eigen::RowVector3d(0, 1, 0)
+    );
+
+    add_edges
+    (
+        V_boxy.row(0) - Eigen::RowVector3d(0, 0.75, 0),
+        V_boxy.row(1) + Eigen::RowVector3d(0, 0.75, 0),
+        Eigen::RowVector3d(0, 0, 1)
+    );
+
+    add_edges
+    (
+        V_boxx.row(0) - Eigen::RowVector3d(1.5, 0, 0),
+        V_boxx.row(1) + Eigen::RowVector3d(1.5, 0, 0),
+        Eigen::RowVector3d(1, 0, 0)
+    );
+    /*
+    line_width = 3.0f;
+    point_size = 15;
+
+    Eigen::MatrixXd V_box(8, 3); // Corners of the bounding box
+    Eigen::MatrixXd V_boxz(2, 3); // Corners of the bounding box
+    Eigen::MatrixXd V_boxy(2, 3); // Corners of the bounding box
+    Eigen::MatrixXd V_boxx(2, 3); // Corners of the bounding box
+
+    V_box.row(0) = alignedBox.corner(alignedBox.BottomRightCeil);
+    V_box.row(1) = alignedBox.corner(alignedBox.BottomRightFloor);
+    V_box.row(2) = alignedBox.corner(alignedBox.BottomLeftCeil);
+    V_box.row(3) = alignedBox.corner(alignedBox.BottomLeftFloor);
+    V_box.row(4) = alignedBox.corner(alignedBox.TopRightCeil);
+    V_box.row(5) = alignedBox.corner(alignedBox.TopRightFloor);
+    V_box.row(6) = alignedBox.corner(alignedBox.TopLeftCeil);
+    V_box.row(7) = alignedBox.corner(alignedBox.TopLeftFloor);
+
+    V_boxz.row(0) = (V_box.row(0) + V_box.row(2) + V_box.row(4) + V_box.row(6)) / 4;
+    V_boxz.row(1) = (V_box.row(1) + V_box.row(3) + V_box.row(5) + V_box.row(7)) / 4;
+
+    add_points(V_boxz, Eigen::RowVector3d(0, 0, 0));
+
     V_boxy.row(0) = (V_box.row(0) + V_box.row(1) + V_box.row(2) + V_box.row(3)) / 4;
     V_boxy.row(1) = (V_box.row(4) + V_box.row(5) + V_box.row(6) + V_box.row(7)) / 4;
 
@@ -97,7 +146,7 @@ void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& aligned
         V_boxx.row(1) * 2,
         Eigen::RowVector3d(1, 0, 0)
     );
-
+    */
 }
 //end Ass3
 
