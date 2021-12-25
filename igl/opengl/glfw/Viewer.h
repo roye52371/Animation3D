@@ -134,6 +134,10 @@ namespace glfw
         Eigen::Vector3d getTipPosition(int indx);
         Eigen::Vector3d getDistination(int indx);
         Eigen::Vector3d getPointInSystem(int indx, Eigen::Vector3d point);
+        //my new function try, roye
+        void FabricAlgo();
+        Eigen::Vector3d getTarget();
+        Eigen::Vector3d getTipbyindex(int index);
     // end Ass3
     ////////////////////////
     // Multi-mesh methods //
