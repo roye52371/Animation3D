@@ -123,16 +123,7 @@ namespace glfw
         void IKSimulation();
         void toggleIKSimulation();
         void axisFixer();
-        
-        Eigen::Matrix4d maketranslatetoshape(int indx);
-        void calculateStep(std::vector<Eigen::Vector3d> before, std::vector<Eigen::Vector3d> points);
-        void makeChange();
         double distance_2Points(Eigen::Vector3d p1, Eigen::Vector3d p2);
-        double distToTarget(int linkInd);
-        double dist_p1Tonextp1(int p1_ind);
-        Eigen::Vector3d getTipPosition(int indx);
-        Eigen::Vector3d getDistination(int indx);
-        Eigen::Vector3d getPointInSystem(int indx, Eigen::Vector3d point);
         //my new function try, roye
         void FabrikAlgo();
         Eigen::Vector3d getTarget();
