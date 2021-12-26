@@ -51,9 +51,10 @@
 #include <Eigen/Core>
 #include <igl/collapse_edge.h>
 #include <set>
+//end comment Ass1
 //Ass3 include
 #include <math.h> 
-//end comment Ass1
+
 
 // Internal global variables used for glfw event handling
 //static igl::opengl::glfw::Viewer * __viewer;
@@ -211,14 +212,18 @@ namespace glfw
     initMeshdata();// reset- init data
     //end comment Ass1
     //Ass3
-    //bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
-    bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
+    bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
+    //bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
     bool first_link_num = link_num == 0;
     if (first_link_num && iszcylinder) {
-        data().MyTranslateInSystem(data().GetRotation(), Eigen::RowVector3d(0, 0, 1.6));
+        data().MyTranslateInSystem(data().GetRotation(), Eigen::RowVector3d(0, 0, 0.8));
         data().tree.init(data().V, data().F);
         data().draw_xyzAxis(data().tree.m_box);
         data().SetCenterOfRotation(Eigen::RowVector3d(0, 0, -0.8));
+        /*data().show_overlay_depth = true;
+        data().show_overlay = true;
+        data().show_texture = true;
+        data().set_visible(false, 1);*/
         link_num++;
     }
     else if (!first_link_num && iszcylinder) {
@@ -226,6 +231,10 @@ namespace glfw
         data().tree.init(data().V, data().F);
         data().draw_xyzAxis(data().tree.m_box);
         data().SetCenterOfRotation(Eigen::RowVector3d(0, 0, -0.8));
+        /*data().show_overlay_depth = true;
+        data().show_overlay = true;
+        data().show_texture = true;
+        data().set_visible(false, 1);*/
         link_num++;
     }
     //end Ass3
@@ -316,8 +325,8 @@ namespace glfw
     if (fname.length() == 0)
       return;*/
     //this->load_mesh_from_file(fname.c_str());
-    //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
-    this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
+    this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
+    //this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
 
     //end comment Ass 3
   }
@@ -890,23 +899,23 @@ namespace glfw
 
 
   //Ass3 comment
-  void Viewer::toggleIK() {
+  void Viewer::toggleIKSimulation() {
       if (isActive == true) {
           //return;
-          fixAxis();
+          axisFixer();
       }
       isActive = !isActive;
   }
 
-  void Viewer::animateIK() {
-      //Eigen::Vector4d root4 = data_list[1].MakeTransd() * Eigen::Vector4d(0, -0.8, 0, 1);
-      Eigen::Vector4d root4 = data_list[1].MakeTransd() * Eigen::Vector4d(0,0, -0.8, 1);
-      Eigen::Vector3d root = Eigen::Vector3d(root4[0], root4[1], root4[2]);
+  void Viewer::IKSimulation() {
 
-      Eigen::Vector4d ball4 = data_list[0].MakeTransd() * Eigen::Vector4d(0, 0, 0, 1);
-      Eigen::Vector3d ball = Eigen::Vector3d(ball4[0], ball4[1], ball4[2]);
+      Eigen::Vector4d fstCylin4 = data_list[1].MakeTransd() * Eigen::Vector4d(0,0, -0.8, 1);
+      Eigen::Vector3d fstCylin = Eigen::Vector3d(fstCylin4[0], fstCylin4[1], fstCylin4[2]);
 
-      double dist = (root - ball).norm();
+      Eigen::Vector4d sphere4 = data_list[0].MakeTransd() * Eigen::Vector4d(0, 0, 0, 1);
+      Eigen::Vector3d sphere = Eigen::Vector3d(sphere4[0], sphere4[1], sphere4[2]);
+
+      double dist = (fstCylin - sphere).norm();
 
       //if (dist > 6.4) { //6.4 is arm length fully extended
       if (dist > (data_list.size()-1)*1.6) { // its arm length fully extended(with out taking the sphere)
@@ -918,93 +927,73 @@ namespace glfw
       Eigen::Vector4d E4;
       Eigen::Vector3d E;
       for (int i = data_list.size() - 1; i > 0; i--) {
-          //E4 = ParentsTrans(4) * data_list[4].MakeTransd() * Eigen::Vector4d(0, 0.8, 0, 1);
-          E4 = ParentsTrans(data_list.size() - 1) * data_list[data_list.size() - 1].MakeTransd() * Eigen::Vector4d(0,0, 0.8, 1);
+          //E4 = ParentsTrans_mat4d(4) * data_list[4].MakeTransd() * Eigen::Vector4d(0, 0.8, 0, 1);
+          E4 = ParentsTrans_mat4d(data_list.size() - 1) * data_list[data_list.size() - 1].MakeTransd() * Eigen::Vector4d(0,0, 0.8, 1);
           E = Eigen::Vector3d(E4[0], E4[1], E4[2]);
-          dist = (E - ball).norm();
+          dist = (E - sphere).norm();
 
-          Eigen::Vector4d R4 = ParentsTrans(i) * data_list[i].MakeTransd() * Eigen::Vector4d(0,0, -0.8, 1);
+          Eigen::Vector4d R4 = ParentsTrans_mat4d(i) * data_list[i].MakeTransd() * Eigen::Vector4d(0,0, -0.8, 1);
           Eigen::Vector3d R = Eigen::Vector3d(R4[0], R4[1], R4[2]);
 
           Eigen::Vector3d RE = E - R;
-          Eigen::Vector3d RD = ball - R;
+          Eigen::Vector3d RD = sphere - R;
 
           double dot = RD.normalized().dot(RE.normalized());
-          double alphaRad = acos (dot); //alpah in radians
+          double aDegRad = acos (dot); //alpha in radians
           if (dist > 0.3)
-              alphaRad = alphaRad / 20;
-          if (dot >= 1.0)
-              alphaRad = 0;
+              aDegRad = aDegRad / 20;
+          if (dot >= 1.0)//checking for legal value for acos
+              aDegRad = 0;
 
-          Eigen::Vector3d cros = RE.cross(RD);
-          cros.normalize();
-          cros = ParentsInverseRot(i) * cros;
-          data_list[i].MyRotate(cros, alphaRad, false);
-          // ----- Debug Prints ----
-          //float alpha =  alphaRad / M_PI * 180.0; //alpha in degrees
-          //cout << "R: " << endl << R << endl << "E: " << endl << E << endl;
-          //cout << "RE: " << endl << RE << endl << "RD: " << endl << RD << endl;
-          //cout << "alpha: " << alphaRad << endl;
-          //cout << "dot: " << dot << endl;
+          Eigen::Vector3d cross_product = RE.cross(RD);
+          cross_product.normalize();
+          cross_product = ParentsInvRot_mat3d(i) * cross_product;
+          data_list[i].MyRotate(cross_product, aDegRad, false);
       }
-      //E4 = ParentsTrans(4) * data_list[4].MakeTransd() * Eigen::Vector4d(0, 0.8, 0, 1);
-      E4 = ParentsTrans(data_list.size() - 1) * data_list[data_list.size() - 1].MakeTransd() * Eigen::Vector4d(0,0, 0.8, 1);
+      E4 = ParentsTrans_mat4d(data_list.size() - 1) * data_list[data_list.size() - 1].MakeTransd() * Eigen::Vector4d(0,0, 0.8, 1);
       E = Eigen::Vector3d(E4[0], E4[1], E4[2]);
-      dist = (E - ball).norm();
+      dist = (E - sphere).norm();
       if (dist < 0.1 || isActive == false) {
           isActive = false;
-          fixAxis();
+          axisFixer();
       }
-      //cout << "Distance: " << dist << endl;
   }
+  
+  void Viewer::axisFixer() {
 
-  void Viewer::fixAxis() {
-      //float firstY = 0;
       for (int i = 1; i <= data_list.size() - 1; i++) {
-          Eigen::Matrix3d RU = data_list[i].GetRotation();
-          if (RU(1, 1) < 1.0) {
-              if (RU(1, 1) > -1.0) {
-                  double z = atan2(RU(1, 0), -RU(1, 2));
+          Eigen::Matrix3d rotation_mat = data_list[i].GetRotation();
+          cout << "RU:\n" << rotation_mat << endl;
+          if (rotation_mat(2, 2) < 1.0) {
+              if (rotation_mat(2, 2) > -1.0) {
+                  double z = atan2(rotation_mat(2, 0), -rotation_mat(2, 1));
                   data_list[i].MyRotate(Eigen::Vector3d(0, 0, 1), -z, false);
-                  //if (i != 4) {
                   if(i!= data_list.size()-1){
                       data_list[i + 1].MyRotate(Eigen::Vector3d(0, 0, 1), z, true);
                   }
-                  /*
-                  double y = atan2(RU(1, 0), -RU(1, 2));
-                  data_list[i].MyRotate(Eigen::Vector3d(0, 1, 0), -y, false);
-                  if (i != 4) {
-                      data_list[i + 1].MyRotate(Eigen::Vector3d(0, 1, 0), y, true);
-                  }
-                  */
               }
           }
       }
   }
 
-  Eigen::Matrix4d Viewer::ParentsTrans(int index) {
-      if (index <= 1)
-          return Eigen::Transform<double, 3, Eigen::Affine>::Identity().matrix();
-      return ParentsTrans(index - 1) * data_list[index - 1].MakeTransd();
+  Eigen::Matrix4d Viewer::ParentsTrans_mat4d(int index) {
+      if(index <= 1)
+          return Transform<double, 3, Eigen::Affine>::Identity().matrix();
+      return ParentsTrans_mat4d(index - 1) * data_list[index - 1].MakeTransd();
   }
 
-  Eigen::Matrix3d Viewer::ParentsInverseRot(int index) {
-      Eigen::Matrix3d rot = data(index).GetRotation().inverse();
-      int i = index - 1;
-      while (i > 0) {
-          rot = rot * data(i).GetRotation().inverse();
-          i--;
-      }
-      return rot;
+  Eigen::Matrix3d Viewer::ParentsInvRot_mat3d(int index) {
+      Matrix3d inv_rot = data(index).GetRotation().inverse();
+      for (int i = index - 1; i > 0; i--) 
+          inv_rot = inv_rot * data(i).GetRotation().inverse();
+      return inv_rot;
   }
 
-  /////////////////
-  
-  
-  Eigen::Matrix4d Viewer::maketranslatetoshape(int indx)
-	{
+  ///////////////////////////////
+
+  Eigen::Matrix4d Viewer::maketranslatetoshape(int indx){
 		return data_list[indx].MakeTransd();
-	}
+  }
   
   void Viewer::calculateStep(std::vector<Eigen::Vector3d> before, std::vector<Eigen::Vector3d> points)
   {
@@ -1094,12 +1083,12 @@ namespace glfw
 
            data_list[i].MyRotate(Zaxis, alphaRad, true);
            */
-          E4 = ParentsTrans(data_list.size() - 1) * data_list[data_list.size() - 1].MakeTransd() * Eigen::Vector4d(0,0, 0.8, 1);
+          E4 = ParentsTrans_mat4d(data_list.size() - 1) * data_list[data_list.size() - 1].MakeTransd() * Eigen::Vector4d(0,0, 0.8, 1);
           E = Eigen::Vector3d(E4[0], E4[1], E4[2]);
           double dist = (E - ball).norm();
           if (dist < 0.1 || isActive == false) {
               isActive = false;
-              fixAxis();
+              axisFixer();
       }
 
 
@@ -1187,12 +1176,6 @@ namespace glfw
       //euclidian distance between 2 3D points
       return sqrt(pow((p1(0) - p2(0)),2) + pow((p1(1) - p2(1)), 2) + pow((p1(2) - p2(2)), 2));
   }
-  void Viewer::printTipPositions() {
-      for (int i = 0; i < data_list.size(); i++)
-      {
-          std::cout << "i is: " << i << ", and tip i is: " << getTipPosition(i)(0) << "," << getTipPosition(i)(1) << "," << getTipPosition(i)(2) << std::endl;
-      }
-  }
 
   double Viewer::distToTarget(int linkInd) {
       // getting the relevant link tip position coordinates
@@ -1242,7 +1225,7 @@ namespace glfw
 
   Vector3d Viewer::getPointInSystem(int indx,Vector3d point)
   {
-      Matrix4d scaled_mat = ParentsTrans(indx)* data_list[indx].MakeTransScaled();
+      Matrix4d scaled_mat = ParentsTrans_mat4d(indx)* data_list[indx].MakeTransScaled();
       Vector4d vec = scaled_mat * Vector4d(point(0), point(1), point(2), 1);
       return Vector3d(vec(0), vec(1), vec(2));
   }
@@ -1357,33 +1340,29 @@ namespace glfw
           }
           //if difa not bigger than 0.1 so we need to stop
           isActive = false;
-          fixAxis();
+          axisFixer();
           //printf("lala3\n");
       }
       //printf("lala4\n");
   }
   Eigen::Vector3d Viewer::getTarget() {
-      Eigen::Vector4d ball4 = data_list[0].MakeTransd() * Eigen::Vector4d(0, 0, 0, 1);
-      Eigen::Vector3d ball = Eigen::Vector3d(ball4[0], ball4[1], ball4[2]);
-      return ball;
+      Vector4d sphere = data_list[0].MakeTransd() * Vector4d(0, 0, 0, 1);
+      return Vector3d(sphere[0], sphere[1], sphere[2]);
   }
   Eigen::Vector3d Viewer::getTipbyindex(int index) {
       //index must start from 1 and above
-      Eigen::Vector4d tiposvec;
-
+      Eigen::Vector4d tipvec;
       int lastindex = data_list.size();// last index of last link, we have linknum+1 points == data_list.size()
       if (index == lastindex)// if its last index of last link link
       {
-          tiposvec=ParentsTrans(data_list.size() - 1)* data_list[data_list.size() - 1].MakeTransd()* Eigen::Vector4d(0, 0, 0.8, 1);
+          tipvec = ParentsTrans_mat4d(data_list.size() - 1) * data_list[data_list.size() - 1].MakeTransd()* Eigen::Vector4d(0, 0, 0.8, 1);
       }
       else// other index of links
       {
-          tiposvec = ParentsTrans(index) * data_list[index].MakeTransd() * Eigen::Vector4d(0, 0, -0.8, 1);
+          tipvec = ParentsTrans_mat4d(index) * data_list[index].MakeTransd() * Eigen::Vector4d(0, 0, -0.8, 1);
       }
 
-      Eigen::Vector3d tipospoint = Eigen::Vector3d(tiposvec[0], tiposvec[1], tiposvec[2]);
-      return tipospoint;
-
+      return Vector3d(tipvec[0], tipvec[1], tipvec[2]);
   }
 
   void Viewer::transformfab(vector<Eigen::Vector3d>& p)

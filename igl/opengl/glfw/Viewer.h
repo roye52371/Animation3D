@@ -117,18 +117,17 @@ namespace glfw
         Eigen::RowVector3d destination_position;
         bool ikAnimation;
         //ASS3:
-        Eigen::Matrix4d ParentsTrans(int index);
-        Eigen::Matrix3d ParentsInverseRot(int index);
+        Eigen::Matrix4d ParentsTrans_mat4d(int index);
+        Eigen::Matrix3d ParentsInvRot_mat3d(int index);
         
-        void animateIK();
-        void toggleIK();
-        void fixAxis();
+        void IKSimulation();
+        void toggleIKSimulation();
+        void axisFixer();
         
         Eigen::Matrix4d maketranslatetoshape(int indx);
         void calculateStep(std::vector<Eigen::Vector3d> before, std::vector<Eigen::Vector3d> points);
         void makeChange();
         double distance_2Points(Eigen::Vector3d p1, Eigen::Vector3d p2);
-        void printTipPositions();
         double distToTarget(int linkInd);
         double dist_p1Tonextp1(int p1_ind);
         Eigen::Vector3d getTipPosition(int indx);

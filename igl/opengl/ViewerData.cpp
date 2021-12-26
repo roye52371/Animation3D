@@ -49,13 +49,17 @@ IGL_INLINE void igl::opengl::ViewerData::set_face_based(bool newvalue)
 
 //Ass3
 void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& alignedBox) {
-    line_width = 3.0f;
-    point_size = 15;
+    point_size = 10;
+    line_width = 4;
+    Eigen::RowVector3d red = Eigen::RowVector3d(255, 0, 0);
+    Eigen::RowVector3d green = Eigen::RowVector3d(0, 255, 0);
+    Eigen::RowVector3d blue = Eigen::RowVector3d(0, 0, 255);
 
-    Eigen::MatrixXd V_box(8, 3); // Corners of the bounding box
-    Eigen::MatrixXd V_boxz(2, 3); // Corners of the bounding box
-    Eigen::MatrixXd V_boxy(2, 3); // Corners of the bounding box
-    Eigen::MatrixXd V_boxx(2, 3); // Corners of the bounding box
+    Eigen::MatrixXd V_box(8, 3);  // all box corners
+    
+    Eigen::MatrixXd V_boxx(2, 3); // x box corners
+    Eigen::MatrixXd V_boxy(2, 3); // y box corners
+    Eigen::MatrixXd V_boxz(2, 3); // z box corners
 
     V_box.row(0) = alignedBox.corner(alignedBox.BottomRightCeil);
     V_box.row(1) = alignedBox.corner(alignedBox.BottomRightFloor);
@@ -66,87 +70,24 @@ void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& aligned
     V_box.row(6) = alignedBox.corner(alignedBox.TopLeftCeil);
     V_box.row(7) = alignedBox.corner(alignedBox.TopLeftFloor);
 
-    V_boxz.row(0) = (V_box.row(0) + V_box.row(2) + V_box.row(4) + V_box.row(6)) / 4;
-    V_boxz.row(1) = (V_box.row(1) + V_box.row(3) + V_box.row(5) + V_box.row(7)) / 4;
 
-    add_points(V_boxz, Eigen::RowVector3d(0, 0, 0));
-
-    V_boxy.row(0) = (V_box.row(0) + V_box.row(2)) / 2;
-    V_boxy.row(1) = (V_box.row(4) + V_box.row(6)) / 2;
-
+    Eigen::RowVector3d xfactor = Eigen::RowVector3d(1.5, 0, 0);
     V_boxx.row(0) = (V_box.row(0) + V_box.row(4)) / 2;
     V_boxx.row(1) = (V_box.row(2) + V_box.row(6)) / 2;
 
-    add_edges
-    (
-        V_boxz.row(0) * 3,
-        V_boxz.row(1),
-        Eigen::RowVector3d(0, 1, 0)
-    );
-
-    add_edges
-    (
-        V_boxy.row(0) - Eigen::RowVector3d(0, 0.75, 0),
-        V_boxy.row(1) + Eigen::RowVector3d(0, 0.75, 0),
-        Eigen::RowVector3d(0, 0, 1)
-    );
-
-    add_edges
-    (
-        V_boxx.row(0) - Eigen::RowVector3d(1.5, 0, 0),
-        V_boxx.row(1) + Eigen::RowVector3d(1.5, 0, 0),
-        Eigen::RowVector3d(1, 0, 0)
-    );
-    /*
-    line_width = 3.0f;
-    point_size = 15;
-
-    Eigen::MatrixXd V_box(8, 3); // Corners of the bounding box
-    Eigen::MatrixXd V_boxz(2, 3); // Corners of the bounding box
-    Eigen::MatrixXd V_boxy(2, 3); // Corners of the bounding box
-    Eigen::MatrixXd V_boxx(2, 3); // Corners of the bounding box
-
-    V_box.row(0) = alignedBox.corner(alignedBox.BottomRightCeil);
-    V_box.row(1) = alignedBox.corner(alignedBox.BottomRightFloor);
-    V_box.row(2) = alignedBox.corner(alignedBox.BottomLeftCeil);
-    V_box.row(3) = alignedBox.corner(alignedBox.BottomLeftFloor);
-    V_box.row(4) = alignedBox.corner(alignedBox.TopRightCeil);
-    V_box.row(5) = alignedBox.corner(alignedBox.TopRightFloor);
-    V_box.row(6) = alignedBox.corner(alignedBox.TopLeftCeil);
-    V_box.row(7) = alignedBox.corner(alignedBox.TopLeftFloor);
-
+    Eigen::RowVector3d yfactor = Eigen::RowVector3d(0, 0.75, 0);
+    V_boxy.row(0) = (V_box.row(0) + V_box.row(2)) / 2;
+    V_boxy.row(1) = (V_box.row(4) + V_box.row(6)) / 2;
+    
     V_boxz.row(0) = (V_box.row(0) + V_box.row(2) + V_box.row(4) + V_box.row(6)) / 4;
     V_boxz.row(1) = (V_box.row(1) + V_box.row(3) + V_box.row(5) + V_box.row(7)) / 4;
-
     add_points(V_boxz, Eigen::RowVector3d(0, 0, 0));
-
-    V_boxy.row(0) = (V_box.row(0) + V_box.row(1) + V_box.row(2) + V_box.row(3)) / 4;
-    V_boxy.row(1) = (V_box.row(4) + V_box.row(5) + V_box.row(6) + V_box.row(7)) / 4;
-
-    V_boxx.row(0) = (V_box.row(0) + V_box.row(1) + V_box.row(4) + V_box.row(5)) / 4;
-    V_boxx.row(1) = (V_box.row(2) + V_box.row(3) + V_box.row(6) + V_box.row(7)) / 4;
-
-    add_edges
-    (
-        V_boxz.row(0) * 1.5,
-        V_boxz.row(1) * 1.5,
-        Eigen::RowVector3d(0, 0, 1)
-    );
-
-    add_edges
-    (
-        V_boxy.row(0) * 2,
-        V_boxy.row(1) * 2,
-        Eigen::RowVector3d(0, 1, 0)
-    );
-
-    add_edges
-    (
-        V_boxx.row(0) * 2,
-        V_boxx.row(1) * 2,
-        Eigen::RowVector3d(1, 0, 0)
-    );
-    */
+   
+    add_edges(V_boxx.row(0) - xfactor, V_boxx.row(1) + xfactor, red);
+    
+    add_edges(V_boxy.row(0) - yfactor, V_boxy.row(1) + yfactor, blue);
+    
+    add_edges(3 * V_boxz.row(0), V_boxz.row(1), green);
 }
 //end Ass3
 
@@ -214,8 +155,8 @@ IGL_INLINE void igl::opengl::ViewerData::set_mesh(
       Eigen::Vector3d(GOLD_AMBIENT[0], GOLD_AMBIENT[1], GOLD_AMBIENT[2]),
       Eigen::Vector3d(GOLD_DIFFUSE[0], GOLD_DIFFUSE[1], GOLD_DIFFUSE[2]),
       Eigen::Vector3d(GOLD_SPECULAR[0], GOLD_SPECULAR[1], GOLD_SPECULAR[2]));
-	//image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake1.png");
-    image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake1.png");
+	image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake1.png");
+    //image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake1.png");
 //    grid_texture();
   }
   else

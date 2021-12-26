@@ -15,8 +15,8 @@ SandBox::SandBox()
 void SandBox::Init(const std::string &config)
 {
 	//Ass 3
-	//load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
-	load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+	load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
+	//load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
 
 	Eigen::RowVector3d center(5, 0, 0);
 	parents.push_back(-1);
@@ -50,9 +50,7 @@ void SandBox::Animate()
 		//checkCollision();
 		//Ass2 comment end	
 		//Ass3 comment
-		//animateIK();
-		//makeChange();
-		FabrikAlgo();
+		IKSimulation();
 		//end comment Ass3
 	}
 }

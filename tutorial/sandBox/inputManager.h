@@ -147,13 +147,16 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			//rndr->core().toggle(scn->data().show_faces);
 			//Ass3
 			int lastLinkidx = scn->link_num;
-			scn->tip_position = scn->CalcParentsTrans(lastLinkidx) *
-				scn->data(lastLinkidx).MakeTransd() *
-				Eigen::Vector4d(scn->data(lastLinkidx).V.colwise().mean()[0], 
-				scn->data(lastLinkidx).V.colwise().maxCoeff()[1], scn->data(lastLinkidx).V.colwise().mean()[2], 1);
 
-			std::cout << "tip: (" << scn->tip_position.transpose()[0] <<","<< scn->tip_position.transpose()[1]<<","<< scn->tip_position.transpose()[2] << ")" << std::endl;
-			break;
+			for (int i = 1; i <= lastLinkidx; i++) {
+				scn->tip_position = scn->ParentsTrans_mat4d(i) * scn->data(i).MakeTransd() * Eigen::Vector4d(0, 0, 0.8, 1);
+					/*scn->CalcParentsTrans(i) *
+					scn->data(i).MakeTransd() *
+					Eigen::Vector4d(scn->data(i).V.colwise().mean()[0],
+						scn->data(i).V.colwise().maxCoeff()[1], scn->data(i).V.colwise().mean()[2], 1);*/
+				std::cout << "tip_" << i << ": ("<< scn->tip_position.transpose()[0] << "," << scn->tip_position.transpose()[1] << "," << scn->tip_position.transpose()[2] << ")" << std::endl;
+			}
+				break;
 
 		}
 		case '[':
@@ -232,7 +235,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			//Ass3
 			// toggle ik solver aniimation
 			//scn->ikAnimation = !scn->ikAnimation;
-			scn->toggleIK();
+			scn->toggleIKSimulation();
 			break;
 			//end Ass3
 			//break;
@@ -257,18 +260,14 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case 'p': 
 		{
 				int idx = scn->selected_data_index;
-				Eigen::Matrix3d mat = idx == -1 ?
-					scn->MakeTransd().block(0, 0, 3, 3) :
-					scn->data().MakeTransd().block(0, 0, 3, 3);
-
-				std::cout << "rotation of " << idx << ": " << std::endl;
-				std::cout << mat << std::endl;
+				Eigen::Matrix3d mat = idx == -1 ? scn->GetRotation() : scn->data_list[idx].GetRotation();
+				std::cout << "rotation_" << idx << ":\n" << mat << std::endl;
 				break;
 		}
 		case 'D':
 		case 'd':
-			scn->destination_position = scn->data(0).MakeTransd().col(3).head(3);
-			std::cout << "destination: (" << scn->destination_position.transpose() << ")" << std::endl;
+			scn->destination_position = Eigen::Vector3d(scn->data_list[0].MakeTransd().col(3)[0], scn->data_list[0].MakeTransd().col(3)[1], scn->data_list[0].MakeTransd().col(3)[2]);
+			std::cout << "destination: (" << scn->destination_position << ")" << std::endl;
 			break;
 		//end Ass3
 		default: 
