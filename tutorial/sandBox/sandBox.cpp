@@ -50,8 +50,8 @@ void SandBox::Animate()
 		//checkCollision();
 		//Ass2 comment end	
 		//Ass3 comment
-		//IKSimulation();
-		FabrikAlgo();
+		//IKSimulation();//assignment 3 first implementation algorithm
+		FabrikAlgo();//assignment 3 main algoritm
 		//end comment Ass3
 	}
 }
