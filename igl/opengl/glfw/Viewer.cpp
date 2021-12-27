@@ -212,8 +212,8 @@ namespace glfw
     initMeshdata();// reset- init data
     //end comment Ass1
     //Ass3
-    bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
-    //bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
+    //bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
+    bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
     bool first_link_num = link_num == 0;
     if (first_link_num && iszcylinder) {
         data().MyTranslateInSystem(data().GetRotation(), Eigen::RowVector3d(0, 0, 0.8));
@@ -325,8 +325,8 @@ namespace glfw
     if (fname.length() == 0)
       return;*/
     //this->load_mesh_from_file(fname.c_str());
-    this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
-    //this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
+    //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
+    this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
 
     //end comment Ass 3
   }
@@ -960,7 +960,22 @@ namespace glfw
   }
   
   void Viewer::axisFixer() {
-
+      Eigen::Vector3d zAx(0, 0, 1);
+      //int linkindx = 1; //start with first link
+      double adegrad;
+      for (int i = 1; i <= data_list.size() - 1; i++) {
+          Eigen::Matrix3d rotation_mat = data_list[i].GetRotation();
+          Eigen::Vector3d Eulerangl = rotation_mat.eulerAngles(2, 0, 2);// take the current rotation angle zxz(2,0,2)
+          adegrad = Eulerangl[2];
+          data_list[i].MyRotate(zAx, -adegrad);// rotate around z ax, with the  minus the degree, that we rotate before, to fix axis
+          //now after zxz we rotate -z so now its zx....z(-z)=zx
+          // so for next link we rotate with z angle to return zxz
+          if (i != data_list.size() - 1) { // if we are last link with no children link, so we finish , no rotate, to prevent error with no exist data
+              data_list[i + 1].RotateInSystem(zAx, adegrad);
+          }
+      }
+      
+      /*
       for (int i = 1; i <= data_list.size() - 1; i++) {
           Eigen::Matrix3d rotation_mat = data_list[i].GetRotation();
           cout << "RU:\n" << rotation_mat << endl;
@@ -975,6 +990,7 @@ namespace glfw
               }
           }
       }
+      */
   }
 
   Eigen::Matrix4d Viewer::ParentsTrans_mat4d(int index) {
