@@ -17,7 +17,7 @@ public:
 	void MyRotate(const Eigen::Matrix3d &rot);
 
 	//Ass 3 comment
-	void MyRotate(Eigen::Vector3d rotAxis, double angle, bool zAxis);
+	//void MyRotate(Eigen::Vector3d rotAxis, double angle, bool zAxis);
 	//end Ass3 comment
 
 

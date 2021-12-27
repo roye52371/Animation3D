@@ -191,8 +191,9 @@ void Renderer::MouseProcessing(int button)
 			*/
 			//scn->data().MyRotate(Eigen::Vector3d(0, -1, 0), xrel / 100.0, true);
 			//scn->data().MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
-			scn->data().MyRotate(Eigen::Vector3d(0, 0,-1), xrel / 100.0, true);
-			scn->data().MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
+			scn->data().MyRotate(Eigen::Vector3d(0, 0,-1), xrel / 100.0);//true
+			scn->data().MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0);//false
+			scn->axisFixer();// Ass3
 			//end Ass3
 			//fixed rotation object end
 
@@ -225,8 +226,9 @@ void Renderer::MouseProcessing(int button)
 			*/
 			//scn->MyRotate(Eigen::Vector3d(0, -1, 0), xrel / 100.0, true);
 			//scn->MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
-			scn->MyRotate(Eigen::Vector3d(0, 0,-1), xrel / 100.0, true);
-			scn->MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
+			scn->MyRotate(Eigen::Vector3d(0, 0,-1), xrel / 100.0);//, true
+			scn->MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0);//, false
+			scn->axisFixer();// Ass3
 			//fixed rotation scene end
 		}
 	}
@@ -283,61 +285,20 @@ void Renderer::changeMovingDirection(int dir) {
 
 //Ass3
 void Renderer::changeRotateAxis(int rotate) {
-	/*
-	if (scn->selected_data_index != -1) {
-		switch (rotate)
-		{
-			case GLFW_KEY_UP:
-					scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), -0.1);
-					break;
-			case GLFW_KEY_DOWN:
-					scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), 0.1);
-					break;
-			case GLFW_KEY_LEFT:
-					scn->data().MyRotate(Eigen::Vector3d(0, 1, 0), -0.1);
-					break;
-			case GLFW_KEY_RIGHT:
-					scn->data().MyRotate(Eigen::Vector3d(0, 1, 0), 0.1);
-					break;
-			default:
-				break;
-		}
-	}
-	else
-	{
-		switch (rotate)
-		{
-			case GLFW_KEY_UP:
-				scn->MyRotate(Eigen::Vector3d(1, 0, 0), 0.1);
-				break;
-			case GLFW_KEY_DOWN:
-				scn->MyRotate(Eigen::Vector3d(1, 0, 0), -0.1);
-				break;
-			case GLFW_KEY_LEFT:
-				scn->MyRotate(Eigen::Vector3d(0, 1, 0), -0.1);
-				break;
-			case GLFW_KEY_RIGHT:
-				scn->MyRotate(Eigen::Vector3d(0, 1, 0), 0.1);
-				break;
-			default:
-				break;
-		}
-	}
-		*/
 	if (scn->selected_data_index != -1) {
 		switch (rotate)
 		{
 		case GLFW_KEY_UP:
-			scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), -0.1, false);
+			scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), -0.1);//, false
 			break;
 		case GLFW_KEY_DOWN:
-			scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), 0.1, false);
+			scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), 0.1);//, false
 			break;
 		case GLFW_KEY_LEFT:
-			scn->data().MyRotate(Eigen::Vector3d(0, 0, 1), -0.1,true);
+			scn->data().MyRotate(Eigen::Vector3d(0, 0, 1), -0.1);//,true
 			break;
 		case GLFW_KEY_RIGHT:
-			scn->data().MyRotate(Eigen::Vector3d(0, 0, 1), 0.1,true);
+			scn->data().MyRotate(Eigen::Vector3d(0, 0, 1), 0.1);//,true
 			break;
 		default:
 			break;
@@ -348,23 +309,23 @@ void Renderer::changeRotateAxis(int rotate) {
 		switch (rotate)
 		{
 		case GLFW_KEY_UP:
-			scn->MyRotate(Eigen::Vector3d(1, 0, 0), -0.1, false);
+			scn->MyRotate(Eigen::Vector3d(1, 0, 0), -0.1);//, false
 			break;
 		case GLFW_KEY_DOWN:
-			scn->MyRotate(Eigen::Vector3d(1, 0, 0), 0.1,false);
+			scn->MyRotate(Eigen::Vector3d(1, 0, 0), 0.1);//,false
 			break;
 		case GLFW_KEY_LEFT:
-			scn->MyRotate(Eigen::Vector3d(0, 0, 1), -0.1, true);
+			scn->MyRotate(Eigen::Vector3d(0, 0, 1), -0.1);//, true
 			break;
 		case GLFW_KEY_RIGHT:
-			scn->MyRotate(Eigen::Vector3d(0, 0, 1), 0.1, true);
+			scn->MyRotate(Eigen::Vector3d(0, 0, 1), 0.1);//, true
 			break;
 		default:
 			break;
 		}
 		
 	}
-
+	scn->axisFixer();//Ass 3
 }
 //end Ass3
 

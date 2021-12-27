@@ -269,6 +269,13 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			scn->destination_position = Eigen::Vector3d(scn->data_list[0].MakeTransd().col(3)[0], scn->data_list[0].MakeTransd().col(3)[1], scn->data_list[0].MakeTransd().col(3)[2]);
 			std::cout << "destination: (" << scn->destination_position << ")" << std::endl;
 			break;
+
+		case 'H':
+		case 'h':
+		{
+			rndr->core().toggle(scn->data().show_overlay);
+			break;
+		}
 		//end Ass3
 		default: 
 			Eigen::Vector3f shift;

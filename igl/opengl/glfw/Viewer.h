@@ -53,8 +53,8 @@ namespace glfw
 
   public:
     // UI Enumerations
-   // enum class MouseButton {Left, Middle, Right};
-   // enum class MouseMode { None, Rotation, Zoom, Pan, Translation} mouse_mode;
+    // enum class MouseButton {Left, Middle, Right};
+    // enum class MouseMode { None, Rotation, Zoom, Pan, Translation} mouse_mode;
     virtual void Init(const std::string config);
 	virtual void Animate() {}
 	virtual void WhenTranslate() {}
@@ -118,19 +118,17 @@ namespace glfw
         bool ikAnimation;
         //ASS3:
         Eigen::Matrix4d ParentsTrans_mat4d(int index);
-        Eigen::Matrix3d ParentsInvRot_mat3d(int index);
-        
+        Eigen::Matrix3d ParentsInvRot_mat3d(int index); 
         void IKSimulation();
         void toggleIKSimulation();
         void axisFixer();
         double distance_2Points(Eigen::Vector3d p1, Eigen::Vector3d p2);
-        //my new function try, roye
         void FabrikAlgo();
         void transformfab(std::vector<Eigen::Vector3d>& p, std::vector<Eigen::Vector3d>& oldp);
         Eigen::Vector3d getTarget();
         Eigen::Vector3d getTipbyindex(int index);
-        //void transformfab(std::vector<Eigen::Vector3d>& p);
     // end Ass3
+   
     ////////////////////////
     // Multi-mesh methods //
     ////////////////////////

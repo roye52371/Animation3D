@@ -212,8 +212,8 @@ namespace glfw
     initMeshdata();// reset- init data
     //end comment Ass1
     //Ass3
-    //bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
-    bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
+    bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
+    //bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
     bool first_link_num = link_num == 0;
     if (first_link_num && iszcylinder) {
         data().MyTranslateInSystem(data().GetRotation(), Eigen::RowVector3d(0, 0, 0.8));
@@ -325,8 +325,8 @@ namespace glfw
     if (fname.length() == 0)
       return;*/
     //this->load_mesh_from_file(fname.c_str());
-    //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
-    this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
+    this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
+    //this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
 
     //end comment Ass 3
   }
@@ -690,11 +690,6 @@ namespace glfw
       MyTranslate(Eigen::Vector3d(0, 0, -0.4), true);//for seening the object smaller so we have space to move more
       data_list[0].MyTranslate(Eigen::Vector3d(0.65, 0, 0), true);//moving the objects so they won't be on each other at initial running time
       data_list[1].MyTranslate(Eigen::Vector3d(-0.65, 0, 0), true);
-      /*viewer.data_list[0].show_overlay = 1;
-      viewer.data_list[1].show_overlay = 1;
-      viewer.data_list[0].show_overlay_depth = 1;
-      viewer.data_list[1].show_overlay_depth = 1;*/
-
 
       //init the tree of both objects, and draw their bounding box
 
@@ -916,10 +911,7 @@ namespace glfw
       Eigen::Vector3d sphere = Eigen::Vector3d(sphere4[0], sphere4[1], sphere4[2]);
 
       double dist = (fstCylin - sphere).norm();
-
-      //if (dist > 6.4) { //6.4 is arm length fully extended
       if (dist > (data_list.size()-1)*1.6) { // its arm length fully extended(with out taking the sphere)
-          //cout<<data_list.size() - 2<<endl;
           cout << "cannot reach" << endl;
           isActive = false;
           return;
@@ -927,7 +919,6 @@ namespace glfw
       Eigen::Vector4d E4;
       Eigen::Vector3d E;
       for (int i = data_list.size() - 1; i > 0; i--) {
-          //E4 = ParentsTrans_mat4d(4) * data_list[4].MakeTransd() * Eigen::Vector4d(0, 0.8, 0, 1);
           E4 = ParentsTrans_mat4d(data_list.size() - 1) * data_list[data_list.size() - 1].MakeTransd() * Eigen::Vector4d(0,0, 0.8, 1);
           E = Eigen::Vector3d(E4[0], E4[1], E4[2]);
           dist = (E - sphere).norm();
@@ -948,7 +939,7 @@ namespace glfw
           Eigen::Vector3d cross_product = RE.cross(RD);
           cross_product.normalize();
           cross_product = ParentsInvRot_mat3d(i) * cross_product;
-          data_list[i].MyRotate(cross_product, aDegRad, false);
+          data_list[i].MyRotate(cross_product, aDegRad);//, false
       }
       E4 = ParentsTrans_mat4d(data_list.size() - 1) * data_list[data_list.size() - 1].MakeTransd() * Eigen::Vector4d(0,0, 0.8, 1);
       E = Eigen::Vector3d(E4[0], E4[1], E4[2]);
@@ -961,9 +952,8 @@ namespace glfw
   
   void Viewer::axisFixer() {
       Eigen::Vector3d zAx(0, 0, 1);
-      //int linkindx = 1; //start with first link
       double adegrad;
-      for (int i = 1; i <= data_list.size() - 1; i++) {
+      for (int i = 1; i < data_list.size(); i++) {
           Eigen::Matrix3d rotation_mat = data_list[i].GetRotation();
           Eigen::Vector3d Eulerangl = rotation_mat.eulerAngles(2, 0, 2);// take the current rotation angle zxz(2,0,2)
           adegrad = Eulerangl[2];
@@ -974,23 +964,6 @@ namespace glfw
               data_list[i + 1].RotateInSystem(zAx, adegrad);
           }
       }
-      
-      /*
-      for (int i = 1; i <= data_list.size() - 1; i++) {
-          Eigen::Matrix3d rotation_mat = data_list[i].GetRotation();
-          cout << "RU:\n" << rotation_mat << endl;
-          if (rotation_mat(2, 2) < 1.0) {
-              if (rotation_mat(2, 2) > -1.0) {
-                  //double z = atan2(rotation_mat(2, 0), -rotation_mat(2, 1));
-                  double z = acos(rotation_mat(2, 2));
-                  data_list[i].MyRotate(Eigen::Vector3d(0, 0, 1), -z, false);
-                  if(i!= data_list.size()-1){
-                      data_list[i + 1].MyRotate(Eigen::Vector3d(0, 0, 1), z, true);
-                  }
-              }
-          }
-      }
-      */
   }
 
   Eigen::Matrix4d Viewer::ParentsTrans_mat4d(int index) {
@@ -1005,8 +978,6 @@ namespace glfw
           inv_rot = inv_rot * data(i).GetRotation().inverse();
       return inv_rot;
   }
-
-  ///////////////////////////////
   
   double Viewer::distance_2Points(Eigen::Vector3d p1, Eigen::Vector3d p2) {
       //euclidian distance between 2 3D points
@@ -1014,25 +985,20 @@ namespace glfw
   }
 
   void Viewer::FabrikAlgo() {
-      //printf("starting fabric algo\n");
+
       Eigen::Vector3d b;
       vector<Eigen::Vector3d> before;// array to save old  points position of the links( links+1 points) 
       vector<Eigen::Vector3d> new_points;// array to save new  points position of the links( links+1 points) 
       int linknum = data_list.size() - 1;//because we dont need the sphere
       int pointArraySize = linknum + 1;//( links+1 points)
-      //printf("before calc target\n");
       Eigen::Vector3d target = getTarget();
-      //printf("after calc target\n");
       double di = 1.6;// distance between 2 points(next to each other points) pi+1 pi will be the size of cylinder
-      double ri;
-      double lambda;
+      double ri, lambda;
 
-      //printf("before calc tip\n");
       for (int i = 0; i < pointArraySize; i++) {//pushing only the point of cylinders 
           before.push_back(getTipbyindex(i + 1));// i+1 because we tart i from 0, and tip function start from 1 . the index of root cylinder
       }
-      //printf("after calc tip\n");
-      //before.push_back(getTipbyindex(data_list.size() - 1)); not need, pushing it above, if it sphere so maybe we will need to push it later not sure
+      
       Vector3d p1 = getTipbyindex(1);
       double dist = distance_2Points(p1, target);
       double sumOf_di = di * (pointArraySize - 1);//pointArraySize its num of pi's , pointArraySize-1 its num of (pi+1-pi)
@@ -1040,218 +1006,51 @@ namespace glfw
           cout << "cannot reach" << endl;
           isActive = false;
           return;
-          /*
-          new_points.push_back(before.at(0));//pushing p0 so we cant calc pi+1 from i=1 according to alg
-          for (int i = 1; i < pointArraySize - 1; i++)
-          {
-              Eigen::Vector3d pi = new_points.at(i - 1);
-              ri = distance_2Points(target, pi);
-              lambda = di / ri;
-              Eigen::Vector3d  pi_plus_1(0, 0, 0);
-              pi_plus_1 += lambda * target;
-              pi_plus_1 += (1 - lambda) * pi;
-              new_points.push_back(pi_plus_1);
-
-          }*/
-          //calcing step rotating need
-
       }
 
       else { //the target is reachable put the points in new points array and we will work with them
-          //printf("before calc tip in newpoint\n");
-          for (int i = 0; i < pointArraySize; i++)
-          {
+          for (int i = 0; i < pointArraySize; i++){
               new_points.push_back(getTipbyindex(i + 1));
-              //cout << i << endl;
           }
-          //printf("after calc tip in newpoint\n");
 
           Eigen::Vector3d p1 = new_points.at(0);
           Eigen::Vector3d pn = new_points.at(new_points.size() - 1);
           b = p1;
           double difA = distance_2Points(pn, target);
 
-
-          new_points.at(new_points.size() - 1) = target;// pushin target to pn
-          //cout << new_points.size() - 1 << endl;
-          //cout << pointArraySize - 1 << endl;
+          new_points.at(new_points.size() - 1) = target;// pushing target to the vector
           //forward reaching
-          //printf("starting forward reach\n");
           int pn_mius_1_index = pointArraySize - 2;// because pointArraySize - 2 is last index(pn)
-          for (int i = pn_mius_1_index; i > 0; i--)
-          {
-              //printf("before calc ri\n");
+          for (int i = pn_mius_1_index; i > 0; i--){
               ri = distance_2Points(new_points.at(i + 1), new_points.at(i));
-              //printf("after calc ri");
               lambda = di / ri;
-              //printf("calc lambda is ok\n");
               new_points.at(i) = (1 - lambda) * new_points.at(i + 1) + lambda * new_points.at(i);
-              //printf("neew point changing is ok\n");
           }
           //got to here need to check the line above
 
           //bacward reaching
-          //printf("5\n");
-
           new_points.at(0) = b;
-          //new_points.push_back(target);// not sure if this line needed according to algorithm, so i puted in comment,needed because pn=target didnot kept in new point for some reason
-          //cout << new_points.size() << endl;
-          //cout << pointArraySize << endl;
           for (int i = 0; i < pointArraySize - 1; i++)// because we start from 0 , if we have 4 cylinder, then 5 points, then we want to run until point n-1 , aka point 4 aka index 3 (==arraypointsize-2)
           {
-              //printf("befire calc distance\n");
               ri = distance_2Points(new_points.at(i + 1), new_points.at(i));
-              //cout << ri << endl;
               lambda = di / ri;
-              //cout << lambda << endl;
               new_points.at(i + 1) = (1 - lambda) * new_points.at(i) + lambda * new_points.at(i + 1);
-              //cout << i << endl;
           }
-
-          // difA = distance_2Points(new_points.at(new_points.size() - 1), target);//new_points.at(new_points.size() - 1) is Pn
-           //cout << new_points.size() << endl;
-           //printf("lala1\n");
-           //calculateStep(before, new_points);
           transformfab(new_points, before);
-          //after using before, now our points changed, lets put then in before
-          /*before.clear();
-          for (int i = 0; i < pointArraySize; i++) {//pushing only the point of cylinders
-              before.push_back(getTipbyindex(i + 1));// i+1 because we tart i from 0, and tip function start from 1 . the index of root cylinder
-          }*/
-          //need to to calc and rotate, will not stop this loop  without it, because difa will not change because we didnt change the points and moved it yet
-          //printf("lala2\n");
 
-      //if difa not bigger than 0.1 so we need to stop
-          printf("target:");
-          std::cout << target[0] << "," << target[1] << "," << target[2] << ")" << std::endl;
-          printf("difA:");
-          cout << difA << endl;
-          printf("difA-delta\n");
-          cout << difA - delta << endl;
-          printf("delta:");
-          cout << delta << endl;
+          //if difa not bigger than 0.1 so we need to stop
           if (delta > difA) {
               isActive = false;
               axisFixer();
-              printf("lala3\n");
           }
       }
-      //printf("lala4\n");
   }
 
-  //void Viewer::FabrikAlgo() {
-  //    //printf("starting fabric algo\n");
-  //    Eigen::Vector3d b;
-  //    vector<Eigen::Vector3d> before;// array to save old  points position of the links( links+1 points) 
-  //    vector<Eigen::Vector3d> new_points;// array to save new  points position of the links( links+1 points) 
-  //    int linknum = data_list.size()-1;//because we dont need the sphere
-  //    int pointArraySize = linknum + 1;//( links+1 points)
-  //    //printf("before calc target\n");
-  //    Eigen::Vector3d target = getTarget();
-  //    //printf("after calc target\n");
-  //    double di= 1.6;// distance between 2 points(next to each other points) pi+1 pi will be the size of cylinder
-  //    double ri;
-  //    double lambda;
-
-  //    //printf("before calc tip\n");
-  //    for (int i = 0; i < pointArraySize; i++) {//pushing only the point of cylinders 
-  //        before.push_back(getTipbyindex(i+1));// i+1 because we tart i from 0, and tip function start from 1 . the index of root cylinder
-  //    }
-  //    //printf("after calc tip\n");
-  //    //before.push_back(getTipbyindex(data_list.size() - 1)); not need, pushing it above, if it sphere so maybe we will need to push it later not sure
-  //    Vector3d p1 = getTipbyindex(1);
-  //    double dist = distance_2Points(p1,target);
-  //    double sumOf_di = di*(pointArraySize-1);//pointArraySize its num of pi's , pointArraySize-1 its num of (pi+1-pi)
-  //    if (dist > sumOf_di) {
-  //        cout << "cannot reach" << endl;
-  //        isActive = false;
-  //        return;
-  //        /*
-  //        new_points.push_back(before.at(0));//pushing p0 so we cant calc pi+1 from i=1 according to alg
-  //        for (int i = 1; i < pointArraySize - 1; i++)
-  //        {
-  //            Eigen::Vector3d pi = new_points.at(i - 1);
-  //            ri = distance_2Points(target, pi);
-  //            lambda = di / ri;
-  //            Eigen::Vector3d  pi_plus_1(0, 0, 0);
-  //            pi_plus_1 += lambda * target;
-  //            pi_plus_1 += (1 - lambda) * pi;
-  //            new_points.push_back(pi_plus_1);
-
-  //        }*/
-  //        //calcing step rotating need
-  //        
-  //    }
-
-  //    else { //the target is reachable put the points in new points array and we will work with them
-  //        //printf("before calc tip in newpoint\n");
-  //        for (int i = 0; i < pointArraySize; i++)
-  //        {
-  //            new_points.push_back(getTipbyindex(i+1));
-  //            //cout << i << endl;
-  //        }
-  //        //printf("after calc tip in newpoint\n");
-
-  //        Eigen::Vector3d p1 = new_points.at(0);
-  //        Eigen::Vector3d pn = new_points.at(new_points.size() - 1);
-  //        b = p1;
-  //        double difA = distance_2Points(pn, target);
-
-  //        while (delta < difA) {
-  //            new_points.at(new_points.size() - 1) = target;// pushin target to pn
-  //            //cout << new_points.size() - 1 << endl;
-  //            //cout << pointArraySize - 1 << endl;
-  //            //forward reaching
-  //            //printf("starting forward reach\n");
-  //            int pn_mius_1_index = pointArraySize - 2;// because pointArraySize - 2 is last index(pn)
-  //            for (int i = pn_mius_1_index; i > 0; i--)
-  //            {
-  //                //printf("before calc ri\n");
-  //                ri = distance_2Points(new_points.at(i + 1), new_points.at(i));
-  //                //printf("after calc ri");
-  //                lambda = di / ri;
-  //                //printf("calc lambda is ok\n");
-  //                new_points.at(i) = (1 - lambda) * new_points.at(i + 1) + lambda * new_points.at(i);
-  //                //printf("neew point changing is ok\n");
-  //            }
-  //            //got to here need to check the line above
-  //            
-  //            //bacward reaching
-  //            //printf("5\n");
-
-  //            new_points.at(0) = b;
-  //            //new_points.push_back(target);// not sure if this line needed according to algorithm, so i puted in comment,needed because pn=target didnot kept in new point for some reason
-  //            //cout << new_points.size() << endl;
-  //            //cout << pointArraySize << endl;
-  //            for (int i = 0; i < pointArraySize-1; i++)// because we start from 0 , if we have 4 cylinder, then 5 points, then we want to run until point n-1 , aka point 4 aka index 3 (==arraypointsize-2)
-  //            {
-  //                //printf("befire calc distance\n");
-  //                ri = distance_2Points(new_points.at(i + 1), new_points.at(i));
-  //                //cout << ri << endl;
-  //                lambda = di / ri;
-  //                //cout << lambda << endl;
-  //                new_points.at(i + 1) = (1 - lambda) * new_points.at(i) + lambda * new_points.at(i + 1);
-  //                //cout << i << endl;
-  //            }
-  //            difA = distance_2Points(new_points.at(new_points.size() - 1), target);//new_points.at(new_points.size() - 1) is Pn
-  //            //cout << new_points.size() << endl;
-  //            //printf("lala1\n");
-  //            //calculateStep(before, new_points);
-  //            transformfab(new_points);
-  //            //need to to calc and rotate, will not stop this loop  without it, because difa will not change because we didnt change the points and moved it yet
-  //            //printf("lala2\n");
-  //        }
-  //        //if difa not bigger than 0.1 so we need to stop
-  //        isActive = false;
-  //        axisFixer();
-  //        //printf("lala3\n");
-  //    }
-  //    //printf("lala4\n");
-  //}
   Eigen::Vector3d Viewer::getTarget() {
       Vector4d sphere = data_list[0].MakeTransd() * Vector4d(0, 0, 0, 1);
       return Vector3d(sphere[0], sphere[1], sphere[2]);
   }
+
   Eigen::Vector3d Viewer::getTipbyindex(int index) {
       //index must start from 1 and above
       Eigen::Vector4d tipvec;
@@ -1264,102 +1063,34 @@ namespace glfw
       {
           tipvec = ParentsTrans_mat4d(index) * data_list[index].MakeTransd() * Eigen::Vector4d(0, 0, -0.8, 1);
       }
-
       return Vector3d(tipvec[0], tipvec[1], tipvec[2]);
   }
 
-  //void Viewer::transformfab(vector<Eigen::Vector3d>& p)
-  //{
-  //    Eigen::Vector3d z_axis = Eigen::Vector3d(0, 0, 1);
-  //    Eigen::Vector3d y_axis = Eigen::Vector3d(0, 1, 0);
-  //    for (auto i = 1; i < data_list.size(); i++)
-  //    {
-  //        //clear_rotation(i);
-
-  //        Eigen::Vector3d next_z = p[i + 1] - p[i];
-  //        next_z.normalize();
-  //        Eigen::Vector3d r_axis = z_axis.cross(next_z);
-  //        r_axis.normalize();
-  //        if (r_axis.norm() > 0.0001) {
-  //            Eigen::Vector3d x_axis = y_axis.cross(z_axis);
-  //            Eigen::Vector3d proj = (next_z - (next_z.dot(z_axis) * z_axis));
-  //            proj.normalize();
-
-  //            double z_deg = acos(y_axis.dot(proj));
-  //            z_deg = z_deg < -1.0 ? -1.0 : z_deg;
-  //            z_deg = z_deg > 1.0 ? 1.0 : z_deg; //acos(clamp(Zaxis.dot(Vp), -1.0, 1.0));
-
-  //            double tmpdeg = proj.dot(x_axis) > 0 ? -1 : 1;
-
-  //            z_deg = z_deg * tmpdeg;
-
-  //            double x_deg = acos(z_axis.dot(next_z));
-  //            x_deg = x_deg < -1.0 ? -1.0 : x_deg;
-  //            x_deg = x_deg > 1.0 ? 1.0 : x_deg; //acos(clamp(Zaxis.dot(Vp), -1.0, 1.0));
-
-
-  //            //double z_deg = degrees(glm::acos(clamp(dot(y_axis, proj), -1.0f, 1.0f))) * (dot(proj, x_axis) > 0 ? -1 : 1);
-  //            //double x_deg = degrees(glm::acos(clamp(dot(z_axis, next_z), -1.0f, 1.0f)));
-  //            //rot
-  //            //y_axis = Eigen::Vector3d(MyRotate(r_axis, x_deg) * Vector4d(y_axis, 0));
-  //            z_axis = next_z;
-  //            data_list[i].MyRotate(r_axis,x_deg, false);
-  //            data_list[i].MyRotate(r_axis, z_deg, true);
-  //            //shapeRotation(z_deg, -x_deg, i);
-  //        }
-  //    }
-  //}
-
-  void Viewer::transformfab(vector<Eigen::Vector3d>& p, std::vector<Eigen::Vector3d>& oldp)
+  void Viewer::transformfab(vector<Eigen::Vector3d>& p_curr, std::vector<Eigen::Vector3d>& p_prev)
   {
-      double adegrad;
-      double deg;
-      Eigen::Vector3d next_oldp;
-      Eigen::Vector3d next_p;
-      //printf("in here1\n");
-      for (auto i = 0; i < data_list.size() - 1; i++)
+      double adegrad, deg;
+      Eigen::Vector3d next_p_prev, next_p_curr;
+      for (int i = 0; i < data_list.size() - 1; i++)
       {
-          cout << oldp[i + 1] << endl;
-          //printf("start loop\n");
-          //clear_rotation(i);
+          next_p_prev = p_prev[i] - p_prev[i + 1];
+          next_p_curr = p_curr[i] - p_curr[i + 1];
+          adegrad = next_p_prev.normalized().dot(next_p_curr.normalized());
 
-          next_oldp = oldp[i] - oldp[i + 1];
-          next_p = p[i] - p[i + 1];
-          cout << next_oldp << endl;
-          cout << next_p << endl;
-          //printf("in here2\n");
-          adegrad = next_oldp.normalized().dot(next_p.normalized());
+          //checking for adegrad limits check
           if (adegrad < -1)
               adegrad = -1;
           if (adegrad > 1)
               adegrad = 1;
+
           deg = acos(adegrad);
           deg = deg / 10;
-          cout << deg << endl;
-          //printf("in here3\n");
-          Eigen::Vector3d crossvecp = next_oldp.cross(next_p);
 
-          /*
-          crossvecp.normalize();
-
-          crossvecp = ParentsInvRot_mat3d(i) * crossvecp;
-          cout << crossvecp << endl;
-
-
-          printf("in here4\n");
-          data_list[i+1].MyRotate(crossvecp, deg, false);
-          */
-
-          Eigen::Vector4d vecvec(crossvecp(0), crossvecp(1), crossvecp(2), 0);
-          //
-          //data_list[i + 1].MyRotate(Eigen::Vector3d(1, 0, 0), -0.1, false);
-          data_list[i + 1].MyRotate(((CalcParentsTrans(i + 1) * data_list[i + 1].MakeTransd()).inverse() * vecvec).head(3), deg);
-          //data_list[i + 1].MyRotate(((ParentsTrans_mat4d(i + 1) * data_list[i + 1].MakeTransd()).inverse() * vecvec).head(3), deg);
-
-
-
+          Eigen::Vector3d next_p_cross = next_p_prev.cross(next_p_curr);
+          Eigen::Vector4d next_p_cross4d(next_p_cross[0], next_p_cross[1], next_p_cross[2], 0);
+          next_p_cross4d = (CalcParentsTrans(i + 1) * data_list[i + 1].MakeTransd()).inverse() * next_p_cross4d;
+          next_p_cross = Eigen::Vector3d(next_p_cross4d[0], next_p_cross4d[1], next_p_cross4d[2]);
+          data_list[i + 1].MyRotate(next_p_cross, deg);
       }
-
   }
 
   //end Ass3 comment
