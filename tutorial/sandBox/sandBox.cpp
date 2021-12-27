@@ -50,7 +50,8 @@ void SandBox::Animate()
 		//checkCollision();
 		//Ass2 comment end	
 		//Ass3 comment
-		IKSimulation();
+		//IKSimulation();
+		FabrikAlgo();
 		//end comment Ass3
 	}
 }

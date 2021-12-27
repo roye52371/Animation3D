@@ -47,7 +47,7 @@ namespace glfw
   class Viewer : public Movable
   {
       //Ass3
-      double delta;
+      double delta=0.1;
       double maxDistance;
       //end Ass3
 
@@ -126,9 +126,10 @@ namespace glfw
         double distance_2Points(Eigen::Vector3d p1, Eigen::Vector3d p2);
         //my new function try, roye
         void FabrikAlgo();
+        void transformfab(std::vector<Eigen::Vector3d>& p, std::vector<Eigen::Vector3d>& oldp);
         Eigen::Vector3d getTarget();
         Eigen::Vector3d getTipbyindex(int index);
-        void transformfab(std::vector<Eigen::Vector3d>& p);
+        //void transformfab(std::vector<Eigen::Vector3d>& p);
     // end Ass3
     ////////////////////////
     // Multi-mesh methods //
