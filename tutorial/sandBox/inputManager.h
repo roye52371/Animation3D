@@ -77,13 +77,18 @@ static void glfw_mouse_press(GLFWwindow* window, int button, int action, int mod
 static void glfw_mouse_scroll(GLFWwindow* window, double x, double y)
 {
 	Renderer* rndr = (Renderer*)glfwGetWindowUserPointer(window);
-	if(rndr->GetScene()->current_picked != -1)
+	if (rndr->GetScene()->current_picked != -1) {
 		//Ass3
-		rndr->GetScene()->data().MyTranslate(Eigen::Vector3d(0, 0, -y * 0.03), true);
+		if (rndr->GetScene()->current_picked != 0)//not sphere
+			rndr->GetScene()->data(1).MyTranslateInSystem(rndr->GetScene()->GetRotation(), Eigen::Vector3d(0, 0, -y * 0.03));//arm must not brake
+		else
+			rndr->GetScene()->data().MyTranslateInSystem(rndr->GetScene()->GetRotation(), Eigen::Vector3d(0, 0, -y * 0.03));//move sphere
+
 		//rndr->GetScene()->data().MyScale(Eigen::Vector3d(1 + y * 0.01,1 + y * 0.01,1+y*0.01));
 		//end Ass3
+	}
 	else
-		rndr->GetScene()->MyTranslate(Eigen::Vector3d(0,0, - y * 0.03),true);
+		rndr->GetScene()->MyTranslate(Eigen::Vector3d(0, 0, -y * 0.03), true);
 }
 
 void glfw_window_size(GLFWwindow* window, int width, int height)
