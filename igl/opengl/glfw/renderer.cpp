@@ -285,7 +285,7 @@ void Renderer::changeMovingDirection(int dir) {
 
 //Ass3
 void Renderer::changeRotateAxis(int rotate) {
-	if (scn->selected_data_index != -1) {
+	if (scn->current_picked != -1) {
 		switch (rotate)
 		{
 		case GLFW_KEY_UP:

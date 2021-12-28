@@ -89,7 +89,8 @@ namespace glfw
     link_num(0),
     tip_position(Eigen::RowVector4d(0, 0, 0, 1)),
     destination_position(Eigen::RowVector3d(5,0,0)),//we have 4 zcylinder and 1 sphere
-    ikAnimation(false)
+    ikAnimation(false),
+    current_picked(-1)
   {
     data_list.front().id = 0;
     maxDistance = (data_list.size() - 1) * 1.6;

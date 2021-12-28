@@ -116,6 +116,7 @@ namespace glfw
         Eigen::RowVector4d tip_position;
         Eigen::RowVector3d destination_position;
         bool ikAnimation;
+        int current_picked;
         //ASS3:
         Eigen::Matrix4d ParentsTrans_mat4d(int index);
         Eigen::Matrix3d ParentsInvRot_mat3d(int index); 

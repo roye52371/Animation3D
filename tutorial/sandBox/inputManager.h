@@ -22,6 +22,7 @@ static void glfw_mouse_press(GLFWwindow* window, int button, int action, int mod
 
 	  double depth, closestZ = 1;
 	  int i = 0, savedIndx = scn->selected_data_index, lastIndx= scn->selected_data_index;
+	  int prev_picked = scn->current_picked;
 
 	  for (; i < scn->data_list.size(); i++)
 	  {
@@ -29,6 +30,7 @@ static void glfw_mouse_press(GLFWwindow* window, int button, int action, int mod
 		  depth = rndr->Picking(x2, y2);
 		  if (depth < 0 && (closestZ > 0 || closestZ < depth))
 		  {
+			  scn->current_picked = i;
 			  savedIndx = i;
 			  closestZ = depth;
 			  std::cout << "found " << depth << std::endl;
@@ -39,6 +41,9 @@ static void glfw_mouse_press(GLFWwindow* window, int button, int action, int mod
 	  if (lastIndx != savedIndx)
 		  scn->data_list[lastIndx].set_colors(Eigen::RowVector3d(255.0 / 255.0, 228.0 / 255.0, 58.0 / 255.0));
 
+	  if (scn->current_picked == prev_picked) {
+		  scn->current_picked = -1;
+	  }
 	  rndr->UpdatePosition(x2, y2);
 
   }
@@ -72,7 +77,7 @@ static void glfw_mouse_press(GLFWwindow* window, int button, int action, int mod
 static void glfw_mouse_scroll(GLFWwindow* window, double x, double y)
 {
 	Renderer* rndr = (Renderer*)glfwGetWindowUserPointer(window);
-	if(rndr->IsPicked())
+	if(rndr->GetScene()->current_picked != -1)
 		//Ass3
 		rndr->GetScene()->data().MyTranslate(Eigen::Vector3d(0, 0, -y * 0.03), true);
 		//rndr->GetScene()->data().MyScale(Eigen::Vector3d(1 + y * 0.01,1 + y * 0.01,1+y*0.01));
@@ -259,10 +264,21 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case'P':
 		case 'p': 
 		{
+			Eigen::Matrix3d mat;
+			if (scn->current_picked != -1 && scn->current_picked != 0) {// we don't need to print sphere in index 0
 				int idx = scn->selected_data_index;
-				Eigen::Matrix3d mat = idx == -1 ? scn->GetRotation() : scn->data_list[idx].GetRotation();
+				Eigen::Matrix3d mat = scn->data_list[idx].GetRotation();
 				std::cout << "rotation_" << idx << ":\n" << mat << std::endl;
-				break;
+			}
+			else if (scn->current_picked == 0) {
+				std::cout << "Sphere matrix not supposed to be printed" << std::endl;
+			}
+			else {
+				Eigen::Matrix3d mat = scn->GetRotation();
+				std::cout << "rotation_scn" << ":\n" << mat << std::endl;
+			}
+
+			break;
 		}
 		case 'D':
 		case 'd':
