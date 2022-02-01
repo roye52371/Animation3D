@@ -213,7 +213,7 @@ namespace glfw
     initMeshdata();// reset- init data
     //end comment Ass1
     //Ass3
-    bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
+    /*bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
     //bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
     bool first_link_num = link_num == 0;
     if (first_link_num && iszcylinder) {
@@ -221,10 +221,10 @@ namespace glfw
         data().tree.init(data().V, data().F);
         data().draw_xyzAxis(data().tree.m_box);
         data().SetCenterOfRotation(Eigen::RowVector3d(0, 0, -0.8));
-        /*data().show_overlay_depth = true;
-        data().show_overlay = true;
-        data().show_texture = true;
-        data().set_visible(false, 1);*/
+        //data().show_overlay_depth = true;
+        //data().show_overlay = true;
+        //data().show_texture = true;
+        //data().set_visible(false, 1);
         link_num++;
     }
     else if (!first_link_num && iszcylinder) {
@@ -232,12 +232,12 @@ namespace glfw
         data().tree.init(data().V, data().F);
         data().draw_xyzAxis(data().tree.m_box);
         data().SetCenterOfRotation(Eigen::RowVector3d(0, 0, -0.8));
-        /*data().show_overlay_depth = true;
-        data().show_overlay = true;
-        data().show_texture = true;
-        data().set_visible(false, 1);*/
+        //data().show_overlay_depth = true;
+        //data().show_overlay = true;
+        //data().show_texture = true;
+        //data().set_visible(false, 1);
         link_num++;
-    }
+    }*/
     //end Ass3
     return true;
   }
@@ -319,14 +319,14 @@ namespace glfw
 
   IGL_INLINE void Viewer::open_dialog_load_mesh()
   {
-      /*    //Ass 3 comment
+          //Ass 3 comment
 
     std::string fname = igl::file_dialog_open();
 
     if (fname.length() == 0)
-      return;*/
-    //this->load_mesh_from_file(fname.c_str());
-    this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
+      return;
+    this->load_mesh_from_file(fname.c_str());
+    //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
     //this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
 
     //end comment Ass 3

@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
   //end Ass 2 comment
 
   //Ass3 
-
+  /*
   for (int i = 0; i < viewer.data_list.size(); i++) {
 	  viewer.data_list[i].tree.init(viewer.data_list[i].V, viewer.data_list[i].F);
   }
@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 
   drawDotsAndLines(viewer);
   //std::cout << "ddddddddd\n";
+  */
   //end comment Ass3
   
   Init(*disp, menu);
