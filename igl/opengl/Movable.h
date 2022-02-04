@@ -29,6 +29,11 @@ public:
 
 	void RotateInSystem(Eigen::Vector3d rotAxis, double angle);
 
+	//Project comment
+	void Movable::MyRotate(const Eigen::Quaterniond rot);
+	void Movable::RotateInSystem(const Eigen::Matrix3d& mat, const Eigen::Quaterniond rot);
+	//end Project commnet
+
 	Eigen::Matrix3d GetRotation() const{ return Tout.rotation().matrix(); }
 
 	virtual ~Movable() {}

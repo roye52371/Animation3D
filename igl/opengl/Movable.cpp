@@ -86,6 +86,20 @@ void Movable::RotateInSystem(Eigen::Vector3d rotAxis, double angle)
 
 }
 
+//Project comment
+void Movable::MyRotate(const Eigen::Quaterniond rot)
+{
+	Tout.rotate(rot);
+}
+
+void Movable::RotateInSystem(const Eigen::Matrix3d& mat, const Eigen::Quaterniond rot)
+{
+	Eigen::Quaterniond q = Eigen::Quaterniond(mat);
+	MyRotate((q * rot.conjugate()) * q.conjugate());
+}
+
+//end Project comment
+
 
 
 
