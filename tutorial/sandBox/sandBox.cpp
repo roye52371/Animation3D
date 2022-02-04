@@ -180,20 +180,6 @@ void SandBox::initDataStructure(Eigen::MatrixXd& V, Eigen::MatrixXi& F)
 
 void SandBox::Skinning()
 {
-
-    RotationList vQ; //rotation of joints
-    vector<Vector3d> vT; //translation of joints
-
-    //igl::forward_kinematics(C, BE, P, anim_pose, vQ, vT);
-
-    igl::dqs(data_list[0].V, W, vQ, vT, U);
-
-    data_list[0].set_vertices(U);
-    //data_list[0].set_edges(CT, BET, sea_green);
-    //data_list[0].compute_normals();
-
-
-    /*
     if (recompute)
     {
         //find pose interval
@@ -211,7 +197,85 @@ void SandBox::Skinning()
         RotationList vQ; //rotation of joints
         vector<Vector3d> vT; //translation of joints
 
-        igl::forward_kinematics(C, BE, P, anim_pose, vQ, vT);
+        //igl::forward_kinematics(C, BE, P, anim_pose, vQ, vT);
+
+        //our forward kinematics start
+
+        vQ.resize(17);
+        vT.resize(17);
+
+
+        Eigen::Vector3d b;
+        vector<Eigen::Vector3d> before;// array to save old  points position of the links( links+1 points) 
+        vector<Eigen::Vector3d> new_points;// array to save new  points position of the links( links+1 points) 
+        int linknum = data_list.size() - 1;//because we dont need the sphere
+        int pointArraySize = linknum + 1;//( links+1 points)
+        //Eigen::Vector3d target = getTarget();
+        double di = 1.6;// distance between 2 points(next to each other points) pi+1 pi will be the size of cylinder
+        double ri, lambda;
+
+        for (int i = 0; i < 17; i++) {//pushing only the point of cylinders 
+            before.push_back(JointsPoses.at(i));// i+1 because we tart i from 0, and tip function start from 1 . the index of root cylinder
+        }
+
+        // Vector3d p1 = getTipbyindex(1);
+        // double dist = distance_2Points(p1, target);
+        // double sumOf_di = di * (pointArraySize - 1);//pointArraySize its num of pi's , pointArraySize-1 its num of (pi+1-pi)
+        /* if (dist > sumOf_di) {
+             cout << "cannot reach" << endl;
+             isActive = false;
+             return;
+         }*/
+
+
+        for (int i = 0; i < 17; i++) {
+            new_points.push_back(JointsPoses.at(i));
+        }
+
+        //Eigen::Vector3d p1 = new_points.at(0);
+        //Eigen::Vector3d pn = new_points.at(new_points.size() - 1);
+        //b = p1;
+        //double difA = distance_2Points(pn, target);
+
+        //new_points.at(new_points.size() - 1) = target;// pushing target to the vector
+        //forward reaching
+        //int pn_mius_1_index = pointArraySize - 2;// because pointArraySize - 2 is last index(pn)
+        for (int i = 15; i >= 0; i--) {
+            ri = distance_2Points(new_points.at(i + 1), new_points.at(i));
+            lambda = di / ri;
+            new_points.at(i) = (1 - lambda) * new_points.at(i + 1) + lambda * new_points.at(i);
+            Eigen::Quaterniond quat = Eigen::Quaterniond::FromTwoVectors(new_points[i], JointsPoses[i]);
+            quat = quat.slerp(0.95, Eigen::Quaterniond::Identity());
+            vQ.at(i) = quat;
+            vT.at(i) = new_points[i];
+
+        }
+
+        Eigen::Quaterniond quat = Eigen::Quaterniond::FromTwoVectors(new_points[16], JointsPoses[16]);
+        //quat = quat.slerp(0.95, Eigen::Quaterniond::Identity());
+        vQ.at(16) = quat;
+        vT.at(16) = new_points[16];
+
+        //joints[i]->RotateInSystem(mat.block<3, 3>(0, 0), quat);
+        //igl::dqs(data_list[0].V, W, vQ, vT, UU);
+        //data_list[0].set_vertices(UU);
+        //igl::dqs(data_list[0].V, W, vQ, vT, U);
+       // data_list[0].set_vertices(U);
+        //data_list[0].set_edges(CT, BET, sea_green);
+        //data_list[0].compute_normals();
+
+
+        //update the joints to the new one
+
+        for (signed int i = 16; i >= 0; i--) {
+            JointsPoses.at(i) = new_points[i];
+        }
+
+
+
+
+
+        //our forward kinemtics ends
 
         const int dim = C.cols();
         MatrixXd T(BE.rows() * (dim + 1), dim);
@@ -256,7 +320,6 @@ void SandBox::Skinning()
             recompute = false;
         }
     }
-    */
 }
 void SandBox::forwardLoop()
 {
@@ -333,6 +396,7 @@ Eigen::Vector3d SandBox::getJoint(int indx) {
 
     return joint;
 }
+
 
 
 void SandBox::add_joints() {
@@ -420,7 +484,7 @@ void SandBox::Animate()
 	if (isActive)
 	{
 
-
+        //project comment
         RotationList vQ; //rotation of joints
         vector<Vector3d> vT; //translation of joints
         //Eigen::MatrixXd UU;
@@ -494,8 +558,8 @@ void SandBox::Animate()
             for (signed int i = 16; i >= 0; i--) {
                 JointsPoses.at(i) = new_points[i];
             }
-
-
+            //end project comment
+        
         /*
         vector<Eigen::Vector3d> tmpPoses = JointsPoses;
         for (signed int i = num_of_links - 1; i >= 0; i--) {
