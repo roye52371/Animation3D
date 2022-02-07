@@ -108,6 +108,7 @@ void SandBox::Init(const std::string &config)
 
 
     target_pose = skelton[joints_num];
+    //data_list[0].set_colors(Eigen::RowVector3d(165,90,0));//brownie color for the snake;
     U = V;
 
     //end comment Project

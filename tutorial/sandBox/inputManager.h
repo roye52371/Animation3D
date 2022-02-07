@@ -11,7 +11,7 @@
 static void glfw_mouse_press(GLFWwindow* window, int button, int action, int modifier)
 {
 
-  Renderer* rndr = (Renderer*) glfwGetWindowUserPointer(window);
+  /*Renderer* rndr = (Renderer*) glfwGetWindowUserPointer(window);
   igl::opengl::glfw::Viewer* scn = rndr->GetScene();
 
   if (action == GLFW_PRESS)
@@ -51,7 +51,43 @@ static void glfw_mouse_press(GLFWwindow* window, int button, int action, int mod
   {
 	  rndr->GetScene()->isPicked = false;
 
-  }
+  }*/
+	Renderer* rndr = (Renderer*)glfwGetWindowUserPointer(window);
+	igl::opengl::glfw::Viewer* scn = rndr->GetScene();
+
+	if (action == GLFW_PRESS)
+	{
+		double x2, y2;
+		glfwGetCursorPos(window, &x2, &y2);
+
+
+		double depth, closestZ = 1;
+		int i = 0, savedIndx = scn->selected_data_index, lastIndx = scn->selected_data_index;
+
+		for (; i < scn->data_list.size(); i++)
+		{
+			scn->selected_data_index = i;
+			depth = rndr->Picking(x2, y2);
+			if (depth < 0 && (closestZ > 0 || closestZ < depth))
+			{
+				savedIndx = i;
+				closestZ = depth;
+				std::cout << "found " << depth << std::endl;
+			}
+		}
+		scn->selected_data_index = savedIndx;
+		scn->data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
+		if (lastIndx != savedIndx)
+			scn->data_list[lastIndx].set_colors(Eigen::RowVector3d(255.0 / 255.0, 228.0 / 255.0, 58.0 / 255.0));
+
+		rndr->UpdatePosition(x2, y2);
+
+	}
+	else
+	{
+		rndr->GetScene()->isPicked = false;
+
+	}
 }
 
 
@@ -77,16 +113,19 @@ static void glfw_mouse_press(GLFWwindow* window, int button, int action, int mod
 static void glfw_mouse_scroll(GLFWwindow* window, double x, double y)
 {
 	Renderer* rndr = (Renderer*)glfwGetWindowUserPointer(window);
-	if (rndr->GetScene()->current_picked != -1) {
-		//Ass3
-		if (rndr->GetScene()->current_picked != 0)//not sphere
-			rndr->GetScene()->data(1).MyTranslateInSystem(rndr->GetScene()->GetRotation(), Eigen::Vector3d(0, 0, -y * 0.03));//arm must not brake
-		else
-			rndr->GetScene()->data().MyTranslateInSystem(rndr->GetScene()->GetRotation(), Eigen::Vector3d(0, 0, -y * 0.03));//move sphere
+	//if (rndr->GetScene()->current_picked != -1) {
+	//	
+	//	//Ass3
+	//	if (rndr->GetScene()->current_picked != 0)//not sphere
+	//		rndr->GetScene()->data(1).MyTranslateInSystem(rndr->GetScene()->GetRotation(), Eigen::Vector3d(0, 0, -y * 0.03));//arm must not brake
+	//	else
+	//		rndr->GetScene()->data().MyTranslateInSystem(rndr->GetScene()->GetRotation(), Eigen::Vector3d(0, 0, -y * 0.03));//move sphere
 
-		//rndr->GetScene()->data().MyScale(Eigen::Vector3d(1 + y * 0.01,1 + y * 0.01,1+y*0.01));
-		//end Ass3
-	}
+	//	//rndr->GetScene()->data().MyScale(Eigen::Vector3d(1 + y * 0.01,1 + y * 0.01,1+y*0.01));
+	//	//end Ass3
+	//}
+	if (rndr->IsPicked())
+		rndr->GetScene()->data().MyScale(Eigen::Vector3d(1 + y * 0.01, 1 + y * 0.01, 1 + y * 0.01));
 	else
 		rndr->GetScene()->MyTranslate(Eigen::Vector3d(0, 0, -y * 0.03), true);
 }
@@ -156,17 +195,17 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		{
 			//rndr->core().toggle(scn->data().show_faces);
 			//Ass3
-			int lastLinkidx = scn->link_num;
+			//int lastLinkidx = scn->link_num;
 
-			for (int i = 1; i <= lastLinkidx; i++) {
-				scn->tip_position = scn->ParentsTrans_mat4d(i) * scn->data(i).MakeTransd() * Eigen::Vector4d(0, 0, 0.8, 1);
-					/*scn->CalcParentsTrans(i) *
-					scn->data(i).MakeTransd() *
-					Eigen::Vector4d(scn->data(i).V.colwise().mean()[0],
-						scn->data(i).V.colwise().maxCoeff()[1], scn->data(i).V.colwise().mean()[2], 1);*/
-				std::cout << "tip_" << i << ": ("<< scn->tip_position.transpose()[0] << "," << scn->tip_position.transpose()[1] << "," << scn->tip_position.transpose()[2] << ")" << std::endl;
-			}
-				break;
+			//for (int i = 1; i <= lastLinkidx; i++) {
+			//	scn->tip_position = scn->ParentsTrans_mat4d(i) * scn->data(i).MakeTransd() * Eigen::Vector4d(0, 0, 0.8, 1);
+			//		/*scn->CalcParentsTrans(i) *
+			//		scn->data(i).MakeTransd() *
+			//		Eigen::Vector4d(scn->data(i).V.colwise().mean()[0],
+			//			scn->data(i).V.colwise().maxCoeff()[1], scn->data(i).V.colwise().mean()[2], 1);*/
+			//	std::cout << "tip_" << i << ": ("<< scn->tip_position.transpose()[0] << "," << scn->tip_position.transpose()[1] << "," << scn->tip_position.transpose()[2] << ")" << std::endl;
+			//}
+			break;
 
 		}
 		case '[':
@@ -437,40 +476,41 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case 'k':
 		case 'K':
 			// 'k' and 'K' activating or deactivating the object movemant
-			scn->setMovingButton();
+			//scn->setMovingButton();
 			break;
 			// end comment Ass 2
 			//Ass 2 comment
 			//changing moving object between 2 objects
 		case 'j':
 		case 'J':
-			scn->moving_index = (scn->moving_index + 1) % 2;
+			//scn->moving_index = (scn->moving_index + 1) % 2;
 			break;
 			// end comment Ass 2
 		//Ass3
 		case'P':
 		case 'p': 
-		{
-			Eigen::Matrix3d mat;
-			if (scn->current_picked != -1 && scn->current_picked != 0) {// we don't need to print sphere in index 0
-				int idx = scn->selected_data_index;
-				Eigen::Matrix3d mat = scn->data_list[idx].GetRotation();
-				std::cout << "rotation_" << idx << ":\n" << mat << std::endl;
-			}
-			else if (scn->current_picked == 0) {
-				std::cout << "Sphere matrix not supposed to be printed" << std::endl;
-			}
-			else {
-				Eigen::Matrix3d mat = scn->GetRotation();
-				std::cout << "rotation_scn" << ":\n" << mat << std::endl;
-			}
+		//{
+		//	Eigen::Matrix3d mat;
+		//	if (scn->current_picked != -1 && scn->current_picked != 0) {// we don't need to print sphere in index 0
+		//		int idx = scn->selected_data_index;
+		//		Eigen::Matrix3d mat = scn->data_list[idx].GetRotation();
+		//		std::cout << "rotation_" << idx << ":\n" << mat << std::endl;
+		//	}
+		//	else if (scn->current_picked == 0) {
+		//		std::cout << "Sphere matrix not supposed to be printed" << std::endl;
+		//	}
+		//	else {
+		//		Eigen::Matrix3d mat = scn->GetRotation();
+		//		std::cout << "rotation_scn" << ":\n" << mat << std::endl;
+		//	}
 
+		//	break;
+		//}
 			break;
-		}
 		case 'D':
 		case 'd':
-			scn->destination_position = Eigen::Vector3d(scn->data_list[0].MakeTransd().col(3)[0], scn->data_list[0].MakeTransd().col(3)[1], scn->data_list[0].MakeTransd().col(3)[2]);
-			std::cout << "destination: (" << scn->destination_position << ")" << std::endl;
+			/*scn->destination_position = Eigen::Vector3d(scn->data_list[0].MakeTransd().col(3)[0], scn->data_list[0].MakeTransd().col(3)[1], scn->data_list[0].MakeTransd().col(3)[2]);
+			std::cout << "destination: (" << scn->destination_position << ")" << std::endl;*/
 			break;
 
 		case 'H':

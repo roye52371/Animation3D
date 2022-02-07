@@ -163,39 +163,48 @@ void Renderer::MouseProcessing(int button)
 			Eigen::Matrix4f tmpM = core().proj;
 			double xToMove = -(double)xrel / core().viewport[3] * (z + 2 * near) * (far) / (far + 2 * near) * 2.0 * tanf(angle / 360 * M_PI) / (core().camera_zoom * core().camera_base_zoom);
 			double yToMove = (double)yrel / core().viewport[3] * (z + 2 * near) * (far) / (far + 2 * near) * 2.0 * tanf(angle / 360 * M_PI) / (core().camera_zoom * core().camera_base_zoom);
-			//Ass3
-			if (scn->selected_data_index > 0) {//if its zcylindercylinderes
-				//moving all of the arm
-				//index 1 is the root of all z
-				scn->data_list[1].MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(xToMove, 0, 0));
-				scn->data_list[1].MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(0, yToMove, 0));
-			}
-			else
-			{
-				//fixed tranlation object
-				scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(xToMove, 0, 0));
-				scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(0, yToMove, 0));
-				//fixed tranlation object end
-			}
-			//end Ass3
+			////Ass3
+			//if (scn->selected_data_index > 0) {//if its zcylindercylinderes
+			//	//moving all of the arm
+			//	//index 1 is the root of all z
+			//	scn->data_list[1].MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(xToMove, 0, 0));
+			//	scn->data_list[1].MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(0, yToMove, 0));
+			//}
+			//else
+			//{
+			//	//fixed tranlation object
+			//	scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(xToMove, 0, 0));
+			//	scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(0, yToMove, 0));
+			//	//fixed tranlation object end
+			//}
+			////end Ass3
+
+			//Project comment
+			scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(xToMove, 0, 0));
+			scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(0, yToMove, 0));
+			//end comment Project
 			scn->WhenTranslate();
 			
 		}
 		else
 		{
-			//fixed rotation object
-			//Ass3
-			/*
-			scn->data().RotateInSystem(Eigen::Vector3d(-1, 0, 0), yrel / 100.0);
-			scn->data().RotateInSystem(Eigen::Vector3d(0, -1, 0), xrel / 100.0);
-			*/
-			//scn->data().MyRotate(Eigen::Vector3d(0, -1, 0), xrel / 100.0, true);
+			////fixed rotation object
+			////Ass3
+			///*
+			//scn->data().RotateInSystem(Eigen::Vector3d(-1, 0, 0), yrel / 100.0);
+			//scn->data().RotateInSystem(Eigen::Vector3d(0, -1, 0), xrel / 100.0);
+			//*/
+			////scn->data().MyRotate(Eigen::Vector3d(0, -1, 0), xrel / 100.0, true);
+			////scn->data().MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
+			//scn->data().MyRotate(Eigen::Vector3d(0, 0,-1), xrel / 100.0, true);
 			//scn->data().MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
-			scn->data().MyRotate(Eigen::Vector3d(0, 0,-1), xrel / 100.0, true);
-			scn->data().MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
-			//scn->axisFixer();// Ass3
-			//end Ass3
-			//fixed rotation object end
+			////scn->axisFixer();// Ass3
+			////end Ass3
+			////fixed rotation object end
+			//Project comment
+			scn->data().RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 100.0);
+			scn->data().RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 100.0);
+			//end comment Project
 
 		}
 	}
@@ -219,17 +228,22 @@ void Renderer::MouseProcessing(int button)
 		}
 		else
 		{
-			//fixed rotation scene
-			/*
+			////fixed rotation scene
+			///*
+			//scn->RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 100.0);
+			//scn->RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 100.0);
+			//*/
+			////scn->MyRotate(Eigen::Vector3d(0, -1, 0), xrel / 100.0, true);
+			////scn->MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
+			//scn->MyRotate(Eigen::Vector3d(0, 0,-1), xrel / 100.0, true);
+			//scn->MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
+			////scn->axisFixer();// Ass3
+			//fixed rotation scene end
+
+			//Project comment
 			scn->RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 100.0);
 			scn->RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 100.0);
-			*/
-			//scn->MyRotate(Eigen::Vector3d(0, -1, 0), xrel / 100.0, true);
-			//scn->MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
-			scn->MyRotate(Eigen::Vector3d(0, 0,-1), xrel / 100.0, true);
-			scn->MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
-			//scn->axisFixer();// Ass3
-			//fixed rotation scene end
+			//end comment Project
 		}
 	}
 }
