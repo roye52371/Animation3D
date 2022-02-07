@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 
   //Project comment start
   //viewer.MyRotate(Eigen::Vector3d(0.08, -0.5, 0.5), 160.0);//snake like standing
-  viewer.MyRotate(Eigen::Vector3d(-0.5, -0.08, 0.5), 160.0);// snake like on side maybe want like this
+  //viewer.MyRotate(Eigen::Vector3d(-0.5, -0.08, 0.5), 160.0);// snake like on side maybe want like this
   //end comment Project
 
   //std::cout << "tttttttttttttttt\n";

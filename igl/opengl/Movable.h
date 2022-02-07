@@ -20,6 +20,14 @@ public:
 	void MyRotate(Eigen::Vector3d rotAxis, double angle, bool zAxis);
 	//end Ass3 comment
 
+	//-------------------------------------------------------project---------------------------------------------------------
+
+	Eigen::Quaterniond GetRotationQ();
+	void Movable::RotateInSystem(Eigen::Matrix4d Mat, Eigen::Vector3d rotAxis, double angle);
+	Eigen::Vector3d Movable::GetCenter();
+
+	//-------------------------------------------------------project----------------------------------------------------------
+
 
 	void MyScale(Eigen::Vector3d amt);
 

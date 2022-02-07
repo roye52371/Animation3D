@@ -13,45 +13,66 @@ public:
 	void Init(const std::string& config);
 	double doubleVariable;
 	//Project comment
-	void initDataStructure(Eigen::MatrixXd&, Eigen::MatrixXi&);
+	/*void initDataStructure(Eigen::MatrixXd&, Eigen::MatrixXi&);*/
 	//void setVelocity(Eigen::Vector3d dir);
 
+	//----------------------------------Project----------------------------------
+	void calc_all_weights();
+	Eigen::VectorXd create_weight_vec(double w1, double w1_ind, double w2, double w2_ind);
+	void calc_next_pos();
 
-	const int snake_head = 0;
-	const int num_of_joints = 17;
-	const int num_of_links = 16;
-	std::vector<igl::opengl::Joint*> joints;
-	vector<Eigen::Vector3d> JointsPoses;
+	/////////////////
+	void add_weights();
+	double calc_related_distance(int i);
+	/////////////////
+	//----------------------------------Project----------------------------------
 
-	void setJointsPositions();
-	void setHeadPosition();
+	//-------------------------------Project-------------------------------
+
+
+	Eigen::Vector3d target_pose;
+
+	int scale;
+	int joints_num;
+	std::vector<Eigen::Vector3d>skelton;
+	std::vector<Movable> Joints;
+	//boolean variable for movment
+	bool up;
+	bool down;
+	bool right;
+	bool left;
+
+
+	typedef
+		std::vector<Eigen::Quaterniond, Eigen::aligned_allocator<Eigen::Quaterniond> >
+		RotationList;
+	// W - weights matrix
+	// BE - Edges between joints
+	// C - joints positions
+	// P - parents
+	// M - weights per vertex per joint matrix
+	// U - new vertices position after skinning
+
+	Eigen::MatrixXd V, W, C, U, M;
+	Eigen::MatrixXi F, BE;
+	Eigen::VectorXi P;
+	RotationList vQ;
+	std::vector<Eigen::Vector3d> vT;
+	//std::vector<RotationList > poses; // rotation of joints
+
+
+	//-------------------------------Project-------------------------------
+
+
 	//end comment Project
 
 private:
 	//Project comment
 	// Prepare array-based edge data structures and priority queue
-	int link_Len = 1.6;
-	Eigen::MatrixXd W;
-	typedef std::vector<Eigen::Quaterniond, Eigen::aligned_allocator<Eigen::Quaterniond>>RotationList;
-	Eigen::RowVector3d sea_green = Eigen::RowVector3d((70.0 / 255), 252.0 / 255., 167 / 255.);
-	//maybe delete M and P (??)
-	Eigen::MatrixXd C, U, M;
-	Eigen::MatrixXi BE;
-	Eigen::VectorXi P;
-	std::vector<RotationList > poses; // rotations of joints for animation
-	double anim_t = 0.0;
-	double anim_t_dir = 0.015;
-	bool use_dqs = false;
-	bool recompute = true;
-	void add_joints();
-	void drawJoints();
-	Eigen::Vector3d getJoint(int indx);
-	Eigen::Matrix3d SandBox::CalcParentsRot(int indx);
-	double calc_related_distance(int i);
-	void add_weights();
-	double sum(int i);
-	void Skinning();
-	void forwardLoop();
+	
+	//double calc_related_distance(int i);
+	//void add_weights();
+
 	//end Project comment
 	
 	
