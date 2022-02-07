@@ -41,6 +41,8 @@ public:
 	bool down;
 	bool right;
 	bool left;
+	bool in;
+	bool out;
 
 
 	typedef

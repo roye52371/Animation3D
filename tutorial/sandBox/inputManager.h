@@ -185,17 +185,78 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case 'W':
 			//Ass2 comment
 			//moving in
-			rndr->changeMovingDirection('w');
+			//rndr->changeMovingDirection('w');
 			//end comment Ass 2
 			//rndr->TranslateCamera(Eigen::Vector3f(0, 0, 0.03f));
+			
+			//Project comment
+			//W is in movment
+			if (scn->up) {
+				scn->up = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->down) {
+				scn->down = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->left) {
+				scn->left = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->right) {
+				scn->right = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->out) {
+				scn->out = false;
+				scn->isActive = !scn->isActive;
+			}
+
+			if (!scn->in)
+				scn->in = true;
+			else
+				scn->in = false;
+			scn->isActive = !scn->isActive;
+			// end Project comment
 			break;
 		case 's':
 		case 'S':
 			//Ass2 comment
 			//moving out
-			rndr->changeMovingDirection('s');
+			//rndr->changeMovingDirection('s');
 			//end comment Ass 2
 			//rndr->TranslateCamera(Eigen::Vector3f(0, 0, -0.03f));
+
+			//Project comment
+			//S is out movment
+			if (scn->up) {
+				scn->up = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->down) {
+				scn->down = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->left) {
+				scn->left = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->right) {
+				scn->right = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->in) {
+				scn->in = false;
+				scn->isActive = !scn->isActive;
+			}
+
+			if (!scn->out)
+				scn->out = true;
+			else
+				scn->out = false;
+			scn->isActive = !scn->isActive;
+			
+			//end comment Project
 			break;
 		//case GLFW_KEY_UP:
 		//	//Ass2 comment
@@ -252,6 +313,14 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 				scn->left = false;
 				scn->isActive = !scn->isActive;
 			}
+			if (scn->in) {
+				scn->in = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->out) {
+				scn->out = false;
+				scn->isActive = !scn->isActive;
+			}
 
 			if (!scn->up)
 				scn->up = true;
@@ -272,6 +341,14 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			}
 			if (scn->right) {
 				scn->right = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->in) {
+				scn->in = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->out) {
+				scn->out = false;
 				scn->isActive = !scn->isActive;
 			}
 
@@ -295,6 +372,14 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 				scn->right = false;
 				scn->isActive = !scn->isActive;
 			}
+			if (scn->in) {
+				scn->in = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->out) {
+				scn->out = false;
+				scn->isActive = !scn->isActive;
+			}
 	
 			if (!scn->left)
 				scn->left = true;
@@ -314,6 +399,14 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			}
 			if (scn->left) {
 				scn->left = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->in) {
+				scn->in = false;
+				scn->isActive = !scn->isActive;
+			}
+			if (scn->out) {
+				scn->out = false;
 				scn->isActive = !scn->isActive;
 			}
 	

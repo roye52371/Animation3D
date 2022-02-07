@@ -35,6 +35,9 @@ void SandBox::Init(const std::string &config)
     left = false;
     up = false;
     down = false;
+    in = false;
+    out = false;
+
 
     joints_num = 16;
     skelton.resize(joints_num + 1);
@@ -281,6 +284,13 @@ void SandBox::Animate()
         else if (down) {
             target_pose = Eigen::Vector3d(0, -0.03, 0);
         }
+        else if (in) {
+            target_pose = Eigen::Vector3d(0.03, 0, 0);
+        }
+        else if (out) {
+            target_pose = Eigen::Vector3d(-0.03, 0, 0);
+        }
+
         else {}
 
 
