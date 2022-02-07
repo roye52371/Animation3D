@@ -285,10 +285,11 @@ void SandBox::Animate()
 
 
         //Move The Snake
-        calc_next_pos();
+        calc_next_pos();//find current vT values
         igl::dqs(V, W, vQ, vT, U);
         data_list.at(0).set_vertices(U);
-        for (size_t i = 0; i < joints_num + 1; i++)
+        //update skelton
+        for (int i = 0; i < skelton.size(); i++)
         {
             skelton[i] = vT[i];
         }
