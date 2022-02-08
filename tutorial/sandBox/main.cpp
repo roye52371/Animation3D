@@ -41,29 +41,34 @@ int main(int argc, char *argv[])
   igl::opengl::glfw::imgui::ImGuiMenu* menu = new igl::opengl::glfw::imgui::ImGuiMenu();
   viewer.Init("configuration.txt");
 
-  viewer.load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
-  //if (data_list.size() > parents.size())
-  //{
-  //printf("here\n");
+  viewer.data_list[0].tree.init(viewer.data_list[0].V, viewer.data_list[0].F);
+  igl::AABB<Eigen::MatrixXd, 3> tree_first = viewer.data_list[0].tree;
+  Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
+  viewer.data_list[0].drawBox(box_first, 0);
 
-  viewer.parents.push_back(-1);
-  viewer.data_list.back().set_visible(false, 1);
-  viewer.data().show_overlay_depth = false;
-  viewer.data().point_size = 10;
-  viewer.data().line_width = 2;
-  viewer.data().set_visible(false, 1);
+  //viewer.load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
+  ////if (data_list.size() > parents.size())
+  ////{
+  ////printf("here\n");
 
-  viewer.load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
-  //if (data_list.size() > parents.size())
-  //{
-  //printf("here\n");
+  //viewer.parents.push_back(-1);
+  //viewer.data_list.back().set_visible(false, 1);
+  //viewer.data().show_overlay_depth = false;
+  //viewer.data().point_size = 10;
+  //viewer.data().line_width = 2;
+  //viewer.data().set_visible(false, 1);
 
-  viewer.parents.push_back(-1);
-  viewer.data_list.back().set_visible(false, 1);
-  viewer.data().show_overlay_depth = false;
-  viewer.data().point_size = 10;
-  viewer.data().line_width = 2;
-  viewer.data().set_visible(false, 1);
+  //viewer.load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+  ////if (data_list.size() > parents.size())
+  ////{
+  ////printf("here\n");
+
+  //viewer.parents.push_back(-1);
+  //viewer.data_list.back().set_visible(false, 1);
+  //viewer.data().show_overlay_depth = false;
+  //viewer.data().point_size = 10;
+  //viewer.data().line_width = 2;
+  //viewer.data().set_visible(false, 1);
   //std::cout << "bbbbbbbbbb\n";
   //Ass 2 comment
   //viewer.isActive = false;//make it false at the begining, so we cam control when to start the collision simulation

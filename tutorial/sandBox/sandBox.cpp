@@ -31,7 +31,7 @@ void SandBox::Init(const std::string &config)
     std::ifstream nameFileout;
     doubleVariable = 0;
 
-    right = false;
+    right = true;// so when press space, it start move to the right and not screwed
     left = false;
     up = false;
     down = false;
@@ -111,7 +111,10 @@ void SandBox::Init(const std::string &config)
     //data_list[0].set_colors(Eigen::RowVector3d(165,90,0));//brownie color for the snake;
     U = V;
 
+    levelk();
+
     //end comment Project
+
 
   
 
@@ -265,6 +268,39 @@ double SandBox::calc_related_distance(int i) {
 }
 
 
+//Project levels  functions
+void SandBox::levelk() 
+{
+
+    for (int i = 0; i < level; i++)
+    {
+        load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
+        
+            
+          parents.push_back(-1);
+          data_list.back().set_visible(false, 1);
+          data().show_overlay_depth = false;
+          data().point_size = 10;
+          data().line_width = 2;
+          data().set_visible(false, 1);
+          data().MyTranslate(Eigen::Vector3d(0, 2 * (i+1), 0), true);
+
+          load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+  
+
+          parents.push_back(-1);
+          data_list.back().set_visible(false, 1);
+          data().show_overlay_depth = false;
+          data().point_size = 10;
+          data().line_width = 2;
+          data().set_visible(false, 1);
+          data().MyTranslate(Eigen::Vector3d(0, -2 * (i+1), 0), true);
+    }
+    initTreesAndDrawForCollision();
+
+}
+//end comment Project
+
 
 /////////////////////
 
@@ -272,6 +308,11 @@ void SandBox::Animate()
 {
 	if (isActive)
 	{
+        for (int i = 1; i < data_list.size(); i++)
+        {
+            data_list[i].MyTranslate(Eigen::Vector3d(-0.004, i/100, i/100),true);
+        }
+        
         //Project comment
         if (left) {
             target_pose = Eigen::Vector3d(0, 0, -0.03);
@@ -304,7 +345,15 @@ void SandBox::Animate()
         {
             skelton[i] = vT[i];
         }
+
+
+        
+        
+
+        checkCollision();
         //end project comment
+
+       
         
 	}
 }

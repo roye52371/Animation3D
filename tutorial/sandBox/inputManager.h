@@ -466,7 +466,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			// toggle ik solver aniimation
 			//scn->ikAnimation = !scn->ikAnimation;
 			//scn->toggleIKSimulation();
-			//scn->isActive = !scn->isActive;//it ruined the movment
+			scn->isActive = !scn->isActive;//it ruined the movment
 			break;
 			//end Ass3
 			//break;

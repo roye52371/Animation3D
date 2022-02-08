@@ -686,23 +686,22 @@ namespace glfw
 
   //Ass 2 comment
   void Viewer:: initTreesAndDrawForCollision() {
-      isActive = false;//make it false at the begining, so we cam control when to start the collision simulation
+      //isActive = false;//make it false at the begining, so we cam control when to start the collision simulation
       //moving the scene and the object, for start of collision simulation
-      MyTranslate(Eigen::Vector3d(0, 0, -0.4), true);//for seening the object smaller so we have space to move more
-      data_list[0].MyTranslate(Eigen::Vector3d(0.65, 0, 0), true);//moving the objects so they won't be on each other at initial running time
-      data_list[1].MyTranslate(Eigen::Vector3d(-0.65, 0, 0), true);
+      //MyTranslate(Eigen::Vector3d(0, 0, -0.4), true);//for seening the object smaller so we have space to move more
+      //data_list[0].MyTranslate(Eigen::Vector3d(0.65, 0, 0), true);//moving the objects so they won't be on each other at initial running time
+      //data_list[1].MyTranslate(Eigen::Vector3d(-0.65, 0, 0), true);
 
       //init the tree of both objects, and draw their bounding box
-
-      data_list[0].tree.init(data_list[0].V, data_list[0].F);
-      igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[0].tree;
-      Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
-      data_list[0].drawBox(box_first, 0);
-
-      data_list[1].tree.init(data_list[1].V, data_list[1].F);
-      igl::AABB<Eigen::MatrixXd, 3> tree_second = data_list[1].tree;
-      Eigen::AlignedBox<double, 3> box_second = tree_second.m_box;
-      data_list[1].drawBox(box_second, 0);
+      for (int i = 1; i < data_list.size(); i++)
+      {
+          //printf("lsllala\n");
+          data_list[i].tree.init(data_list[i].V, data_list[i].F);
+          igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[i].tree;
+          Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
+          data_list[i].drawBox(box_first, 0);
+      }
+      
   }
 
 
@@ -858,8 +857,8 @@ namespace glfw
           //No children, this is a leaf, drawing the box
           if (node1->is_leaf() && node2->is_leaf())
           {
-              data_list[0].drawBox(node1->m_box, 1);
-              data_list[1].drawBox(node2->m_box, 1);
+              //data_list[0].drawBox(node1->m_box, 1);
+              //data_list[1].drawBox(node2->m_box, 1);
               return true;
           }
           else {
@@ -886,10 +885,17 @@ namespace glfw
   }
 
   void Viewer::checkCollision() {
-      if (recursiveCheckCollision(&data_list[0].tree, &data_list[1].tree)) {
-          cout << "Objects had a collision !" << endl;
-          isActive = false;
+      for (size_t i = 1; i < data_list.size(); i++)
+      {
+          //Project comment
+          if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree)) {
+              score++;
+              cout << "nice Score!" << endl;
+              cout << "your current score is: "<<score << endl;
+          }
+          //project comment
       }
+      
   }
   //end comment Ass 2
 

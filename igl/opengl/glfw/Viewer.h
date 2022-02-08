@@ -193,6 +193,9 @@ public:
     int next_data_id;
 	bool isPicked;
 	bool isActive;
+    //project comment
+    int score = 0;
+    //end project comment
 
     
 

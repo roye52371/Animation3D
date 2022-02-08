@@ -24,6 +24,8 @@ public:
 	/////////////////
 	void add_weights();
 	double calc_related_distance(int i);
+
+	void levelk();
 	/////////////////
 	//----------------------------------Project----------------------------------
 
@@ -61,6 +63,8 @@ public:
 	RotationList vQ;
 	std::vector<Eigen::Vector3d> vT;
 	//std::vector<RotationList > poses; // rotation of joints
+	//int score = 0;
+	int level = 1;
 
 
 	//-------------------------------Project-------------------------------
@@ -76,7 +80,6 @@ private:
 	//void add_weights();
 
 	//end Project comment
-	
 	
 	void Animate();
 };
