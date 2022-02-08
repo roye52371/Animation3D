@@ -40,6 +40,30 @@ int main(int argc, char *argv[])
   //std::cout << "aaaaaaaaa\n" ;
   igl::opengl::glfw::imgui::ImGuiMenu* menu = new igl::opengl::glfw::imgui::ImGuiMenu();
   viewer.Init("configuration.txt");
+
+  viewer.load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
+  //if (data_list.size() > parents.size())
+  //{
+  //printf("here\n");
+
+  viewer.parents.push_back(-1);
+  viewer.data_list.back().set_visible(false, 1);
+  viewer.data().show_overlay_depth = false;
+  viewer.data().point_size = 10;
+  viewer.data().line_width = 2;
+  viewer.data().set_visible(false, 1);
+
+  viewer.load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+  //if (data_list.size() > parents.size())
+  //{
+  //printf("here\n");
+
+  viewer.parents.push_back(-1);
+  viewer.data_list.back().set_visible(false, 1);
+  viewer.data().show_overlay_depth = false;
+  viewer.data().point_size = 10;
+  viewer.data().line_width = 2;
+  viewer.data().set_visible(false, 1);
   //std::cout << "bbbbbbbbbb\n";
   //Ass 2 comment
   //viewer.isActive = false;//make it false at the begining, so we cam control when to start the collision simulation

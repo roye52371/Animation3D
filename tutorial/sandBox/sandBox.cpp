@@ -41,7 +41,7 @@ void SandBox::Init(const std::string &config)
 
     joints_num = 16;
     skelton.resize(joints_num + 1);
-    parents.resize(joints_num + 1);
+    //parents.resize(joints_num + 1);
     scale = 1;
     //Initialize vT, vQ
     vT.resize(17);
@@ -94,17 +94,17 @@ void SandBox::Init(const std::string &config)
 
     //Create Joints
     //the first joint that dont have a parent
-    Joints.emplace_back();
-    Joints.at(0).MyTranslate(skelton.at(0), true);
-    parents[0] = -1;
+    //Joints.emplace_back();
+    //Joints.at(0).MyTranslate(skelton.at(0), true);
+    //parents[1] = -1;
     //the 16 other joint that have parents
-    for (int i = 0; i < joints_num; i++)
+    /*for (int i = 1; i < joints_num; i++)
     {
         parents[i + 1] = i;
         Joints.emplace_back();
         Joints.at(i + 1).MyTranslate(skelton.at(i + 1), true);
 
-    }
+    }*/
 
 
     target_pose = skelton[joints_num];
