@@ -73,6 +73,20 @@ IGL_INLINE void Renderer::draw(GLFWwindow* window)
 
 			if (mesh.is_visible & core.id)
 			{// for kinematic chain change scn->MakeTrans to parent matrix
+				//Project comment
+				if (selected_core_index == 0) {
+
+					Eigen::Matrix4d headTransMat = scn->MakeTransd() * scn->CalcParentsTrans(0) * scn->data(0).MakeTransd();
+					core.camera_translation = (headTransMat * Eigen::Vector4d(0, 0.8, 0.8, -1)).block(0, 0, 3, 1).cast<float>();
+					core.camera_eye = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, -1, 0)).block(0, 0, 3, 1).cast<float>();
+					core.camera_up = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, 0, -1)).block(0, 0, 3, 1).cast<float>();
+				}
+				else {
+					core.camera_translation = prev_camera_translation;
+					core.camera_eye = prev_camera_eye;
+					core.camera_up = prev_camera_up;
+				}
+				//end comment Project
 
 				core.draw(scn->MakeTransScale() * scn->CalcParentsTrans(indx).cast<float>(), mesh);
 			}
@@ -128,7 +142,15 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer, int coresNum, 
 		//TranslateCamera(v.cast<float>());
 
 		core_index(left_view - 1);
+		//Project comment
+		prev_camera_translation = core().camera_translation;
+		prev_camera_eye = core().camera_eye;
+		prev_camera_up = core().camera_up;
+		//Project comment end
 	}
+	//Project comment
+	//selected_core_index = 0;
+	//Project comment end
 
 	if (menu)
 	{

@@ -127,5 +127,11 @@ private:
 	double doubleVariable;
 	igl::opengl::glfw::imgui::ImGuiMenu* menu;
 	double z;
+
+	//Project comment
+	Eigen::Vector3f prev_camera_translation;
+	Eigen::Vector3f prev_camera_eye;
+	Eigen::Vector3f prev_camera_up;
+	//end comment Project
 };
 
