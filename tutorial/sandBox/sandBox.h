@@ -8,6 +8,10 @@ using namespace std;
 class SandBox : public igl::opengl::glfw::Viewer
 {
 public:
+
+	//project
+	int counter = 0;
+
 	SandBox();
 	~SandBox();
 	void Init(const std::string& config);

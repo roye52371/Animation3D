@@ -184,6 +184,10 @@ public:
   Eigen::MatrixXd V; // Vertices of the current mesh (#V x 3)
   Eigen::MatrixXi F; // Faces of the mesh (#F x 3)
 
+  //project
+  bool hasCollisioned = false;
+
+
   // Per face attributes
   Eigen::MatrixXd F_normals; // One normal per face
 

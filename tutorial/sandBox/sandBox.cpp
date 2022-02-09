@@ -274,18 +274,19 @@ void SandBox::levelk()
 
     for (int i = 0; i < level; i++)
     {
-        load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
+         load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/cube.obj");
         
             
-          parents.push_back(-1);
-          data_list.back().set_visible(false, 1);
-          data().show_overlay_depth = false;
-          data().point_size = 10;
-          data().line_width = 2;
-          data().set_visible(false, 1);
-          data().MyTranslate(Eigen::Vector3d(0, 2 * (i+1), 0), true);
+           parents.push_back(-1);
+           data_list.back().set_visible(false, 1);
+           data().show_overlay_depth = false;
+           data().point_size = 10;
+           data().line_width = 2;
+           data().set_visible(false, 1);
+           data().MyTranslate(Eigen::Vector3d(0, 2 * (i+1), 0), true);
 
-          load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+
+          load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
   
 
           parents.push_back(-1);
@@ -345,12 +346,16 @@ void SandBox::Animate()
         {
             skelton[i] = vT[i];
         }
-
+        counter++;
+        if (counter == 50) {
+            counter = 0;
+            data_list[0].tree.init(data_list[0].V, data_list[0].F);
+            igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[0].tree;
+            Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
+            checkCollision();
+        }
 
         
-        
-
-        checkCollision();
         //end project comment
 
        

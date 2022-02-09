@@ -107,8 +107,8 @@ namespace glfw
     void initTreesAndDrawForCollision();
     void setMovingButton();
     void checkCollision();//main checkeer
-    bool recursiveCheckCollision(igl::AABB<Eigen::MatrixXd, 3>* node1, igl::AABB<Eigen::MatrixXd, 3>* node2);//recursive checker,called by main checker
-    bool checkTermsForBoxesCollision(Eigen::AlignedBox<double, 3>& box1, Eigen::AlignedBox<double, 3>& box2);//check 15 terms for boxes collision, called by recursive checker
+    bool recursiveCheckCollision(igl::AABB<Eigen::MatrixXd, 3>* node1, igl::AABB<Eigen::MatrixXd, 3>* node2,int i);//recursive checker,called by main checker
+    bool checkTermsForBoxesCollision(Eigen::AlignedBox<double, 3>& box1, Eigen::AlignedBox<double, 3>& box2, int i);//check 15 terms for boxes collision, called by recursive checker
     //end comment Ass 2
 
     //Ass 3

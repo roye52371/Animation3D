@@ -713,7 +713,7 @@ namespace glfw
   using namespace std;
 
   //Returns true if box 1 and box 2 collide
-  bool Viewer::checkTermsForBoxesCollision(Eigen::AlignedBox<double, 3>& box1, Eigen::AlignedBox<double, 3>& box2) {
+  bool Viewer::checkTermsForBoxesCollision(Eigen::AlignedBox<double, 3>& box1, Eigen::AlignedBox<double, 3>& box2, int i) {
       double R, R0, R1;
 
       //parameters from page 35 of "Separating Axis Theorem for Oriented Bounding Boxes"
@@ -730,9 +730,9 @@ namespace glfw
       double D_A = box1.sizes()[2] / 2;//half depth of A
 
       //B parameters
-      Eigen::RowVector3d Bx = data_list[1].GetRotation() * Eigen::Vector3d(1, 0, 0);
-      Eigen::RowVector3d By = data_list[1].GetRotation() * Eigen::Vector3d(0, 1, 0);
-      Eigen::RowVector3d Bz = data_list[1].GetRotation() * Eigen::Vector3d(0, 0, 1);
+      Eigen::RowVector3d Bx = data_list[i].GetRotation() * Eigen::Vector3d(1, 0, 0);
+      Eigen::RowVector3d By = data_list[i].GetRotation() * Eigen::Vector3d(0, 1, 0);
+      Eigen::RowVector3d Bz = data_list[i].GetRotation() * Eigen::Vector3d(0, 0, 1);
       Eigen::Matrix3d B;
       B << Bx[0], By[0], Bz[0],
           Bx[1], By[1], Bz[1],
@@ -748,7 +748,7 @@ namespace glfw
       Eigen::Vector3d P_A = Eigen::Vector3d(tmp1[0], tmp1[1], tmp1[2]);//coordinate position of the center of A
 
       Eigen::Vector4f tmp2 = Eigen::Vector4f(box2.center()[0], box2.center()[1], box2.center()[2], 1);
-      tmp2 = data_list[1].MakeTransScale() * tmp2;
+      tmp2 = data_list[i].MakeTransScale() * tmp2;
       Eigen::Vector3d P_B = Eigen::Vector3d(tmp2[0], tmp2[1], tmp2[2]);//coordinate position of the center of B
 
       Eigen::Vector3d T = P_B - P_A;
@@ -851,8 +851,8 @@ namespace glfw
 
   //Recursion call for checking collision, retruns true if node1 and node2 collide (checking untill leafs recursivly)
   //If they collide, draw the box of the leaf in each data items
-  bool Viewer::recursiveCheckCollision(igl::AABB<Eigen::MatrixXd, 3>* node1, igl::AABB<Eigen::MatrixXd, 3>* node2) {
-      if (checkTermsForBoxesCollision(node1->m_box, node2->m_box))
+  bool Viewer::recursiveCheckCollision(igl::AABB<Eigen::MatrixXd, 3>* node1, igl::AABB<Eigen::MatrixXd, 3>* node2, int i) {
+      if (checkTermsForBoxesCollision(node1->m_box, node2->m_box, i))
       {
           //No children, this is a leaf, drawing the box
           if (node1->is_leaf() && node2->is_leaf())
@@ -871,10 +871,10 @@ namespace glfw
               igl::AABB<Eigen::MatrixXd, 3>* n2_right = node2->is_leaf() ? node2 : node2->m_right;
 
               //looking for every type of intersection between the children's node of each object node
-              if (recursiveCheckCollision(n1_left, n2_left) ||
-                  recursiveCheckCollision(n1_left, n2_right) ||
-                  recursiveCheckCollision(n1_right, n2_left) ||
-                  recursiveCheckCollision(n1_right, n2_right))
+              if (recursiveCheckCollision(n1_left, n2_left, i) ||
+                  recursiveCheckCollision(n1_left, n2_right, i) ||
+                  recursiveCheckCollision(n1_right, n2_left, i) ||
+                  recursiveCheckCollision(n1_right, n2_right, i))
                   return true;
               else
                   return false;
@@ -885,13 +885,20 @@ namespace glfw
   }
 
   void Viewer::checkCollision() {
-      for (size_t i = 1; i < data_list.size(); i++)
+      for (int i = 1; i < data_list.size(); i++)
       {
+          std::cout << i << std::endl;
           //Project comment
-          if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree)) {
+          if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree, i) ) {
+              
+              data_list[i].hasCollisioned = true;
+              data_list[i].set_visible(false, 0);
+              data_list[i].MyTranslate(Eigen::Vector3d(0, 0, 100), true);
+              cout << "i: " << i << endl;
               score++;
               cout << "nice Score!" << endl;
-              cout << "your current score is: "<<score << endl;
+              cout << "your current score is: " << score << endl;
+ 
           }
           //project comment
       }
