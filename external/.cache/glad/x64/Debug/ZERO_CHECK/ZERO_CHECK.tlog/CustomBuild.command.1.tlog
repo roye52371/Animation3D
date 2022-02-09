@@ -1,6 +1,6 @@
-^C:\DEV\ENGINEFORANIMATIONCOURSE\EXTERNAL\.CACHE\GLAD\CMAKEFILES\472D8AB8952453840FD48FC1EC6F25EB\GENERATE.STAMP.RULE
+^C:\USERS\ROI52\DESKTOP\THREEDANIMATIONCOURSE\ENGINEFORANIMATIONCOURSE\EXTERNAL\.CACHE\GLAD\CMAKEFILES\683D52990B3B0756BF77121E9E4FC224\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -SC:/Dev/EngineForAnimationCourse/external/.cache/glad -BC:/Dev/EngineForAnimationCourse/external/.cache/glad --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Dev/EngineForAnimationCourse/external/.cache/glad/glad-download.sln
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad -BC:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/glad-download.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

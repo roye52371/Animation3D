@@ -2,37 +2,37 @@
 	"sources" : 
 	[
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/glfw-download"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/glfw-download"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/348a56fa66aa08285112e5836da14efb/glfw-download.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/aed3734f9548382ab029453d011b6295/glfw-download.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/04854dc552b1d756b34806e04cfe8c47/glfw-download-complete.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/0eba38006aa41037d24dc7537f4a0713/glfw-download-complete.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/e78e77f0bd680b46414144f1ef510be5/glfw-download-install.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/b1f709b979ee173bbf82051d30bff4d3/glfw-download-build.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/e78e77f0bd680b46414144f1ef510be5/glfw-download-mkdir.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/b1f709b979ee173bbf82051d30bff4d3/glfw-download-configure.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/e78e77f0bd680b46414144f1ef510be5/glfw-download-download.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/b1f709b979ee173bbf82051d30bff4d3/glfw-download-download.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/e78e77f0bd680b46414144f1ef510be5/glfw-download-update.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/b1f709b979ee173bbf82051d30bff4d3/glfw-download-install.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/e78e77f0bd680b46414144f1ef510be5/glfw-download-patch.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/b1f709b979ee173bbf82051d30bff4d3/glfw-download-mkdir.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/e78e77f0bd680b46414144f1ef510be5/glfw-download-configure.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/b1f709b979ee173bbf82051d30bff4d3/glfw-download-patch.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/e78e77f0bd680b46414144f1ef510be5/glfw-download-build.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/b1f709b979ee173bbf82051d30bff4d3/glfw-download-test.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/e78e77f0bd680b46414144f1ef510be5/glfw-download-test.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/b1f709b979ee173bbf82051d30bff4d3/glfw-download-update.rule"
 		}
 	],
 	"target" : 

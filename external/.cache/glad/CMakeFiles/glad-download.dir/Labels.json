@@ -2,37 +2,37 @@
 	"sources" : 
 	[
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/glad-download"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/glad-download"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/472d8ab8952453840fd48fc1ec6f25eb/glad-download.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/683d52990b3b0756bf77121e9e4fc224/glad-download.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/1e95895e67ddacf60b58d4fb984559ac/glad-download-complete.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/594059d45082da171add1a19863b56d6/glad-download-complete.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/a52847fcf3552b5d1106c42f39cec573/glad-download-install.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/0dfc6f264749f42ff8cfb9fb6f65f4f3/glad-download-build.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/a52847fcf3552b5d1106c42f39cec573/glad-download-mkdir.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/0dfc6f264749f42ff8cfb9fb6f65f4f3/glad-download-configure.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/a52847fcf3552b5d1106c42f39cec573/glad-download-download.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/0dfc6f264749f42ff8cfb9fb6f65f4f3/glad-download-download.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/a52847fcf3552b5d1106c42f39cec573/glad-download-update.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/0dfc6f264749f42ff8cfb9fb6f65f4f3/glad-download-install.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/a52847fcf3552b5d1106c42f39cec573/glad-download-patch.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/0dfc6f264749f42ff8cfb9fb6f65f4f3/glad-download-mkdir.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/a52847fcf3552b5d1106c42f39cec573/glad-download-configure.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/0dfc6f264749f42ff8cfb9fb6f65f4f3/glad-download-patch.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/a52847fcf3552b5d1106c42f39cec573/glad-download-build.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/0dfc6f264749f42ff8cfb9fb6f65f4f3/glad-download-test.rule"
 		},
 		{
-			"file" : "C:/Dev/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/a52847fcf3552b5d1106c42f39cec573/glad-download-test.rule"
+			"file" : "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/0dfc6f264749f42ff8cfb9fb6f65f4f3/glad-download-update.rule"
 		}
 	],
 	"target" : 
