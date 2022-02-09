@@ -55,6 +55,11 @@
 //Ass3 include
 #include <math.h> 
 
+//Project comment
+#include <igl/get_seconds.h>
+#include <external/glfw/include/GLFW/glfw3.h>
+//end project comment
+
 
 // Internal global variables used for glfw event handling
 //static igl::opengl::glfw::Viewer * __viewer;
@@ -90,7 +95,10 @@ namespace glfw
     tip_position(Eigen::RowVector4d(0, 0, 0, 1)),
     destination_position(Eigen::RowVector3d(5,0,0)),//we have 4 zcylinder and 1 sphere
     ikAnimation(false),
-    current_picked(-1)
+    current_picked(-1),
+    snake_size(1),  
+    snake_view(false),
+    prev_tic(0)
   {
     data_list.front().id = 0;
     maxDistance = (data_list.size() - 1) * 1.6;
@@ -210,35 +218,29 @@ namespace glfw
     //init data structure for mesh of every data object
     data().OV = data().V;
     data().OF = data().F;
+
+    //project comment
+    size_t file_name_idx = mesh_file_name_string.rfind('/');
+    std::string name = mesh_file_name_string.substr(file_name_idx + 1);
+
+    if (name == "sphere.obj") {
+        data().update_movement_type(2);
+
+        if (data().type == 2)
+            data().set_colors(Eigen::RowVector3d(1, 0, 0));
+        else
+            data().set_colors(Eigen::RowVector3d(0, 1, 0));
+
+        // if current object is a target then init its speed vector
+        if (data().type > 0)
+            data().initiate_speed();
+    }
+    //end comment project
+
+
     initMeshdata();// reset- init data
     //end comment Ass1
-    //Ass3
-    /*bool iszcylinder = mesh_file_name_string == "C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj";
-    //bool iszcylinder = mesh_file_name_string == "C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj";
-    bool first_link_num = link_num == 0;
-    if (first_link_num && iszcylinder) {
-        data().MyTranslateInSystem(data().GetRotation(), Eigen::RowVector3d(0, 0, 0.8));
-        data().tree.init(data().V, data().F);
-        data().draw_xyzAxis(data().tree.m_box);
-        data().SetCenterOfRotation(Eigen::RowVector3d(0, 0, -0.8));
-        //data().show_overlay_depth = true;
-        //data().show_overlay = true;
-        //data().show_texture = true;
-        //data().set_visible(false, 1);
-        link_num++;
-    }
-    else if (!first_link_num && iszcylinder) {
-        data().MyTranslateInSystem(data().GetRotation(), Eigen::RowVector3d(0, 0, 1.6));  
-        data().tree.init(data().V, data().F);
-        data().draw_xyzAxis(data().tree.m_box);
-        data().SetCenterOfRotation(Eigen::RowVector3d(0, 0, -0.8));
-        //data().show_overlay_depth = true;
-        //data().show_overlay = true;
-        //data().show_texture = true;
-        //data().set_visible(false, 1);
-        link_num++;
-    }*/
-    //end Ass3
+    
     return true;
   }
 
@@ -320,15 +322,16 @@ namespace glfw
   IGL_INLINE void Viewer::open_dialog_load_mesh()
   {
           //Ass 3 comment
-
-    std::string fname = igl::file_dialog_open();
+     //project comment
+   std::string fname = igl::file_dialog_open();
 
     if (fname.length() == 0)
       return;
     this->load_mesh_from_file(fname.c_str());
-    //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
-    //this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
-
+    
+    //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
+    //this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+    //project comment
     //end comment Ass 3
   }
 
@@ -1108,6 +1111,48 @@ namespace glfw
   }
 
   //end Ass3 comment
+
+  //project comment , bonus part connetcted to target 
+  IGL_INLINE void Viewer::move_targets()
+  {
+      for (auto& data : data_list) {
+          if (data.type > 0)
+              data.move();
+      }
+  }
+
+  IGL_INLINE void Viewer::generate_target()
+  {
+      float tic = static_cast<float>(glfwGetTime());
+      std::cout << tic << std::endl;
+      if (tic - prev_tic > 5) {
+          prev_tic = tic;
+
+          std::this_thread::sleep_for(std::chrono::microseconds(5));
+
+          int savedIndx = selected_data_index;
+          //open_dialog_load_mesh();
+          // loading the objects we want to move in certain way
+          //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
+          this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+          //project comment
+          if (data_list.size() > parents.size())
+          {
+              parents.push_back(-1);
+              data_list.back().set_visible(false, 1);// delete shadow/ hishtakpoot
+              data_list.back().set_visible(true, 2);
+              data_list.back().show_faces = 3;
+              selected_data_index = savedIndx;
+
+              int last_index = data_list.size() - 1;
+
+              if (last_index > 1)
+                  parents[last_index] = last_index - 1;
+          }
+
+      }
+  }
+  //end comment project
 
 
 } // end namespace

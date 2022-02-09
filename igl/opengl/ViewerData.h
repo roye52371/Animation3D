@@ -157,6 +157,14 @@ public:
   // Copy visualization options from one viewport to another
   //IGL_INLINE void copy_options(const ViewerCore &from, const ViewerCore &to);
 
+  //Project comment
+  IGL_INLINE void move();
+
+  IGL_INLINE void update_movement_type(unsigned int);
+
+  IGL_INLINE void initiate_speed();
+  //end Project comment
+
 
   //Ass1: Data Structures for Mesh simplification
   typedef std::set<std::pair<double, int> > PriorityQueue;
@@ -186,6 +194,12 @@ public:
 
   //project
   bool hasCollisioned = false;
+
+  //target movment 
+  Eigen::Vector3d speed;
+  // 0 - none, 1- basic, 2- bouncy, 4- bezier
+  unsigned int type;
+  //end project comment
 
 
   // Per face attributes

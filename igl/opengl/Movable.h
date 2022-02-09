@@ -7,6 +7,10 @@
 class Movable
 {
 public:
+	//Project comment
+	Eigen::Affine3d Tout, Tin;
+	//end project comment
+
 	Movable();
 	Movable(const Movable& mov);
 	Eigen::Matrix4f MakeTransScale();
@@ -46,6 +50,6 @@ public:
 
 	virtual ~Movable() {}
 private:
-	Eigen::Affine3d Tout,Tin;
+	//Eigen::Affine3d Tout,Tin;
 };
 

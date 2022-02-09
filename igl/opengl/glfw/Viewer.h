@@ -195,6 +195,14 @@ public:
 	bool isActive;
     //project comment
     int score = 0;
+
+    //target and bonus stuff
+    int snake_size;
+    bool snake_view;
+    float prev_tic;
+    IGL_INLINE void move_targets();
+
+    IGL_INLINE void generate_target();
     //end project comment
 
     

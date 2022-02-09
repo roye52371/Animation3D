@@ -17,6 +17,11 @@
 #include <iostream>
 //#include "external/stb/igl_stb_image.h"
 
+//project comment
+#define g 0.05
+// end project comment
+
+
 IGL_INLINE igl::opengl::ViewerData::ViewerData()
 : dirty(MeshGL::DIRTY_ALL),
   show_faces(true),
@@ -33,8 +38,10 @@ IGL_INLINE igl::opengl::ViewerData::ViewerData()
   label_color(0,0,0.04,1),
   shininess(35.0f),
   id(-1),
-  is_visible(1)
+  is_visible(1),
+  type(0) // type of object, 0 not moving , 1 move in straight line, 2 move obj in bouncy way
 {
+  speed = Eigen::Vector3d(0, 0, 0);
   clear();
 };
 
@@ -92,6 +99,39 @@ void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& aligned
     add_edges(3 * V_boxz.row(0), V_boxz.row(1), green);
 }
 //end Ass3
+
+
+//project comment
+IGL_INLINE void igl::opengl::ViewerData::move()
+{
+    MyTranslateInSystem(GetRotation(), speed);
+
+    if (type == 2) { //bouncy type, gravity movment
+        speed -= Eigen::Vector3d(0, g, 0);
+
+        if (Tout.matrix()(1, 3) < -5) //(1,3) its y position of tout matrix, -5 is random number to imaginaite all most touching the floor
+            speed = Eigen::Vector3d(speed(0), -speed(1), speed(2));
+    }
+
+}
+
+IGL_INLINE void igl::opengl::ViewerData::update_movement_type(unsigned int new_type)
+{
+    type = new_type;
+}
+
+IGL_INLINE void igl::opengl::ViewerData::initiate_speed()
+{
+    double x = ((double)rand() / (RAND_MAX)) - 0.5;
+    double y = ((double)rand() / (RAND_MAX)) - 0.5;
+    double z = ((double)rand() / (RAND_MAX)) - 0.5;
+
+    if (type == 2)
+        speed = Eigen::Vector3d(x / 10, y, z);
+    else
+        speed = Eigen::Vector3d(x / 10, y / 10, z);
+}
+//end project
 
 //Ass2 comment
 void igl::opengl::ViewerData::drawBox(Eigen::AlignedBox<double, 3> box, int color) {
