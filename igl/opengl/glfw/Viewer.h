@@ -199,8 +199,9 @@ public:
     void Viewer::showCorrectMenu();
 
 
-    int score;
-    int level;
+    int score=0;
+    int level=1;
+    int targetScore = 10;// start target score
     bool isCollisionTarget;
     bool isCollisionSnake;
     bool start;
@@ -211,9 +212,9 @@ public:
     int snake_size;
     bool snake_view;
     float prev_tic;
-    IGL_INLINE void move_targets();
+    IGL_INLINE void move_targets(int level);
 
-    IGL_INLINE void generate_target();
+    IGL_INLINE void generate_target(int level);
     //end project comment
 
     

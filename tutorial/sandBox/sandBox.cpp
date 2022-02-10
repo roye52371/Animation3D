@@ -271,8 +271,27 @@ double SandBox::calc_related_distance(int i) {
 //Project levels  functions
 void SandBox::levelk() 
 {
+    if (score >= targetScore * level) {
+        //Todo: need to stop game and show menu that ask if do the same level or pass to next one
+        isActive = false;
+        for (int i = 1; i < data_list.size(); i++)
+        {
+            data_list[i].clear();// clear all food
+        }
+        //try to reset snake
+        data_list[0].set_vertices(data_list[0].OV);// OV keeping the first vertics we had to the snake
 
-    for (int i = 0; i < level; i++)
+        //Todo: need to stop game and show menu that ask if do the same level or pass to next one
+        //after decide what level to be, to update it , and the score, and isActive to be True
+        //level++;// need to be update in the menu code after finishing level and decide were to continue
+        //score = 0;//need to be update in the menu code after finishing level and decide were to continue
+    }
+    else {
+        generate_target(level);
+        move_targets(level);
+    }
+
+    /*for (int i = 0; i < level; i++)
     {
          load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/cube.obj");
         
@@ -297,7 +316,7 @@ void SandBox::levelk()
           data().set_visible(false, 1);
           data().MyTranslate(Eigen::Vector3d(0, -2 * (i+1), 0), true);
     }
-    initTreesAndDrawForCollision();
+    initTreesAndDrawForCollision();*/
 
 }
 //end comment Project
@@ -357,8 +376,9 @@ void SandBox::Animate()
 
         
         //bonus bouncy targets object
-        generate_target();
-        move_targets();
+        //generate_target(level);
+        //move_targets(level);
+        levelk(); // need to prevent check collision to earn more points than target points
         //end bonus bouncy targets object
 
         //end project comment  

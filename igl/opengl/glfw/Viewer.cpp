@@ -251,8 +251,36 @@ namespace glfw
 
         // if current object is a target then init its speed vector
         if (data().type > 0)
-            data().initiate_speed();
+            data().initiate_speed(level);
     }
+
+    if (name == "cube.obj") {
+        data().update_movement_type(1);
+
+        if (data().type == 1)
+            data().set_colors(Eigen::RowVector3d(1, 0, 0));
+        else
+            data().set_colors(Eigen::RowVector3d(0, 1, 0));
+
+        // if current object is a target then init its speed vector
+        if (data().type > 0)
+            data().initiate_speed(level);
+    }
+
+    if (name == "bunny.off") {
+        data().update_movement_type(1);
+
+        if (data().type == 1)
+            data().set_colors(Eigen::RowVector3d(1, 0, 0));
+        else
+            data().set_colors(Eigen::RowVector3d(0, 1, 0));
+
+        // if current object is a target then init its speed vector
+        if (data().type > 0)
+            data().initiate_speed(level);
+    }
+
+
     //end comment project
 
 
@@ -905,9 +933,9 @@ namespace glfw
   }
 
   void Viewer::checkCollision() {
-      for (int i = 1; i < data_list.size(); i++)
+      for (int i = 1; i < data_list.size() && (score < (targetScore * level)); i++)
       {
-          cout << data_list.size() << endl;
+          //cout << data_list.size() << endl;
           //Project comment
           if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree, i) ) {
               
@@ -1130,7 +1158,7 @@ namespace glfw
   //end Ass3 comment
 
   //project comment , bonus part connetcted to target 
-  IGL_INLINE void Viewer::move_targets()
+  IGL_INLINE void Viewer::move_targets(int level)
   {
       for (auto& data : data_list) {
           if (data.type > 0)
@@ -1138,7 +1166,7 @@ namespace glfw
       }
   }
 
-  IGL_INLINE void Viewer::generate_target()
+  IGL_INLINE void Viewer::generate_target(int level)
   {
       float tic = static_cast<float>(glfwGetTime());
       if (tic - prev_tic > 5) {
@@ -1149,29 +1177,80 @@ namespace glfw
           //open_dialog_load_mesh();
           // loading the objects we want to move in certain way
           //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
-          this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
-          //project comment
-          if (data_list.size() > parents.size())
-          {
-              parents.push_back(-1);
-              data_list.back().set_visible(false, 1);// delete shadow/ hishtakpoot
-              data_list.back().set_visible(true, 2);
-              data_list.back().show_faces = 3;
-              selected_data_index = savedIndx;
+          if (level > 2) {
+              this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/bunny.off");
+              //project comment
+              if (data_list.size() > parents.size())
+              {
+                  parents.push_back(-1);
+                  data_list.back().set_visible(false, 1);// delete shadow/ hishtakpoot
+                  data_list.back().set_visible(true, 2);
+                  data_list.back().show_faces = 3;
+                  selected_data_index = savedIndx;
 
-              int last_index = data_list.size() - 1;
+                  int last_index = data_list.size() - 1;
 
-              //if (last_index > 1)
-                 // parents[last_index] = last_index - 1;
+                  //if (last_index > 1)
+                     // parents[last_index] = last_index - 1;
+              }
+              //creeating bounding box  for evert food created
+              int current_obj_index = data_list.size() - 1;
+              data_list[current_obj_index].tree.init(data_list[current_obj_index].V, data_list[current_obj_index].F);
+              igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[current_obj_index].tree;
+              Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
           }
-          //creeating bounding box  for evert food created
-          int current_obj_index = data_list.size() - 1;
-          data_list[current_obj_index].tree.init(data_list[current_obj_index].V, data_list[current_obj_index].F);
-          igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[current_obj_index].tree;
-          Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
+
+
+          if (level > 1) {
+              this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+              //project comment
+              if (data_list.size() > parents.size())
+              {
+                  parents.push_back(-1);
+                  data_list.back().set_visible(false, 1);// delete shadow/ hishtakpoot
+                  data_list.back().set_visible(true, 2);
+                  data_list.back().show_faces = 3;
+                  selected_data_index = savedIndx;
+
+                  int last_index = data_list.size() - 1;
+
+                  //if (last_index > 1)
+                     // parents[last_index] = last_index - 1;
+              }
+              //creeating bounding box  for evert food created
+              int current_obj_index = data_list.size() - 1;
+              data_list[current_obj_index].tree.init(data_list[current_obj_index].V, data_list[current_obj_index].F);
+              igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[current_obj_index].tree;
+              Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
+          }
+
+          if(level> 0) {
+              this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
+              //project comment
+              if (data_list.size() > parents.size())
+              {
+                  parents.push_back(-1);
+                  data_list.back().set_visible(false, 1);// delete shadow/ hishtakpoot
+                  data_list.back().set_visible(true, 2);
+                  data_list.back().show_faces = 3;
+                  selected_data_index = savedIndx;
+
+                  int last_index = data_list.size() - 1;
+
+                  //if (last_index > 1)
+                     // parents[last_index] = last_index - 1;
+              }
+              //creeating bounding box  for evert food created
+              int current_obj_index = data_list.size() - 1;
+              data_list[current_obj_index].tree.init(data_list[current_obj_index].V, data_list[current_obj_index].F);
+              igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[current_obj_index].tree;
+              Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
+          }
       }
   }
   //end comment project
+
+
 
 
 } // end namespace

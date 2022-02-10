@@ -104,6 +104,8 @@ void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& aligned
 //project comment
 IGL_INLINE void igl::opengl::ViewerData::move()
 {
+    //std::cout << speed << std::endl;
+
     MyTranslateInSystem(GetRotation(), speed);
 
     if (type == 2) { //bouncy type, gravity movment
@@ -120,16 +122,18 @@ IGL_INLINE void igl::opengl::ViewerData::update_movement_type(unsigned int new_t
     type = new_type;
 }
 
-IGL_INLINE void igl::opengl::ViewerData::initiate_speed()
+IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int level)
 {
+    //maybe change position of x y z, random values cause problem in velocity and direction
     double x = ((double)rand() / (RAND_MAX)) - 0.5;
     double y = ((double)rand() / (RAND_MAX)) - 0.5;
     double z = ((double)rand() / (RAND_MAX)) - 0.5;
 
+    //calc velocity depends on the level, multiple by 0.1 to slow it down little bit
     if (type == 2)
-        speed = Eigen::Vector3d(x / 10, y, z);
+        speed = (0.1*level)*Eigen::Vector3d(x / 10, y, z);
     else
-        speed = Eigen::Vector3d(x / 10, y / 10, z);
+        speed = (0.1*level)*Eigen::Vector3d(x / 10, y / 10, z);
 }
 //end project
 

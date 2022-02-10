@@ -162,7 +162,7 @@ public:
 
   IGL_INLINE void update_movement_type(unsigned int);
 
-  IGL_INLINE void initiate_speed();
+  IGL_INLINE void initiate_speed(int level);
   //end Project comment
 
 
