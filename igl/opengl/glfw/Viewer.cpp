@@ -907,12 +907,14 @@ namespace glfw
   void Viewer::checkCollision() {
       for (int i = 1; i < data_list.size(); i++)
       {
+          cout << data_list.size() << endl;
           //Project comment
           if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree, i) ) {
               
               data_list[i].hasCollisioned = true;
               data_list[i].set_visible(false, 0);
-              data_list[i].MyTranslate(Eigen::Vector3d(0, 0, 100), true);
+              //data_list[i].MyTranslate(Eigen::Vector3d(0, 0, 100), true);
+              data_list[i].clear();
               score++;
               cout << "nice Score!" << endl;
               cout << "your current score is: " << score << endl;

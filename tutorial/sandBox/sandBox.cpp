@@ -358,7 +358,7 @@ void SandBox::Animate()
         
         //bonus bouncy targets object
         generate_target();
-        move_targets();
+        //move_targets();
         //end bonus bouncy targets object
 
         //end project comment  
