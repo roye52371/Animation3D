@@ -1146,8 +1146,8 @@ namespace glfw
           int savedIndx = selected_data_index;
           //open_dialog_load_mesh();
           // loading the objects we want to move in certain way
-          this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
-          //this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+          //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
+          this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
           //project comment
           if (data_list.size() > parents.size())
           {
@@ -1162,7 +1162,11 @@ namespace glfw
               //if (last_index > 1)
                  // parents[last_index] = last_index - 1;
           }
-
+          //creeating bounding box  for evert food created
+          int current_obj_index = data_list.size() - 1;
+          data_list[current_obj_index].tree.init(data_list[current_obj_index].V, data_list[current_obj_index].F);
+          igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[current_obj_index].tree;
+          Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
       }
   }
   //end comment project
