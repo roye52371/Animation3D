@@ -111,7 +111,7 @@ void SandBox::Init(const std::string &config)
     //data_list[0].set_colors(Eigen::RowVector3d(165,90,0));//brownie color for the snake;
     U = V;
 
-    levelk();
+    //levelk();
 
     //end comment Project
 
@@ -309,10 +309,10 @@ void SandBox::Animate()
 {
 	if (isActive)
 	{
-        for (int i = 1; i < data_list.size(); i++)
+       /* for (int i = 1; i < data_list.size(); i++)
         {
-            data_list[i].MyTranslate(Eigen::Vector3d(-0.004, i/100, i/100),true);
-        }
+            data_list[i].MyTranslate(Eigen::Vector3d(-0.004, 0, 0),true);
+        }*/
         
         //Project comment
         if (left) {
@@ -361,9 +361,6 @@ void SandBox::Animate()
         move_targets();
         //end bonus bouncy targets object
 
-        //end project comment
-
-       
-        
+        //end project comment  
 	}
 }

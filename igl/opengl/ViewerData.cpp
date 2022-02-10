@@ -18,7 +18,7 @@
 //#include "external/stb/igl_stb_image.h"
 
 //project comment
-#define g 0.05
+#define g 0.005
 // end project comment
 
 

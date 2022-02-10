@@ -1141,7 +1141,6 @@ namespace glfw
       float tic = static_cast<float>(glfwGetTime());
       if (tic - prev_tic > 5) {
           prev_tic = tic;
-          printf("ADD BALL\n");
           std::this_thread::sleep_for(std::chrono::microseconds(5));
 
           int savedIndx = selected_data_index;
@@ -1160,8 +1159,8 @@ namespace glfw
 
               int last_index = data_list.size() - 1;
 
-              if (last_index > 1)
-                  parents[last_index] = last_index - 1;
+              //if (last_index > 1)
+                 // parents[last_index] = last_index - 1;
           }
 
       }
