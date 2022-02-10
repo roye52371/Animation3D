@@ -157,12 +157,39 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer, int coresNum, 
 		menu->callback_draw_viewer_menu = [&]()
 		{
 			// Draw parent menu content
-			menu->draw_viewer_menu(scn, core_list);
-
-
+			//std::cout << "before" << std::endl;
+			menu->callback_draw_custom_window();
+			//std::cout << "after" << std::endl;
 		};
 	}
 }
+
+//project
+//ass 4
+void Renderer::showCorrectMenu() {
+	if (scn->isCollisionSnake) {
+		//show Lost menu
+		menu->callback_draw_viewer_window();
+		scn->gameLost = true;
+	}
+	else if (scn->isNextLevel) {
+		//show start level menu
+		scn->level++;
+		menu->callback_draw_custom_window();
+		scn->isNextLevel = false;
+
+	}
+	else if (scn->start) {
+		//show start menu
+		menu->callback_draw_custom_window();
+		//scn->start = false;
+	}
+	else {
+		//no menu 
+	}
+}
+
+//end project
 
 void Renderer::UpdatePosition(double xpos, double ypos)
 {

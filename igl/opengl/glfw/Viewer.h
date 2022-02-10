@@ -194,7 +194,18 @@ public:
 	bool isPicked;
 	bool isActive;
     //project comment
-    int score = 0;
+
+    void Viewer::updateScore();
+    void Viewer::showCorrectMenu();
+
+
+    int score;
+    int level;
+    bool isCollisionTarget;
+    bool isCollisionSnake;
+    bool start;
+    bool isNextLevel;
+    bool gameLost;
 
     //target and bonus stuff
     int snake_size;

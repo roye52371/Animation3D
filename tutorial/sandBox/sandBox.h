@@ -68,7 +68,7 @@ public:
 	std::vector<Eigen::Vector3d> vT;
 	//std::vector<RotationList > poses; // rotation of joints
 	//int score = 0;
-	int level = 1;
+	//int level = 1;
 
 
 	//-------------------------------Project-------------------------------

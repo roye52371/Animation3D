@@ -98,7 +98,14 @@ namespace glfw
     current_picked(-1),
     snake_size(1),  
     snake_view(false),
-    prev_tic(0)
+    prev_tic(0),
+    level(1),
+    score(0),
+    isCollisionSnake(false),
+    isCollisionTarget(false),
+    start(true),
+    isNextLevel(false),
+    gameLost(false)
   {
     data_list.front().id = 0;
     maxDistance = (data_list.size() - 1) * 1.6;
@@ -136,6 +143,17 @@ namespace glfw
      // delta = 0.1;
       //maxDistance = (data_list.size() - 1) * 1.6;
   }
+
+  //Ass4
+  void Viewer::updateScore() {
+      if (isCollisionTarget) {
+          score = score + 1;
+          isCollisionTarget = false;
+      }
+
+  }
+
+
 
   IGL_INLINE bool Viewer::load_mesh_from_file(
       const std::string & mesh_file_name_string)
@@ -698,7 +716,6 @@ namespace glfw
       //init the tree of both objects, and draw their bounding box
       for (int i = 1; i < data_list.size(); i++)
       {
-          //printf("lsllala\n");
           data_list[i].tree.init(data_list[i].V, data_list[i].F);
           igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[i].tree;
           Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
@@ -890,14 +907,12 @@ namespace glfw
   void Viewer::checkCollision() {
       for (int i = 1; i < data_list.size(); i++)
       {
-          std::cout << i << std::endl;
           //Project comment
           if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree, i) ) {
               
               data_list[i].hasCollisioned = true;
               data_list[i].set_visible(false, 0);
               data_list[i].MyTranslate(Eigen::Vector3d(0, 0, 100), true);
-              cout << "i: " << i << endl;
               score++;
               cout << "nice Score!" << endl;
               cout << "your current score is: " << score << endl;
@@ -1124,17 +1139,16 @@ namespace glfw
   IGL_INLINE void Viewer::generate_target()
   {
       float tic = static_cast<float>(glfwGetTime());
-      std::cout << tic << std::endl;
       if (tic - prev_tic > 5) {
           prev_tic = tic;
-
+          printf("ADD BALL\n");
           std::this_thread::sleep_for(std::chrono::microseconds(5));
 
           int savedIndx = selected_data_index;
           //open_dialog_load_mesh();
           // loading the objects we want to move in certain way
-          //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
-          this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+          this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
+          //this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
           //project comment
           if (data_list.size() > parents.size())
           {
