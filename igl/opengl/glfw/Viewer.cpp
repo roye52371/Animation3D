@@ -151,10 +151,17 @@ namespace glfw
   }
 
   //Ass4
-  void Viewer::updateScore() {
-      if (isCollisionTarget) {
+  void Viewer::updateScore(ViewerData obj) {
+      /*if (isCollisionTarget) {
           score = score + 1;
           isCollisionTarget = false;
+      }*/
+      if (obj.type == 2) {
+         score = score + 2;
+      }
+      else
+      {
+          score = score + 1;
       }
 
   }
@@ -943,9 +950,11 @@ namespace glfw
               PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
               data_list[i].hasCollisioned = true;
               data_list[i].set_visible(false, 0);
-
+              updateScore(data_list[i]);
+              data_list[i].MyTranslate(Eigen::Vector3d(0, 0, 100), true);//not sure that clear delete from scn, so tranlate it also
               data_list[i].clear();
-              score++;
+              
+              //score++;
               cout << "Nice Score!" << endl;
               cout << "Your current score is: " << score << endl; 
           }

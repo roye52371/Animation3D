@@ -207,7 +207,7 @@ void  SandBox::calc_next_pos()
     vT[0] = skelton[0];
     for (int i = 0; i < joints_num; i++) {
         vT[i + 1] = skelton[i + 1];
-        vT[i] = vT[i] + ((vT[i + 1] - vT[i]) / 6);
+        vT[i] = vT[i] + ((vT[i + 1] - vT[i]) / DiversityFactor_forVtCalc);
     }
     vT[joints_num] = vT[joints_num] + target_pose;
 }
@@ -264,6 +264,7 @@ void SandBox::levelk()
 
         isNextLevel = true;
         isActive = false;
+        isGameStarted = false;
         for (int i = 1; i < data_list.size(); i++)
         {
             data_list[i].clear();// clear all food
@@ -278,7 +279,13 @@ void SandBox::levelk()
             vT.at(i) = origin_vT.at(i);
             vQ.at(i) = origin_vQ.at(i);
         }
-
+        //reset moving direction
+        right = true;
+        left = false;
+        up = false;
+        down = false;
+        in = false;
+        out = false;
      
     }
     else {
@@ -330,22 +337,22 @@ void SandBox::Animate()
         
         //Project comment
         if (left) {
-            target_pose = Eigen::Vector3d(0, 0, -0.03);
+            target_pose = Eigen::Vector3d(0, 0, -snakeVelocity);
         }
         else if (right) {
-            target_pose = Eigen::Vector3d(0, 0, 0.03);
+            target_pose = Eigen::Vector3d(0, 0, snakeVelocity);
         }
         else if (up) {
-            target_pose = Eigen::Vector3d(0, 0.03, 0);
+            target_pose = Eigen::Vector3d(0, snakeVelocity, 0);
         }
         else if (down) {
-            target_pose = Eigen::Vector3d(0, -0.03, 0);
+            target_pose = Eigen::Vector3d(0, -snakeVelocity, 0);
         }
         else if (in) {
-            target_pose = Eigen::Vector3d(0.03, 0, 0);
+            target_pose = Eigen::Vector3d(snakeVelocity, 0, 0);
         }
         else if (out) {
-            target_pose = Eigen::Vector3d(-0.03, 0, 0);
+            target_pose = Eigen::Vector3d(-snakeVelocity, 0, 0);
         }
 
         else {}

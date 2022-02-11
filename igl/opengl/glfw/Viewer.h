@@ -197,7 +197,7 @@ public:
     void Viewer::Initialize_Tree(int index);
 
 
-    void Viewer::updateScore();
+    void Viewer::updateScore(ViewerData obj);
     void Viewer::showCorrectMenu();
 
     bool isResume = false;
@@ -210,6 +210,8 @@ public:
     bool start;
     bool isNextLevel;
     bool gameLost;
+    double snakeVelocity = 0.1;// maybe put 0.03 for start
+    double DiversityFactor_forVtCalc = 3;
 
     //target and bonus stuff
     int snake_size;
