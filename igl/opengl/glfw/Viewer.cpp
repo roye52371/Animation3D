@@ -226,11 +226,7 @@ namespace glfw
     {
       data().grid_texture();
     }
-    
 
-    //for (unsigned int i = 0; i<plugins.size(); ++i)
-    //  if (plugins[i]->post_load())
-    //    return true;
 
     //Ass1 comment, use OV, OF as copy to play with the V and F with out touch the original variables
     //init data structure for mesh of every data object
@@ -1248,23 +1244,6 @@ namespace glfw
           }
       }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //void Viewer::Initialize_Tree(int index) {
-  //    data_list[index].tree = new igl::AABB<Eigen::MatrixXd, 3>();
-  //    data_list[index].tree.init(data_list.at(index).V, data_list.at(index).F);
-  //}
 
 
 

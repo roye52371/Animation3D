@@ -233,32 +233,34 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			
 			//Project comment
 			//W is in movment
-			if (scn->up) {
-				scn->up = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->down) {
-				scn->down = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->left) {
-				scn->left = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->right) {
-				scn->right = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->out) {
-				scn->out = false;
-				scn->isActive = !scn->isActive;
-			}
+			if (scn->isGameStarted) {
+				if (scn->up) {
+					scn->up = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->down) {
+					scn->down = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->left) {
+					scn->left = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->right) {
+					scn->right = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->out) {
+					scn->out = false;
+					scn->isActive = !scn->isActive;
+				}
 
-			if (!scn->in)
-				scn->in = true;
-			else
-				scn->in = false;
-			scn->isActive = !scn->isActive;
+				if (!scn->in)
+					scn->in = true;
+				else
+					scn->in = false;
+				scn->isActive = !scn->isActive;
+			}
 			// end Project comment
 			break;
 		case 's':
@@ -271,33 +273,34 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 
 			//Project comment
 			//S is out movment
-			if (scn->up) {
-				scn->up = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->down) {
-				scn->down = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->left) {
-				scn->left = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->right) {
-				scn->right = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->in) {
-				scn->in = false;
-				scn->isActive = !scn->isActive;
-			}
+			if (scn->isGameStarted) {
+				if (scn->up) {
+					scn->up = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->down) {
+					scn->down = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->left) {
+					scn->left = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->right) {
+					scn->right = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->in) {
+					scn->in = false;
+					scn->isActive = !scn->isActive;
+				}
 
-			if (!scn->out)
-				scn->out = true;
-			else
-				scn->out = false;
-			scn->isActive = !scn->isActive;
-			
+				if (!scn->out)
+					scn->out = true;
+				else
+					scn->out = false;
+				scn->isActive = !scn->isActive;
+			}
 			//end comment Project
 			break;
 		//case GLFW_KEY_UP:
@@ -343,120 +346,128 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		//Project comment
 		case GLFW_KEY_UP:
 			//rndr->TranslateCamera(Eigen::Vector3f(0, 0.01f,0));
-			if (scn->right) {
-				scn->right = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->down) {
-				scn->down = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->left) {
-				scn->left = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->in) {
-				scn->in = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->out) {
-				scn->out = false;
-				scn->isActive = !scn->isActive;
-			}
+			if (scn->isGameStarted) {
+				if (scn->right) {
+					scn->right = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->down) {
+					scn->down = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->left) {
+					scn->left = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->in) {
+					scn->in = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->out) {
+					scn->out = false;
+					scn->isActive = !scn->isActive;
+				}
 
-			if (!scn->up)
-				scn->up = true;
-			else
-				scn->up = false;
-			scn->isActive = !scn->isActive;
+				if (!scn->up)
+					scn->up = true;
+				else
+					scn->up = false;
+				scn->isActive = !scn->isActive;
+			}
 
 			break;
 		case GLFW_KEY_DOWN:
 			//rndr->TranslateCamera(Eigen::Vector3f(0, -0.01f,0));
-			if (scn->up){
-				scn->up = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->left) {
-				scn->left = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->right) {
-				scn->right = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->in) {
-				scn->in = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->out) {
-				scn->out = false;
-				scn->isActive = !scn->isActive;
-			}
+			if (scn->isGameStarted) {
+				if (scn->up) {
+					scn->up = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->left) {
+					scn->left = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->right) {
+					scn->right = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->in) {
+					scn->in = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->out) {
+					scn->out = false;
+					scn->isActive = !scn->isActive;
+				}
 
-			if (!scn->down)
-				scn->down = true;
-			else
-				scn->down = false;
-			scn->isActive = !scn->isActive;
+				if (!scn->down)
+					scn->down = true;
+				else
+					scn->down = false;
+				scn->isActive = !scn->isActive;
+			}
 			break;
 		case GLFW_KEY_LEFT:
 			//rndr->TranslateCamera(Eigen::Vector3f(-0.01f, 0,0));
-			if (scn->up) {
-				scn->up = false;
+			if (scn->isGameStarted) {
+				if (scn->up) {
+					scn->up = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->down) {
+					scn->down = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->right) {
+					scn->right = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->in) {
+					scn->in = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->out) {
+					scn->out = false;
+					scn->isActive = !scn->isActive;
+				}
+
+				if (!scn->left)
+					scn->left = true;
+				else
+					scn->left = false;
 				scn->isActive = !scn->isActive;
 			}
-			if (scn->down) {
-				scn->down = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->right) {
-				scn->right = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->in) {
-				scn->in = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->out) {
-				scn->out = false;
-				scn->isActive = !scn->isActive;
-			}
-	
-			if (!scn->left)
-				scn->left = true;
-			else
-				scn->left = false;
-			scn->isActive = !scn->isActive;
 			break;
 		case GLFW_KEY_RIGHT:
 			//rndr->TranslateCamera(Eigen::Vector3f(0.01f, 0, 0));
-			if (scn->up) {
-				scn->up = false;
+			if (scn->isGameStarted) {
+				if (scn->up) {
+					scn->up = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->down) {
+					scn->down = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->left) {
+					scn->left = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->in) {
+					scn->in = false;
+					scn->isActive = !scn->isActive;
+				}
+				if (scn->out) {
+					scn->out = false;
+					scn->isActive = !scn->isActive;
+				}
+
+				if (!scn->right)
+					scn->right = true;
+				else
+					scn->right = false;
 				scn->isActive = !scn->isActive;
 			}
-			if (scn->down) {
-				scn->down = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->left) {
-				scn->left = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->in) {
-				scn->in = false;
-				scn->isActive = !scn->isActive;
-			}
-			if (scn->out) {
-				scn->out = false;
-				scn->isActive = !scn->isActive;
-			}
-	
-			if (!scn->right)
-				scn->right = true;
-			else
-				scn->right = false;
-			scn->isActive = !scn->isActive;
 			break;
 		//end cpmment Project
 
@@ -469,7 +480,10 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			// toggle ik solver aniimation
 			//scn->ikAnimation = !scn->ikAnimation;
 			//scn->toggleIKSimulation();
-			scn->isActive = !scn->isActive;//it ruined the movment
+			if (scn->isGameStarted) {
+				scn->isActive = !scn->isActive;//it ruined the movment
+				//scn->isResume = !scn->isResume;
+			}
 			break;
 			//end Ass3
 			//break;

@@ -55,30 +55,69 @@ static bool toggleButton(const char* id, SandBox& viewer) {
 		enable_7m = false;
 	}
 	else if (viewer.isNextLevel) {//ImGui::Button("NEXT LVL") || 
-		if (ImGui::Button("START OVER")) {
+		if (ImGui::Button("             START OVER             ")) {
 			showWindow = true;
 			enable_7m = true;
 			viewer.isNextLevel = false;
+			viewer.isActive = true;
 			viewer.score = 0;
 		}
-		if (ImGui::Button("NEXT LVL")) {
+		if (ImGui::Button("              NEXT LVL              ")) {
 			showWindow = true;
 			enable_7m = true;
 			viewer.isNextLevel = false;
+			viewer.isActive = true;
 			viewer.score = 0;
 			viewer.level += 1;
 		}
 	}
+	//else if (viewer.isResume)
+	//	if(ImGui::Button("              RESUME              ")) {
+	//		showWindow = true;
+	//		enable_7m = true;
+	//		viewer.isResume = false;
+	//}
 	else
 	{
-		if (ImGui::Button("Let's Start"))
+		if (ImGui::Button("             Let's Start             "))
 			enable_7m = true;
 	}
 	
 	return showWindow;
 }
-//end project
 
+
+
+
+ImFont* AddDefaultFont(float pixel_size)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	ImFontConfig config;
+	config.SizePixels = pixel_size;
+	config.OversampleH = config.OversampleV = 1;
+	config.PixelSnapH = true;
+	ImFont* font = io.Fonts->AddFontDefault(&config);
+	return font;
+}
+
+void DoFitTextToWindow(ImFont* font, const char* text)
+{
+	ImGui::PushFont(font);
+	ImVec2 sz = ImGui::CalcTextSize(text);
+	ImGui::PopFont();
+	float canvasWidth = ImGui::GetWindowContentRegionWidth();
+	float origScale = font->Scale;
+	font->Scale = canvasWidth / sz.x;
+	ImGui::PushFont(font);
+	ImGui::Text("%s", text);
+	ImGui::PopFont();
+	font->Scale = origScale;
+}
+
+
+
+
+//end project
 int main(int argc, char *argv[])
 {
   Display *disp = new Display(1600, 960, "Final Game by R&D");
@@ -124,27 +163,40 @@ int main(int argc, char *argv[])
 	  }
 
   };*/
+	  
+
 
   menu.callback_draw_custom_window = [&]()
   {
 	  ImGui::CreateContext();
+	  //ImFont* fontA = AddDefaultFont(13);
 	  // Define next window position + size
-	  ImGui::SetNextWindowPos(ImVec2(30.f * menu.menu_scaling(), 200), ImGuiCond_FirstUseEver);
-	  ImGui::SetNextWindowSize(ImVec2(300, 260), ImGuiCond_FirstUseEver);
+
+
+
+	  ImGui::SetNextWindowPos(ImVec2(0.f * menu.menu_scaling(), 0), ImGuiCond_Always);
+	  ImGui::SetNextWindowSize(ImVec2(400, 1000), ImGuiCond_Always);
 	  static bool showWindow = true;
-	  if (showWindow) {
+
+	  if (showWindow && viewer.level == 1) {
+		  viewer.isGameStarted = false;
 		  if (!ImGui::Begin(
 			  "Start Playin'", &showWindow,
 			  ImGuiWindowFlags_NoSavedSettings
 		  )) {
+			  
+			  
 			  ImGui::End();
 		  }
 		  else {
-			  // Expose the same variable directly ...
-			 
+			  ImGui::SetWindowFontScale(1.5f);
+			  
 			  ImGui::PushItemWidth(-80);
+			  
+			  ImGui::Text("\n\n\n\n");
 			  ImGui::Text("               Score: %d", viewer.score);
 			  ImGui::Text("               Level: %d", viewer.level);
+			  ImGui::Text("               ");
 			  ImGui::PopItemWidth();
 
 
@@ -156,6 +208,7 @@ int main(int argc, char *argv[])
 	  }
 	  else if(viewer.isNextLevel)
 	  {
+		  viewer.isGameStarted = false;
 		  if (!ImGui::Begin(
 			  "Next Level", &showWindow,
 			  ImGuiWindowFlags_NoSavedSettings
@@ -163,19 +216,44 @@ int main(int argc, char *argv[])
 			  ImGui::End();
 		  }
 		  else {
+			  ImGui::SetWindowFontScale(1.5f);
+
 			  // Expose the same variable directly ...
 
 			  ImGui::PushItemWidth(-80);
-			  ImGui::Text("Press NEXT LVL or START OVER");
+			  ImGui::Text("Press NEXT LVL or START OVER\n\n");
 			  ImGui::Text("               Score: %d", viewer.score);
 			  ImGui::Text("               Level: %d", viewer.level);
 			  ImGui::PopItemWidth();
 
 			  showWindow = toggleButton("NEXT LVL", viewer);
-			  showWindow = toggleButton("START OVER", viewer);
+			  //showWindow = toggleButton("START OVER", viewer);
 			  			  ImGui::End();
 		  }
 	  }
+	  //else if (viewer.isResume) {
+		 // viewer.isGameStarted = false;
+		 // if (!ImGui::Begin(
+			//  "Resume When Ready To Play", &showWindow,
+			//  ImGuiWindowFlags_NoSavedSettings
+		 // )) {
+			//  ImGui::End();
+		 // }
+		 // else {
+			//  // Expose the same variable directly ...
+			//  ImGui::PushItemWidth(-80);
+			//  ImGui::Text("\n\n\n\n");
+			//  ImGui::Text("               Score: %d", viewer.score);
+			//  ImGui::Text("               Level: %d", viewer.level);
+			//  ImGui::Text("               ");
+			//  ImGui::PopItemWidth();
+
+
+			//  showWindow = toggleButton("RESUME", viewer);
+
+			//  ImGui::End();
+		 // }
+	  //}
 	  else {
 		  if (!ImGui::Begin(
 			  "Give Your Best Shot", &showWindow,
@@ -184,9 +262,12 @@ int main(int argc, char *argv[])
 			  ImGui::End();
 		  }
 		  else {
-			  // Expose the same variable directly ...
+			  ImGui::SetWindowFontScale(1.5f);
 
+			  // Expose the same variable directly ...
+			  viewer.isGameStarted = true;
 			  ImGui::PushItemWidth(-80);
+			  ImGui::Text("\n\n\n\n");
 			  ImGui::Text("               Score: %d", viewer.score);
 			  ImGui::Text("               Level: %d", viewer.level);
 			  ImGui::PopItemWidth();

@@ -200,7 +200,8 @@ public:
     void Viewer::updateScore();
     void Viewer::showCorrectMenu();
 
-
+    bool isResume = false;
+    bool isGameStarted = false;
     int score=0;
     int level=1;
     int targetScore = 1;// start target score

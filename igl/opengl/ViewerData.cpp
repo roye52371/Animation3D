@@ -129,11 +129,11 @@ IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int level)
     double y = ((double)rand() / (RAND_MAX)) - 0.5;
     double z = ((double)rand() / (RAND_MAX)) - 0.5;
 
-    //calc velocity depends on the level, multiple by 0.1 to slow it down little bit
+    //calc velocity depends on the level, multiple by constants(0.06,0.08) to slow it down little bit
     if (type == 2)
-        speed = (0.1*level)*Eigen::Vector3d(x / 10, y, z);
+        speed = (0.06*level)*Eigen::Vector3d(x / 10, y, z);
     else
-        speed = (0.1*level)*Eigen::Vector3d(x / 10, y / 10, z);
+        speed = (0.08*level)*Eigen::Vector3d(x / 10, y / 10, z);
 }
 //end project
 
@@ -201,8 +201,8 @@ IGL_INLINE void igl::opengl::ViewerData::set_mesh(
       Eigen::Vector3d(GOLD_AMBIENT[0], GOLD_AMBIENT[1], GOLD_AMBIENT[2]),
       Eigen::Vector3d(GOLD_DIFFUSE[0], GOLD_DIFFUSE[1], GOLD_DIFFUSE[2]),
       Eigen::Vector3d(GOLD_SPECULAR[0], GOLD_SPECULAR[1], GOLD_SPECULAR[2]));
-	//image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake1.png");
-    image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake1.png");
+	image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake1.png");
+    //image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake1.png");
     //image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake.jpg");
     //image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake.jpg");
 //    grid_texture();
