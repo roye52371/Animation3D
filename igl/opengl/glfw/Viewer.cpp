@@ -932,17 +932,16 @@ namespace glfw
   void Viewer::checkCollision() {
       for (int i = 1; i < data_list.size() && (score < (targetScore * level)); i++)
       {
-          //cout << data_list.size() << endl;
           //Project comment
           if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree, i) ) {
               
               data_list[i].hasCollisioned = true;
               data_list[i].set_visible(false, 0);
-              //data_list[i].MyTranslate(Eigen::Vector3d(0, 0, 100), true);
+
               data_list[i].clear();
               score++;
-              cout << "nice Score!" << endl;
-              cout << "your current score is: " << score << endl; 
+              cout << "Nice Score!" << endl;
+              cout << "Your current score is: " << score << endl; 
           }
           //project comment
       }
@@ -1173,8 +1172,11 @@ namespace glfw
           //open_dialog_load_mesh();
           // loading the objects we want to move in certain way
           //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
+          int current_obj_index = data_list.size() - 1;
+
           if (level > 2) {
               this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/bunny.off");
+              
               //project comment
               if (data_list.size() > parents.size())
               {
@@ -1186,11 +1188,8 @@ namespace glfw
 
                   int last_index = data_list.size() - 1;
 
-                  //if (last_index > 1)
-                     // parents[last_index] = last_index - 1;
               }
               //creeating bounding box  for evert food created
-              int current_obj_index = data_list.size() - 1;
               data_list[current_obj_index].tree.init(data_list[current_obj_index].V, data_list[current_obj_index].F);
               igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[current_obj_index].tree;
               Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
@@ -1200,6 +1199,8 @@ namespace glfw
           if (level > 1) {
               this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
               //project comment
+              current_obj_index = data_list.size() - 1;
+              data_list[current_obj_index].MyScale(Eigen::Vector3d(0.5, 0.5, 0.5));
               if (data_list.size() > parents.size())
               {
                   parents.push_back(-1);
@@ -1223,6 +1224,8 @@ namespace glfw
           if(level> 0) {
               this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/cube.obj");
               //project comment
+              current_obj_index = data_list.size() - 1;
+              data_list[current_obj_index].MyScale(Eigen::Vector3d(0.8, 0.8, 0.8));
               if (data_list.size() > parents.size())
               {
                   parents.push_back(-1);

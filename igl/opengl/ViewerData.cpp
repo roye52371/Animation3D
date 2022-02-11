@@ -131,7 +131,7 @@ IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int level)
 
     //calc velocity depends on the level, multiple by constants(0.06,0.08) to slow it down little bit
     if (type == 2)
-        speed = (0.06*level)*Eigen::Vector3d(x / 10, y, z);
+        speed = (0.06*level)*Eigen::Vector3d(x / 10, y, 0);
     else
         speed = (0.08*level)*Eigen::Vector3d(x / 10, y / 10, z);
 }

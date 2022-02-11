@@ -57,7 +57,7 @@ static bool toggleButton(const char* id, SandBox& viewer) {
 		showWindow = false;
 		enable_7m = false;
 	}
-	else if (viewer.isNextLevel) {//ImGui::Button("NEXT LVL") || 
+	else if (viewer.isNextLevel) { 
 		if (ImGui::Button("             START OVER             ")) {
 			showWindow = true;
 			enable_7m = true;
@@ -106,7 +106,6 @@ int main(int argc, char *argv[])
   viewer.data_list[0].tree.init(viewer.data_list[0].V, viewer.data_list[0].F);
   igl::AABB<Eigen::MatrixXd, 3> tree_first = viewer.data_list[0].tree;
   Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
-  viewer.data_list[0].drawBox(box_first, 0);
   disp->SetRenderer(&renderer);
 
  /* menu.callback_draw_viewer_window = [&]() {
@@ -246,10 +245,7 @@ int main(int argc, char *argv[])
 			  ImGui::PopItemWidth();
 			  ImGui::End();
 		  }
-
 	  }
-
-
   };
   
   Init(*disp, &menu);

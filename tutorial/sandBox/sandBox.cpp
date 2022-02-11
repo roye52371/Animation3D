@@ -63,7 +63,8 @@ void SandBox::Init(const std::string &config)
             std::cout << "openning " << item_name << std::endl;
             load_mesh_from_file(item_name);
 
-            Eigen::RowVector3d center(0, 0, -0.8);
+            data_list[0].MyTranslate(Eigen::Vector3d(-3, -1, 0), true);
+            //data_list[0].MyScale(Eigen::Vector3d(2, 0.5, 1));
             parents.push_back(-1);
             data().show_overlay_depth = false;
             data().point_size = 10;
