@@ -236,30 +236,30 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			if (scn->isGameStarted) {
 				if (scn->up) {
 					scn->up = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->down) {
 					scn->down = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->left) {
 					scn->left = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->right) {
 					scn->right = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->out) {
 					scn->out = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 
 				if (!scn->in)
 					scn->in = true;
 				else
 					scn->in = false;
-				scn->isActive = !scn->isActive;
+				//scn->isActive = !scn->isActive;
 			}
 			// end Project comment
 			break;
@@ -276,30 +276,30 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			if (scn->isGameStarted) {
 				if (scn->up) {
 					scn->up = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->down) {
 					scn->down = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->left) {
 					scn->left = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->right) {
 					scn->right = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->in) {
 					scn->in = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 
 				if (!scn->out)
 					scn->out = true;
 				else
 					scn->out = false;
-				scn->isActive = !scn->isActive;
+				//scn->isActive = !scn->isActive;
 			}
 			//end comment Project
 			break;
@@ -349,30 +349,30 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			if (scn->isGameStarted) {
 				if (scn->right) {
 					scn->right = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->down) {
 					scn->down = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->left) {
 					scn->left = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->in) {
 					scn->in = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->out) {
 					scn->out = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 
 				if (!scn->up)
 					scn->up = true;
 				else
 					scn->up = false;
-				scn->isActive = !scn->isActive;
+				//scn->isActive = !scn->isActive;
 			}
 
 			break;
@@ -381,30 +381,30 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			if (scn->isGameStarted) {
 				if (scn->up) {
 					scn->up = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->left) {
 					scn->left = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->right) {
 					scn->right = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->in) {
 					scn->in = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->out) {
 					scn->out = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 
 				if (!scn->down)
 					scn->down = true;
 				else
 					scn->down = false;
-				scn->isActive = !scn->isActive;
+				//scn->isActive = !scn->isActive;
 			}
 			break;
 		case GLFW_KEY_LEFT:
@@ -412,30 +412,30 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			if (scn->isGameStarted) {
 				if (scn->up) {
 					scn->up = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->down) {
 					scn->down = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->right) {
 					scn->right = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->in) {
 					scn->in = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->out) {
 					scn->out = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 
 				if (!scn->left)
 					scn->left = true;
 				else
 					scn->left = false;
-				scn->isActive = !scn->isActive;
+				//scn->isActive = !scn->isActive;
 			}
 			break;
 		case GLFW_KEY_RIGHT:
@@ -443,30 +443,30 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			if (scn->isGameStarted) {
 				if (scn->up) {
 					scn->up = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->down) {
 					scn->down = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->left) {
 					scn->left = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->in) {
 					scn->in = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 				if (scn->out) {
 					scn->out = false;
-					scn->isActive = !scn->isActive;
+					//scn->isActive = !scn->isActive;
 				}
 
 				if (!scn->right)
 					scn->right = true;
 				else
 					scn->right = false;
-				scn->isActive = !scn->isActive;
+				//scn->isActive = !scn->isActive;
 			}
 			break;
 		//end cpmment Project
@@ -481,8 +481,8 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			//scn->ikAnimation = !scn->ikAnimation;
 			//scn->toggleIKSimulation();
 			if (scn->isGameStarted) {
-				scn->isActive = !scn->isActive;//it ruined the movment
-				//scn->isResume = !scn->isResume;
+				scn->isActive = false;//it ruined the movment
+				scn->isResume = true;
 			}
 			break;
 			//end Ass3

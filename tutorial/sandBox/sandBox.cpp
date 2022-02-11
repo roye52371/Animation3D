@@ -320,7 +320,7 @@ void SandBox::levelk()
 
 void SandBox::Animate()
 {
-	if (isActive)
+	if (isActive && !isResume)
 	{
        /* for (int i = 1; i < data_list.size(); i++)
         {

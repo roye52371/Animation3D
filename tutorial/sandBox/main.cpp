@@ -3,7 +3,10 @@
 #include "tutorial/sandBox/inputManager.h"
 #include "sandBox.h"
 #include <imgui/imgui.cpp>
+#include <igl/get_seconds.h>
+#include <external/glfw/include/GLFW/glfw3.h>
 using namespace std; 
+
 
 static void drawDotsAndLines(igl::opengl::glfw::Viewer& viewer) {
 
@@ -71,49 +74,23 @@ static bool toggleButton(const char* id, SandBox& viewer) {
 			viewer.level += 1;
 		}
 	}
-	//else if (viewer.isResume)
-	//	if(ImGui::Button("              RESUME              ")) {
-	//		showWindow = true;
-	//		enable_7m = true;
-	//		viewer.isResume = false;
-	//}
+	else if (viewer.isResume){
+		if (ImGui::Button("              RESUME              ")) {
+			showWindow = true;
+			enable_7m = true;
+			viewer.isActive = true;//it ruined the movment
+			viewer.isResume = false;
+			viewer.isGameStarted = true;
+			viewer.isNextLevel = false;
+		}
+	}
 	else
 	{
 		if (ImGui::Button("             Let's Start             "))
 			enable_7m = true;
 	}
-	
 	return showWindow;
 }
-
-
-
-
-ImFont* AddDefaultFont(float pixel_size)
-{
-	ImGuiIO& io = ImGui::GetIO();
-	ImFontConfig config;
-	config.SizePixels = pixel_size;
-	config.OversampleH = config.OversampleV = 1;
-	config.PixelSnapH = true;
-	ImFont* font = io.Fonts->AddFontDefault(&config);
-	return font;
-}
-
-void DoFitTextToWindow(ImFont* font, const char* text)
-{
-	ImGui::PushFont(font);
-	ImVec2 sz = ImGui::CalcTextSize(text);
-	ImGui::PopFont();
-	float canvasWidth = ImGui::GetWindowContentRegionWidth();
-	float origScale = font->Scale;
-	font->Scale = canvasWidth / sz.x;
-	ImGui::PushFont(font);
-	ImGui::Text("%s", text);
-	ImGui::PopFont();
-	font->Scale = origScale;
-}
-
 
 
 
@@ -169,11 +146,7 @@ int main(int argc, char *argv[])
   menu.callback_draw_custom_window = [&]()
   {
 	  ImGui::CreateContext();
-	  //ImFont* fontA = AddDefaultFont(13);
 	  // Define next window position + size
-
-
-
 	  ImGui::SetNextWindowPos(ImVec2(0.f * menu.menu_scaling(), 0), ImGuiCond_Always);
 	  ImGui::SetNextWindowSize(ImVec2(400, 1000), ImGuiCond_Always);
 	  static bool showWindow = true;
@@ -227,33 +200,32 @@ int main(int argc, char *argv[])
 			  ImGui::PopItemWidth();
 
 			  showWindow = toggleButton("NEXT LVL", viewer);
-			  //showWindow = toggleButton("START OVER", viewer);
-			  			  ImGui::End();
+			  ImGui::End();
 		  }
 	  }
-	  //else if (viewer.isResume) {
-		 // viewer.isGameStarted = false;
-		 // if (!ImGui::Begin(
-			//  "Resume When Ready To Play", &showWindow,
-			//  ImGuiWindowFlags_NoSavedSettings
-		 // )) {
-			//  ImGui::End();
-		 // }
-		 // else {
-			//  // Expose the same variable directly ...
-			//  ImGui::PushItemWidth(-80);
-			//  ImGui::Text("\n\n\n\n");
-			//  ImGui::Text("               Score: %d", viewer.score);
-			//  ImGui::Text("               Level: %d", viewer.level);
-			//  ImGui::Text("               ");
-			//  ImGui::PopItemWidth();
+	  else if (viewer.isResume) {
+		  viewer.isGameStarted = false;
+		  if (!ImGui::Begin(
+			  "Resume When Ready To Play", &showWindow,
+			  ImGuiWindowFlags_NoSavedSettings
+		  )) {
+			  ImGui::End();
+		  }
+		  else {
+			  ImGui::SetWindowFontScale(1.5f);
+			  // Expose the same variable directly ...
+			  ImGui::PushItemWidth(-80);
+			  ImGui::Text("\n\n\n\n");
+			  ImGui::Text("               Score: %d", viewer.score);
+			  ImGui::Text("               Level: %d", viewer.level);
+			  ImGui::Text("");
+			  ImGui::PopItemWidth();
 
 
-			//  showWindow = toggleButton("RESUME", viewer);
-
-			//  ImGui::End();
-		 // }
-	  //}
+			  showWindow = toggleButton("RESUME", viewer);
+			  ImGui::End();
+		  }
+	  }
 	  else {
 		  if (!ImGui::Begin(
 			  "Give Your Best Shot", &showWindow,
@@ -262,16 +234,16 @@ int main(int argc, char *argv[])
 			  ImGui::End();
 		  }
 		  else {
+			  
 			  ImGui::SetWindowFontScale(1.5f);
-
 			  // Expose the same variable directly ...
 			  viewer.isGameStarted = true;
 			  ImGui::PushItemWidth(-80);
 			  ImGui::Text("\n\n\n\n");
 			  ImGui::Text("               Score: %d", viewer.score);
 			  ImGui::Text("               Level: %d", viewer.level);
-			  ImGui::PopItemWidth();
 
+			  ImGui::PopItemWidth();
 			  ImGui::End();
 		  }
 
@@ -287,7 +259,6 @@ int main(int argc, char *argv[])
 
   disp->launch_rendering(true);
   
-  //std::cout << "2wwwwwwwwww\n";
   //delete menu;
   delete disp;
 }
