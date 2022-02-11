@@ -41,12 +41,13 @@ void SandBox::Init(const std::string &config)
 
     joints_num = 16;
     skelton.resize(joints_num + 1);
-    //parents.resize(joints_num + 1);
     scale = 1;
     //Initialize vT, vQ
     vT.resize(17);
     vQ.resize(17);
-
+    origin_skelton.resize(joints_num + 1);
+    origin_vT.resize(17);
+    origin_vQ.resize(17);
 
 
     nameFileout.open(config);
@@ -92,33 +93,20 @@ void SandBox::Init(const std::string &config)
 
     data().MyRotate(Eigen::Vector3d(0, 1, 0), 3.14 / 2);
 
-    //Create Joints
-    //the first joint that dont have a parent
-    //Joints.emplace_back();
-    //Joints.at(0).MyTranslate(skelton.at(0), true);
-    //parents[1] = -1;
-    //the 16 other joint that have parents
-    /*for (int i = 1; i < joints_num; i++)
-    {
-        parents[i + 1] = i;
-        Joints.emplace_back();
-        Joints.at(i + 1).MyTranslate(skelton.at(i + 1), true);
-
-    }*/
-
 
     target_pose = skelton[joints_num];
-    //data_list[0].set_colors(Eigen::RowVector3d(165,90,0));//brownie color for the snake;
     U = V;
 
-    //levelk();
+    //keep original values of the snake, original vertices kept in OV variable
+    for (int i = 0; i < skelton.size(); i++)
+    {
+        origin_skelton.at(i) = skelton.at(i);
+        origin_vT.at(i) = vT.at(i);
+        origin_vQ.at(i) = vQ.at(i);
+    }
 
-    //end comment Project
 
-
-  
-
-    
+    //end comment Project  
 }
 
 SandBox::~SandBox()
@@ -273,10 +261,7 @@ void SandBox::levelk()
 {
     if (score >= targetScore * level) {
 
-        //Todo: need to stop game and show menu that ask if do the same level or pass to next one
-
         isNextLevel = true;
-
         isActive = false;
         for (int i = 1; i < data_list.size(); i++)
         {
@@ -285,10 +270,15 @@ void SandBox::levelk()
         //try to reset snake
         data_list[0].set_vertices(data_list[0].OV);// OV keeping the first vertics we had to the snake
 
-        //Todo: need to stop game and show menu that ask if do the same level or pass to next one
-        //after decide what level to be, to update it , and the score, and isActive to be True
-        //level++;// need to be update in the menu code after finishing level and decide were to continue
-        //score = 0;//need to be update in the menu code after finishing level and decide were to continue
+        //retrieve original values of the snake, original vertices kept in OV variable
+        for (int i = 0; i < skelton.size(); i++)
+        {
+            skelton.at(i) = origin_skelton.at(i);
+            vT.at(i) = origin_vT.at(i);
+            vQ.at(i) = origin_vQ.at(i);
+        }
+
+     
     }
     else {
         generate_target(level);

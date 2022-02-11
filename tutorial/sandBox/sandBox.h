@@ -66,9 +66,12 @@ public:
 	Eigen::VectorXi P;
 	RotationList vQ;
 	std::vector<Eigen::Vector3d> vT;
-	//std::vector<RotationList > poses; // rotation of joints
-	//int score = 0;
-	//int level = 1;
+
+
+	RotationList origin_vQ;
+	std::vector<Eigen::Vector3d> origin_vT;
+	std::vector<Eigen::Vector3d>origin_skelton;
+
 
 
 	//-------------------------------Project-------------------------------
