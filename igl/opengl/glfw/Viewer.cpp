@@ -58,6 +58,12 @@
 //Project comment
 #include <igl/get_seconds.h>
 #include <external/glfw/include/GLFW/glfw3.h>
+//project comment
+#include <Windows.h>
+#include <MMSystem.h>
+#pragma comment(lib, "winmm.lib")
+//end comment project
+
 //end project comment
 
 
@@ -267,7 +273,7 @@ namespace glfw
         data().update_movement_type(1);
 
         if (data().type == 1)
-            data().set_colors(Eigen::RowVector3d(1, 0, 0));
+            data().set_colors(Eigen::RowVector3d(1, 0, 1));
         else
             data().set_colors(Eigen::RowVector3d(0, 1, 0));
 
@@ -934,7 +940,7 @@ namespace glfw
       {
           //Project comment
           if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree, i) ) {
-              
+              PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
               data_list[i].hasCollisioned = true;
               data_list[i].set_visible(false, 0);
 
@@ -1175,7 +1181,8 @@ namespace glfw
           int current_obj_index = data_list.size() - 1;
 
           if (level > 2) {
-              this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/bunny.off");
+              //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/bunny.off");
+              this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/bunny.off");
               
               //project comment
               if (data_list.size() > parents.size())
@@ -1197,7 +1204,9 @@ namespace glfw
 
 
           if (level > 1) {
-              this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
+              //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
+              this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+
               //project comment
               current_obj_index = data_list.size() - 1;
               data_list[current_obj_index].MyScale(Eigen::Vector3d(0.5, 0.5, 0.5));
@@ -1222,7 +1231,8 @@ namespace glfw
           }
 
           if(level> 0) {
-              this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/cube.obj");
+              //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/cube.obj");
+              this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
               //project comment
               current_obj_index = data_list.size() - 1;
               data_list[current_obj_index].MyScale(Eigen::Vector3d(0.8, 0.8, 0.8));

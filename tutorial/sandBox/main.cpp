@@ -5,6 +5,7 @@
 #include <imgui/imgui.cpp>
 #include <igl/get_seconds.h>
 #include <external/glfw/include/GLFW/glfw3.h>
+
 using namespace std; 
 
 
@@ -47,13 +48,13 @@ static bool toggleButton(const char* id, SandBox& viewer) {
 	if (enable_7m == true)
 	{
 		viewer.isActive = true;
-		ImGui::PushID(id);
+		/*ImGui::PushID(id);
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(245, 60, 40));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(245, 60, 40));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(245, 70, 60));
 		ImGui::Button(id);
 		ImGui::PopStyleColor(3);
-		ImGui::PopID();
+		ImGui::PopID();*/
 		showWindow = false;
 		enable_7m = false;
 	}
@@ -97,6 +98,8 @@ static bool toggleButton(const char* id, SandBox& viewer) {
 //end project
 int main(int argc, char *argv[])
 {
+  
+
   Display *disp = new Display(1600, 960, "Final Game by R&D");
   Renderer renderer;
   SandBox viewer;
