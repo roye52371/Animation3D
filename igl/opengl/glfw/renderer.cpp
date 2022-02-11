@@ -176,7 +176,7 @@ void Renderer::showCorrectMenu() {
 		//show start level menu
 		scn->level++;
 		menu->callback_draw_custom_window();
-		scn->isNextLevel = false;
+		//scn->isNextLevel = false;
 
 	}
 	else if (scn->start) {

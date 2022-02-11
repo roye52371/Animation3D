@@ -32,12 +32,13 @@ static void drawDotsAndLines(igl::opengl::glfw::Viewer& viewer) {
 }
 
 //project
+
 static bool toggleButton(const char* id, SandBox& viewer) {
-	static bool enable_7m = false;  // default value, the button is disabled 
 	static float b = 5.0f; //  test whatever color you need from imgui_demo.cpp e.g.
 	static float c = 5.0f; // 
 	static int i = 3;
-	
+	static bool enable_7m = false;  // default value, the button is disabled 
+
 
 	bool showWindow = true;
 	if (enable_7m == true)
@@ -51,6 +52,22 @@ static bool toggleButton(const char* id, SandBox& viewer) {
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 		showWindow = false;
+		enable_7m = false;
+	}
+	else if (viewer.isNextLevel) {//ImGui::Button("NEXT LVL") || 
+		if (ImGui::Button("START OVER")) {
+			showWindow = true;
+			enable_7m = true;
+			viewer.isNextLevel = false;
+			viewer.score = 0;
+		}
+		if (ImGui::Button("NEXT LVL")) {
+			showWindow = true;
+			enable_7m = true;
+			viewer.isNextLevel = false;
+			viewer.score = 0;
+			viewer.level += 1;
+		}
 	}
 	else
 	{
@@ -137,16 +154,58 @@ int main(int argc, char *argv[])
 			  ImGui::End();
 		  }
 	  }
+	  else if(viewer.isNextLevel)
+	  {
+		  if (!ImGui::Begin(
+			  "Next Level", &showWindow,
+			  ImGuiWindowFlags_NoSavedSettings
+		  )) {
+			  ImGui::End();
+		  }
+		  else {
+			  // Expose the same variable directly ...
+
+			  ImGui::PushItemWidth(-80);
+			  ImGui::Text("Press NEXT LVL or START OVER");
+			  ImGui::Text("               Score: %d", viewer.score);
+			  ImGui::Text("               Level: %d", viewer.level);
+			  ImGui::PopItemWidth();
+
+			  showWindow = toggleButton("NEXT LVL", viewer);
+			  showWindow = toggleButton("START OVER", viewer);
+			  			  ImGui::End();
+		  }
+	  }
+	  else {
+		  if (!ImGui::Begin(
+			  "Give Your Best Shot", &showWindow,
+			  ImGuiWindowFlags_NoSavedSettings
+		  )) {
+			  ImGui::End();
+		  }
+		  else {
+			  // Expose the same variable directly ...
+
+			  ImGui::PushItemWidth(-80);
+			  ImGui::Text("               Score: %d", viewer.score);
+			  ImGui::Text("               Level: %d", viewer.level);
+			  ImGui::PopItemWidth();
+
+			  ImGui::End();
+		  }
+
+	  }
 
 
   };
-
+  
   Init(*disp, &menu);
   renderer.init(&viewer, 3, &menu);
+
   renderer.selected_core_index = 1;
 
-
   disp->launch_rendering(true);
+  
   //std::cout << "2wwwwwwwwww\n";
   //delete menu;
   delete disp;

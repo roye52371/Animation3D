@@ -744,10 +744,11 @@ namespace glfw
       //init the tree of both objects, and draw their bounding box
       for (int i = 1; i < data_list.size(); i++)
       {
-          data_list[i].tree.init(data_list[i].V, data_list[i].F);
+          /*data_list[i].tree.init(data_list[i].V, data_list[i].F);
           igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[i].tree;
           Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
-          data_list[i].drawBox(box_first, 0);
+          data_list[i].drawBox(box_first, 0);*/
+          Eigen::AlignedBox <double, 3> box = data_list[i].tree.m_box;
       }
       
   }
@@ -945,8 +946,7 @@ namespace glfw
               data_list[i].clear();
               score++;
               cout << "nice Score!" << endl;
-              cout << "your current score is: " << score << endl;
- 
+              cout << "your current score is: " << score << endl; 
           }
           //project comment
       }
@@ -1178,7 +1178,7 @@ namespace glfw
           // loading the objects we want to move in certain way
           //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
           if (level > 2) {
-              this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/bunny.off");
+              this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/bunny.off");
               //project comment
               if (data_list.size() > parents.size())
               {
@@ -1202,7 +1202,7 @@ namespace glfw
 
 
           if (level > 1) {
-              this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+              this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
               //project comment
               if (data_list.size() > parents.size())
               {
@@ -1225,7 +1225,7 @@ namespace glfw
           }
 
           if(level> 0) {
-              this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
+              this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/cube.obj");
               //project comment
               if (data_list.size() > parents.size())
               {
@@ -1248,6 +1248,26 @@ namespace glfw
           }
       }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //void Viewer::Initialize_Tree(int index) {
+  //    data_list[index].tree = new igl::AABB<Eigen::MatrixXd, 3>();
+  //    data_list[index].tree.init(data_list.at(index).V, data_list.at(index).F);
+  //}
+
+
+
   //end comment project
 
 

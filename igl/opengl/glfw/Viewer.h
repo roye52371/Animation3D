@@ -194,6 +194,8 @@ public:
 	bool isPicked;
 	bool isActive;
     //project comment
+    void Viewer::Initialize_Tree(int index);
+
 
     void Viewer::updateScore();
     void Viewer::showCorrectMenu();
@@ -201,7 +203,7 @@ public:
 
     int score=0;
     int level=1;
-    int targetScore = 10;// start target score
+    int targetScore = 1;// start target score
     bool isCollisionTarget;
     bool isCollisionSnake;
     bool start;

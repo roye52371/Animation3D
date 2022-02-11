@@ -272,7 +272,11 @@ double SandBox::calc_related_distance(int i) {
 void SandBox::levelk() 
 {
     if (score >= targetScore * level) {
+
         //Todo: need to stop game and show menu that ask if do the same level or pass to next one
+
+        isNextLevel = true;
+
         isActive = false;
         for (int i = 1; i < data_list.size(); i++)
         {
@@ -372,6 +376,7 @@ void SandBox::Animate()
             igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[0].tree;
             Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
             checkCollision();
+
         }
 
         
