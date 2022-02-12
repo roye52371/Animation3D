@@ -1,9 +1,7 @@
 #include "igl/opengl/glfw/renderer.h"
-
 #include <GLFW/glfw3.h>
 #include <igl/unproject_onto_mesh.h>
 #include "igl/look_at.h"
-//#include <Eigen/Dense>
 
 Renderer::Renderer() : selected_core_index(0),
 next_core_id(2)
@@ -75,7 +73,7 @@ IGL_INLINE void Renderer::draw(GLFWwindow* window)
 			{// for kinematic chain change scn->MakeTrans to parent matrix
 				//Project comment
 				if (selected_core_index == 0) {
-
+					//new camera
 					Eigen::Matrix4d headTransMat = scn->MakeTransd() * scn->CalcParentsTrans(0) * scn->data(0).MakeTransd();
 					core.camera_translation = (headTransMat * Eigen::Vector4d(0, 0.8, 0.8, -1)).block(0, 0, 3, 1).cast<float>();
 					core.camera_eye = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, -1, 0)).block(0, 0, 3, 1).cast<float>();
@@ -92,8 +90,6 @@ IGL_INLINE void Renderer::draw(GLFWwindow* window)
 			}
 			indx++;
 		}
-
-
 	}
 	if (menu)
 	{
@@ -138,8 +134,6 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer, int coresNum, 
 			//end comment Ass 2
 
 		}
-		//Eigen::Vector3d v = -scn->GetCameraPosition();
-		//TranslateCamera(v.cast<float>());
 
 		core_index(left_view - 1);
 		//Project comment
@@ -148,85 +142,37 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer, int coresNum, 
 		prev_camera_up = core().camera_up;
 		//Project comment end
 	}
-	//Project comment
-	//selected_core_index = 0;
-	//Project comment end
 
 	if (menu)
 	{
+		//project
+		//removed the original menu
 		menu->callback_draw_viewer_menu = [&]()
 		{
 			// Draw parent menu content
-			//std::cout << "before" << std::endl;
+			//menu->draw_viewer_menu(scn, core_list);
 			menu->callback_draw_custom_window();
-			//std::cout << "after" << std::endl;
 		};
+		//project end
 	}
 }
 
-//project
-//ass 4
-void Renderer::showCorrectMenu() {
-	if (scn->isCollisionSnake) {
-		//show Lost menu
-		menu->callback_draw_viewer_window();
-		scn->gameLost = true;
-	}
-	else if (scn->isNextLevel) {
-		//show start level menu
-		scn->level++;
-		menu->callback_draw_custom_window();
-		//scn->isNextLevel = false;
-
-	}
-	else if (scn->start) {
-		//show start menu
-		menu->callback_draw_custom_window();
-		//scn->start = false;
-	}
-	else {
-		//no menu 
-	}
-}
-
-//end project
-
-void Renderer::UpdatePosition(double xpos, double ypos)
-{
+void Renderer::UpdatePosition(double xpos, double ypos) {
 	xrel = xold - xpos;
 	yrel = yold - ypos;
 	xold = xpos;
 	yold = ypos;
 }
 
-void Renderer::MouseProcessing(int button)
-{
-
+void Renderer::MouseProcessing(int button) {
 	if (scn->isPicked)
 	{
 		if (button == 1)
 		{
 			float near = core().camera_dnear, far = core().camera_dfar, angle = core().camera_view_angle;
-			//float z = far + depth * (near - far);
-
 			Eigen::Matrix4f tmpM = core().proj;
 			double xToMove = -(double)xrel / core().viewport[3] * (z + 2 * near) * (far) / (far + 2 * near) * 2.0 * tanf(angle / 360 * M_PI) / (core().camera_zoom * core().camera_base_zoom);
 			double yToMove = (double)yrel / core().viewport[3] * (z + 2 * near) * (far) / (far + 2 * near) * 2.0 * tanf(angle / 360 * M_PI) / (core().camera_zoom * core().camera_base_zoom);
-			////Ass3
-			//if (scn->selected_data_index > 0) {//if its zcylindercylinderes
-			//	//moving all of the arm
-			//	//index 1 is the root of all z
-			//	scn->data_list[1].MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(xToMove, 0, 0));
-			//	scn->data_list[1].MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(0, yToMove, 0));
-			//}
-			//else
-			//{
-			//	//fixed tranlation object
-			//	scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(xToMove, 0, 0));
-			//	scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(0, yToMove, 0));
-			//	//fixed tranlation object end
-			//}
-			////end Ass3
 
 			//Project comment
 			scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(xToMove, 0, 0));
@@ -237,24 +183,10 @@ void Renderer::MouseProcessing(int button)
 		}
 		else
 		{
-			////fixed rotation object
-			////Ass3
-			///*
-			//scn->data().RotateInSystem(Eigen::Vector3d(-1, 0, 0), yrel / 100.0);
-			//scn->data().RotateInSystem(Eigen::Vector3d(0, -1, 0), xrel / 100.0);
-			//*/
-			////scn->data().MyRotate(Eigen::Vector3d(0, -1, 0), xrel / 100.0, true);
-			////scn->data().MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
-			//scn->data().MyRotate(Eigen::Vector3d(0, 0,-1), xrel / 100.0, true);
-			//scn->data().MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
-			////scn->axisFixer();// Ass3
-			////end Ass3
-			////fixed rotation object end
 			//Project comment
 			scn->data().RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 100.0);
 			scn->data().RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 100.0);
 			//end comment Project
-
 		}
 	}
 	else
@@ -277,18 +209,6 @@ void Renderer::MouseProcessing(int button)
 		}
 		else
 		{
-			////fixed rotation scene
-			///*
-			//scn->RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 100.0);
-			//scn->RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 100.0);
-			//*/
-			////scn->MyRotate(Eigen::Vector3d(0, -1, 0), xrel / 100.0, true);
-			////scn->MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
-			//scn->MyRotate(Eigen::Vector3d(0, 0,-1), xrel / 100.0, true);
-			//scn->MyRotate(Eigen::Vector3d(-1, 0, 0), yrel / 100.0, false);
-			////scn->axisFixer();// Ass3
-			//fixed rotation scene end
-
 			//Project comment
 			scn->RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 100.0);
 			scn->RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 100.0);
@@ -297,13 +217,11 @@ void Renderer::MouseProcessing(int button)
 	}
 }
 
-void Renderer::TranslateCamera(Eigen::Vector3f amt)
-{
+void Renderer::TranslateCamera(Eigen::Vector3f amt) {
 	core().camera_translation += amt;
 }
 
-void Renderer::RotateCamera(float amtX, float amtY)
-{
+void Renderer::RotateCamera(float amtX, float amtY) {
 	core().camera_eye = core().camera_eye + Eigen::Vector3f(0, amtY, 0);
 	Eigen::Matrix3f Mat;
 	Mat << cos(amtY), 0, sin(amtY), 0, 1, 0, -sin(amtY), 0, cos(amtY);
@@ -311,11 +229,7 @@ void Renderer::RotateCamera(float amtX, float amtY)
 
 }
 
-Renderer::~Renderer()
-{
-	//if (scn)
-	//	delete scn;
-}
+Renderer::~Renderer(){ }
 
 
 //Ass 2 comment
@@ -388,7 +302,6 @@ void Renderer::changeRotateAxis(int rotate) {
 		}
 		
 	}
-	//scn->axisFixer();//Ass 3
 }
 //end Ass3
 
@@ -397,7 +310,6 @@ void Renderer::changeRotateAxis(int rotate) {
 double Renderer::Picking(double newx, double newy)
 {
 	int fid;
-	//Eigen::MatrixXd C = Eigen::MatrixXd::Constant(scn->data().F.rows(), 3, 1);
 	Eigen::Vector3f bc;
 	double x = newx;
 	double y = core().viewport(3) - newy;
@@ -423,7 +335,6 @@ double Renderer::Picking(double newx, double newy)
 
 		p << vertices.cast<float>() * bc, 1;
 		p = view * p;
-		//std::cout << scn->data().V.row(face(0)) << std::endl;
 		pp = core().proj * p;
 		//glReadPixels(x,  y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
 		z = pp(2);
@@ -534,4 +445,3 @@ IGL_INLINE int Renderer::append_core(Eigen::Vector4f viewport, bool append_empty
 	selected_core_index = core_list.size() - 1;
 	return core_list.back().id;
 }
-

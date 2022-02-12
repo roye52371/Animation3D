@@ -16,6 +16,11 @@ using namespace std;
 using namespace opengl;
 //end comment Project
 
+//project comment
+#include <Windows.h>
+#include <MMSystem.h>
+#pragma comment(lib, "winmm.lib")
+//end comment project
 
 
 SandBox::SandBox()
@@ -40,12 +45,12 @@ void SandBox::Init(const std::string &config)
 
 
     joints_num = 16;
-    skelton.resize(joints_num + 1);
+    snake_skeleton.resize(joints_num + 1);
     scale = 1;
     //Initialize vT, vQ
     vT.resize(17);
     vQ.resize(17);
-    origin_skelton.resize(joints_num + 1);
+    origin_snake_skeleton.resize(joints_num + 1);
     origin_vT.resize(17);
     origin_vQ.resize(17);
 
@@ -64,7 +69,6 @@ void SandBox::Init(const std::string &config)
             load_mesh_from_file(item_name);
 
             data_list[0].MyTranslate(Eigen::Vector3d(-3, -1, 0), true);
-            //data_list[0].MyScale(Eigen::Vector3d(2, 0.5, 1));
             parents.push_back(-1);
             data().show_overlay_depth = false;
             data().point_size = 10;
@@ -79,12 +83,10 @@ void SandBox::Init(const std::string &config)
     MyTranslate(Eigen::Vector3d(0, 0, -1), true);
 
     //Find points for skelton
-
     double z = -0.8 * scale;
-    for (int i = 0; i < skelton.size(); i++)
-    {
-        skelton.at(i) = Eigen::Vector3d(0, 0, z);
-        z = z + 0.1 * scale;
+    for (int i = 0; i < snake_skeleton.size(); i++) {
+        snake_skeleton.at(i) = Eigen::Vector3d(0, 0, z);
+        z += 0.1 * scale;
     }
 
     
@@ -92,16 +94,15 @@ void SandBox::Init(const std::string &config)
     calc_all_weights();
     //add_weights();
 
-    data().MyRotate(Eigen::Vector3d(0, 1, 0), 3.14 / 2);
+    data().MyRotate(Eigen::Vector3d(0, 1, 0), 3.14 / 2);//rotating the snake to horizontal poistion
 
 
-    target_pose = skelton[joints_num];
+    target_pose = snake_skeleton[joints_num];
     U = V;
 
     //keep original values of the snake, original vertices kept in OV variable
-    for (int i = 0; i < skelton.size(); i++)
-    {
-        origin_skelton.at(i) = skelton.at(i);
+    for (int i = 0; i < snake_skeleton.size(); i++) {
+        origin_snake_skeleton.at(i) = snake_skeleton.at(i);
         origin_vT.at(i) = vT.at(i);
         origin_vQ.at(i) = vQ.at(i);
     }
@@ -116,51 +117,6 @@ SandBox::~SandBox()
 }
 
 
-//Project comment
-
-//double SandBox::calc_related_distance(int i) {
-//    double sum = 0;
-//    double distance;
-//    for (int j = 0; j < joints.size(); j++) {
-//        distance = abs(joints[j]->position.z() - data_list[0].V.row(i).z());
-//        if (distance <= 0.1) {
-//            sum += pow((1 / distance), 4);
-//        }
-//    }
-//    return sum;
-//
-//}
-//
-//double SandBox::sum(int i) {
-//    double sum = 0;
-//    for (int j = 0; j < W.row(i).size(); j++) {
-//        sum += W(i, j);
-//    }
-//    return sum;
-//}
-//
-//void SandBox::add_weights() {
-//    //calc from article "automatic skinning weight retargeting 2017"
-//    double distance;
-//    for (int i = 0; i < data_list[0].V.rows(); i++) {
-//        double related_distance = calc_related_distance(i);// calc sum of sigma on  k=0 to n(jointd) (1/distance(i,k)^4)
-//        for (int j = 0; j < joints.size(); j++) {
-//            distance = abs(joints[j]->position.z() - data_list[0].V.row(i).z());
-//            double temp = pow((1 / distance), 4); // (1 / distance(i, j) ^ 4)
-//            W(i, j) = temp / related_distance;
-//        }
-//        W.row(i).normalized();
-//        //cout << "row " << i << " " << sum(i) << endl;
-//    }
-//
-//}
-//end comment Project
-
-
-
-//------------------------------------------------Final Project-----------------------------------
-
-
 Eigen::VectorXd SandBox::create_weight_vec(double w1, double w1_ind, double w2, double w2_ind)
 {
     Eigen::VectorXd Wi;
@@ -170,8 +126,7 @@ Eigen::VectorXd SandBox::create_weight_vec(double w1, double w1_ind, double w2, 
     double weight2 = w2;
     double index2 = w2_ind;
 
-    for (double i = 0; i < 17; i++)
-    {
+    for (double i = 0; i < 17; i++) {
         if (i == index1)
             Wi[index1] = weight1;
         else {
@@ -191,7 +146,7 @@ void  SandBox::calc_all_weights()
     W.resize(verticeSize, 17);
 
     double z_axe_coord, w_1, w_2, lower_bound, upper_bound;
-    //int lower_bound, upper_bound;
+
     for (int i = 0; i < verticeSize; i++){
         z_axe_coord = V.row(i)[2];
         lower_bound = (floor(z_axe_coord * 10)) / 10;
@@ -204,55 +159,40 @@ void  SandBox::calc_all_weights()
 
 void  SandBox::calc_next_pos()
 {
-    vT[0] = skelton[0];
+    vT[0] = snake_skeleton[0];
     for (int i = 0; i < joints_num; i++) {
-        vT[i + 1] = skelton[i + 1];
+        vT[i + 1] = snake_skeleton[i + 1];
         vT[i] = vT[i] + ((vT[i + 1] - vT[i]) / DiversityFactor_forVtCalc);
     }
     vT[joints_num] = vT[joints_num] + target_pose;
 }
 
-//------------------------------------------------Final Project-----------------------------------
-
-
-/////////////////
 void SandBox::add_weights() {
     //calc from article "automatic skinning weight retargeting 2017"
     double distance;
     int numOfV = data_list.at(0).V.rows();
     Eigen::MatrixXd V = data_list.at(0).V;
     W.resize(numOfV, 17);
-   // printf("1\n");
 
     for (int i = 0; i < data_list[0].V.rows(); i++) {
         double related_distance = calc_related_distance(i);// calc sum of sigma on  k=0 to n(jointd) (1/distance(i,k)^4)
-        for (int j = 0; j < skelton.size(); j++) {
-            //printf("1.1\n");
-            distance = abs(skelton.at(j).z() - data_list[0].V.row(i).z());
-            //printf("1.11\n");
+        for (int j = 0; j < snake_skeleton.size(); j++) {
+            distance = abs(snake_skeleton.at(j).z() - data_list[0].V.row(i).z());
             double temp = pow((1 / distance), 4);
-            //printf("1.111\n");
-            
             W(i, j) = temp / related_distance;
-            //printf("1.111111\n");
         }
         W.row(i).normalized();
-        //cout << "row " << i << " " << sum(i) << endl;
     }
-    //printf("2\n");
 }
 
 double SandBox::calc_related_distance(int i) {
     double sum = 0;
     double distance;
-    //printf("3\n");
-    for (int j = 0; j < skelton.size(); j++) {
-        distance = abs(skelton.at(j).z() - data_list[0].V.row(i).z());
-        if (distance <= 0.1) {
+    for (int j = 0; j < snake_skeleton.size(); j++) {
+        distance = abs(snake_skeleton.at(j).z() - data_list[0].V.row(i).z());
+        if (distance <= 0.1)
             sum += pow((1 / distance), 4);
-        }
     }
-    //printf("4\n");
     return sum;
 }
 
@@ -266,16 +206,14 @@ void SandBox::levelk()
         isActive = false;
         isGameStarted = false;
         for (int i = 1; i < data_list.size(); i++)
-        {
             data_list[i].clear();// clear all food
-        }
+
         //try to reset snake
         data_list[0].set_vertices(data_list[0].OV);// OV keeping the first vertics we had to the snake
 
         //retrieve original values of the snake, original vertices kept in OV variable
-        for (int i = 0; i < skelton.size(); i++)
-        {
-            skelton.at(i) = origin_skelton.at(i);
+        for (int i = 0; i < snake_skeleton.size(); i++) {
+            snake_skeleton.at(i) = origin_snake_skeleton.at(i);
             vT.at(i) = origin_vT.at(i);
             vQ.at(i) = origin_vQ.at(i);
         }
@@ -286,102 +224,50 @@ void SandBox::levelk()
         down = false;
         in = false;
         out = false;
-     
+        PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+        //PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
     }
     else {
-        generate_target(level);
-        move_targets(level);
+        target_generator(level);
+        targets_movement(level);
     }
-
-    /*for (int i = 0; i < level; i++)
-    {
-         load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/cube.obj");
-        
-            
-           parents.push_back(-1);
-           data_list.back().set_visible(false, 1);
-           data().show_overlay_depth = false;
-           data().point_size = 10;
-           data().line_width = 2;
-           data().set_visible(false, 1);
-           data().MyTranslate(Eigen::Vector3d(0, 2 * (i+1), 0), true);
-
-
-          load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
-  
-
-          parents.push_back(-1);
-          data_list.back().set_visible(false, 1);
-          data().show_overlay_depth = false;
-          data().point_size = 10;
-          data().line_width = 2;
-          data().set_visible(false, 1);
-          data().MyTranslate(Eigen::Vector3d(0, -2 * (i+1), 0), true);
-    }
-    initTreesAndDrawForCollision();*/
-
 }
 //end comment Project
-
-
-/////////////////////
 
 void SandBox::Animate()
 {
 	if (isActive && !isResume)
 	{
-       /* for (int i = 1; i < data_list.size(); i++)
-        {
-            data_list[i].MyTranslate(Eigen::Vector3d(-0.004, 0, 0),true);
-        }*/
-        
         //Project comment
-        if (left) {
+        if (left)
             target_pose = Eigen::Vector3d(0, 0, -snakeVelocity);
-        }
-        else if (right) {
+        else if (right)
             target_pose = Eigen::Vector3d(0, 0, snakeVelocity);
-        }
-        else if (up) {
+        else if (up)
             target_pose = Eigen::Vector3d(0, snakeVelocity, 0);
-        }
-        else if (down) {
+        else if (down)
             target_pose = Eigen::Vector3d(0, -snakeVelocity, 0);
-        }
-        else if (in) {
-            target_pose = Eigen::Vector3d(snakeVelocity, 0, 0);
-        }
-        else if (out) {
+        else if (in)
+            target_pose = Eigen::Vector3d(snakeVelocity, 0, 0); 
+        else if (out)
             target_pose = Eigen::Vector3d(-snakeVelocity, 0, 0);
-        }
-
         else {}
-
 
         //Move The Snake
         calc_next_pos();//find current vT values
         igl::dqs(V, W, vQ, vT, U);
         data_list.at(0).set_vertices(U);
         //update skelton
-        for (int i = 0; i < skelton.size(); i++)
-        {
-            skelton[i] = vT[i];
-        }
+        for (int i = 0; i < snake_skeleton.size(); i++)
+            snake_skeleton[i] = vT[i];
         counter++;
         if (counter == 50) {
             counter = 0;
-            data_list[0].tree.init(data_list[0].V, data_list[0].F);
-            igl::AABB<Eigen::MatrixXd, 3> tree_first = data_list[0].tree;
-            Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
+            creating_tree_and_box(0);//0- snake index
             checkCollision();
-
         }
 
-        
-        //bonus bouncy targets object
-        //generate_target(level);
-        //move_targets(level);
-        levelk(); // need to prevent check collision to earn more points than target points
+        levelk();
         //end bonus bouncy targets object
 
         //end project comment  

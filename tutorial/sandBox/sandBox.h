@@ -40,7 +40,7 @@ public:
 
 	int scale;
 	int joints_num;
-	std::vector<Eigen::Vector3d>skelton;
+	std::vector<Eigen::Vector3d>snake_skeleton;
 	std::vector<Movable> Joints;
 	//boolean variable for movment
 	bool up;
@@ -70,7 +70,7 @@ public:
 
 	RotationList origin_vQ;
 	std::vector<Eigen::Vector3d> origin_vT;
-	std::vector<Eigen::Vector3d>origin_skelton;
+	std::vector<Eigen::Vector3d>origin_snake_skeleton;
 
 
 

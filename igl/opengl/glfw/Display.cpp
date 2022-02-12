@@ -160,7 +160,6 @@ Display::Display(int windowWidth, int windowHeight, const std::string& title)
 bool Display::launch_rendering(bool loop)
 {
 	//Project comment cube map
-	// glfwMakeContextCurrent(window);
 	float skyboxVertices[] = {
 		// positions          
 		-1.0f,  1.0f, -1.0f,
@@ -205,7 +204,6 @@ bool Display::launch_rendering(bool loop)
 		-1.0f, -1.0f,  1.0f,
 		 1.0f, -1.0f,  1.0f
 	};
-
 	Shader skyboxShader("../../../shaders/skybox.vs", "../../../shaders/skybox.fs");
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
@@ -228,7 +226,6 @@ bool Display::launch_rendering(bool loop)
 		FileSystem::getPath("tutorial/textures/skybox/bottom.jpg"),
 		FileSystem::getPath("tutorial/textures/skybox/front.jpg"),
 		FileSystem::getPath("tutorial/textures/skybox/back.jpg")
-
 	};
 	unsigned int cubemapTexture = loadCubemap(faces);
 
@@ -261,14 +258,12 @@ bool Display::launch_rendering(bool loop)
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-
-
 		// input
 		// -----
 		processInput(window);
 
 		//Project comment cube map
-		//glViewport(0, 0, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
@@ -346,7 +341,6 @@ void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera.ProcessKeyboard(FORWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -458,9 +452,7 @@ void mouse_callback(GLFWwindow* window, int button, int action, int modifier)
 	else
 	{
 		rndr->GetScene()->isPicked = false;
-
 	}
-
 }
 
 

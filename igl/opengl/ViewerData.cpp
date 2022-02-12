@@ -15,10 +15,11 @@
 #include "../per_vertex_normals.h"
 #include "igl/png/texture_from_png.h"
 #include <iostream>
+#include <igl/opengl/Movable.cpp>
 //#include "external/stb/igl_stb_image.h"
 
 //project comment
-#define g 0.005
+#define gravity 0.005
 // end project comment
 
 
@@ -39,9 +40,9 @@ IGL_INLINE igl::opengl::ViewerData::ViewerData()
   shininess(35.0f),
   id(-1),
   is_visible(1),
-  type(0) // type of object, 0 not moving , 1 move in straight line, 2 move obj in bouncy way
+  type(0), // type of object, 0 not moving , 1 move in straight line, 2 move obj in bouncy way
+  speed(Eigen::Vector3d(0, 0, 0))
 {
-  speed = Eigen::Vector3d(0, 0, 0);
   clear();
 };
 
@@ -102,37 +103,32 @@ void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& aligned
 
 
 //project comment
-IGL_INLINE void igl::opengl::ViewerData::move()
-{
-    //std::cout << speed << std::endl;
+void igl::opengl::ViewerData::speed_change(){
 
     MyTranslateInSystem(GetRotation(), speed);
-
-    if (type == 2) { //bouncy type, gravity movment
-        speed -= Eigen::Vector3d(0, g, 0);
-
+    if (type == 2) { //bouncing
+        speed(1) -= gravity;//creates the gravity illusion
         if (Tout.matrix()(1, 3) < -5) //(1,3) its y position of tout matrix, -5 is random number to imaginaite all most touching the floor
-            speed = Eigen::Vector3d(speed(0), -speed(1), speed(2));
+            speed(1) = -speed(1);//creates the bouncing illusion- changing direction on y axis
     }
-
 }
 
-IGL_INLINE void igl::opengl::ViewerData::update_movement_type(unsigned int new_type)
-{
+void igl::opengl::ViewerData::update_movement_type(unsigned int new_type){
     type = new_type;
 }
-
-IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int level)
+double igl::opengl::ViewerData::random_speed() {
+    return (((double)rand() / (RAND_MAX)) - 0.5);
+}
+void igl::opengl::ViewerData::speed_for_all_types(int level)
 {
-    //maybe change position of x y z, random values cause problem in velocity and direction
-    double x = ((double)rand() / (RAND_MAX)) - 0.5;
-    double y = ((double)rand() / (RAND_MAX)) - 0.5;
-    double z = ((double)rand() / (RAND_MAX)) - 0.5;
+    double x = random_speed();
+    double y = random_speed();
+    double z = random_speed();
 
     //calc velocity depends on the level, multiple by constants(0.06,0.08) to slow it down little bit
-    if (type == 2)
+    if (type == 2)//sphere- use gravity
         speed = (0.06*level)*Eigen::Vector3d(x / 10, y, 0);
-    else
+    else//cube or bunny- use linear movement
         speed = (0.08*level)*Eigen::Vector3d(x / 10, y / 10, z);
 }
 //end project
@@ -201,8 +197,8 @@ IGL_INLINE void igl::opengl::ViewerData::set_mesh(
       Eigen::Vector3d(GOLD_AMBIENT[0], GOLD_AMBIENT[1], GOLD_AMBIENT[2]),
       Eigen::Vector3d(GOLD_DIFFUSE[0], GOLD_DIFFUSE[1], GOLD_DIFFUSE[2]),
       Eigen::Vector3d(GOLD_SPECULAR[0], GOLD_SPECULAR[1], GOLD_SPECULAR[2]));
-	//image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake1.png");
-    image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake1.png");
+	image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake1.png");
+    //image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake1.png");
     //image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake.jpg");
     //image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake.jpg");
 //    grid_texture();

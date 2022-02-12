@@ -52,6 +52,7 @@ class ViewerData : public Movable
 public:
   ViewerData();
   void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& alignedBox);
+
   // Empty all fields
   IGL_INLINE void clear();
 
@@ -157,14 +158,6 @@ public:
   // Copy visualization options from one viewport to another
   //IGL_INLINE void copy_options(const ViewerCore &from, const ViewerCore &to);
 
-  //Project comment
-  IGL_INLINE void move();
-
-  IGL_INLINE void update_movement_type(unsigned int);
-
-  IGL_INLINE void initiate_speed(int level);
-  //end Project comment
-
 
   //Ass1: Data Structures for Mesh simplification
   typedef std::set<std::pair<double, int> > PriorityQueue;
@@ -199,8 +192,12 @@ public:
   Eigen::Vector3d speed;
   // 0 - none, 1- basic, 2- bouncy, 4- bezier
   unsigned int type;
-  //end project comment
 
+  void speed_change();
+  double random_speed();
+  void update_movement_type(unsigned int);
+  void speed_for_all_types(int level);
+  //end Project comment
 
   // Per face attributes
   Eigen::MatrixXd F_normals; // One normal per face

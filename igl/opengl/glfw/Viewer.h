@@ -181,6 +181,8 @@ public:
     //////////////////////
     // Member variables //
     //////////////////////
+    void update_for_new_data(int savedIndx);
+    void Viewer::creating_tree_and_box(int current_obj_index);
 
     // Alec: I call this data_list instead of just data to avoid confusion with
     // old "data" variable.
@@ -203,8 +205,8 @@ public:
     bool isResume = false;
     bool isGameStarted = false;
     int score=0;
-    int level=1;
-    int targetScore = 1;// start target score
+    int level = 1;
+    int targetScore = 2;// start target score
     bool isCollisionTarget;
     bool isCollisionSnake;
     bool start;
@@ -217,9 +219,8 @@ public:
     int snake_size;
     bool snake_view;
     float prev_tic;
-    IGL_INLINE void move_targets(int level);
-
-    IGL_INLINE void generate_target(int level);
+    void targets_movement(int level);
+    void target_generator(int level);
     //end project comment
 
     

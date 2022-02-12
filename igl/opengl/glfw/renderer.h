@@ -114,8 +114,7 @@ public:
 	void RotateCamera(float amtX, float amtY);
 	inline bool IsPicked() { return scn->isPicked; }
 	//project
-	void Renderer::showCorrectMenu();
-	size_t selected_core_index;
+	int selected_core_index;
 	std::vector<igl::opengl::ViewerCore> core_list;
 	//end project
 
