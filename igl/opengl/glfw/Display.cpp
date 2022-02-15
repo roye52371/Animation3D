@@ -204,7 +204,7 @@ bool Display::launch_rendering(bool loop)
 		-1.0f, -1.0f,  1.0f,
 		 1.0f, -1.0f,  1.0f
 	};
-	Shader skyboxShader("../../../shaders/skybox.vs", "../../../shaders/skybox.fs");
+	Shader skyboxShader("../../../shaders/skybox.vs", "../../../shaders/skybox.fs");//loading vertex and fragment shader
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
 	// skybox VAO
@@ -246,7 +246,7 @@ bool Display::launch_rendering(bool loop)
 
 	while (!glfwWindowShouldClose(window))
 	{
-
+		//project- rendering the shader
 		double tic = igl::get_seconds();
 		renderer->Animate();
 		renderer->draw(window);
@@ -280,18 +280,6 @@ bool Display::launch_rendering(bool loop)
 		glDepthFunc(GL_LESS); // set depth function back to default
 		// draw background
 		//glViewport((VIEWPORT_WIDTH / 4) * 3, VIEWPORT_HEIGHT / 5, VIEWPORT_WIDTH / 4 * 1, VIEWPORT_HEIGHT / 5);
-
-		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-		skyboxShader.use();
-		skyboxShader.setMat4("view", view);
-		skyboxShader.setMat4("projection", projection);
-		// skybox cube
-		//glBindVertexArray(skyboxVAO);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-		glDepthFunc(GL_LESS); // set depth function back to default
 
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -327,10 +315,10 @@ bool Display::launch_rendering(bool loop)
 		}
 #endif
 	}
-
+	//deallocating the sky shader
 	glDeleteVertexArrays(1, &skyboxVAO);
 	glDeleteBuffers(1, &skyboxVBO);
-
+	//
 	return EXIT_SUCCESS;
 }
 
@@ -364,7 +352,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
 void mouse_move(GLFWwindow* window, double x, double y)
-{
+{//from the tuturial
 	Renderer* rndr = (Renderer*)glfwGetWindowUserPointer(window);
 
 	float xpos = static_cast<float>(x);
@@ -378,26 +366,6 @@ void mouse_move(GLFWwindow* window, double x, double y)
 
 	float xoffset = xpos - lastX;
 	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-	//std::cout << "x y are " << xoffset << ", " << yoffset << std::endl;
-
-	//if (rndr->IsPicked()) {
-	//	rndr->UpdatePosition(x, y);
-	//	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-	//	{
-	//		rndr->MouseProcessing(GLFW_MOUSE_BUTTON_RIGHT);
-	//	}
-	//	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-	//	{
-	//		rndr->MouseProcessing(GLFW_MOUSE_BUTTON_LEFT);
-	//	}
-	//}
-	//else {
-	//rndr->UpdatePosition(-x * 3, -y * 10);
-	//rndr->MouseProcessing(GLFW_MOUSE_BUTTON_RIGHT);
-	//}
-
-
 	lastX = xpos;
 	lastY = ypos;
 
@@ -419,7 +387,6 @@ void mouse_callback(GLFWwindow* window, int button, int action, int modifier)
 	{
 		double x2, y2;
 		glfwGetCursorPos(window, &x2, &y2);
-
 
 		double depth, closestZ = 1;
 		int i = 0, savedIndx = scn->selected_data_index, lastIndx = scn->selected_data_index;

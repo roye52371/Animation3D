@@ -206,7 +206,7 @@ public:
     bool isGameStarted = false;
     int score=0;
     int level = 1;
-    int targetScore = 2;// start target score
+    int targetScore = 1;// start target score
     bool isCollisionTarget;
     bool isCollisionSnake;
     bool start;
@@ -214,7 +214,7 @@ public:
     bool gameLost;
     double snakeVelocity = 0.1;// maybe put 0.03 for start
     double DiversityFactor_forVtCalc = 3;
-
+    bool loose = false;
     //target and bonus stuff
     int snake_size;
     bool snake_view;

@@ -205,25 +205,7 @@ void SandBox::levelk()
         isNextLevel = true;
         isActive = false;
         isGameStarted = false;
-        for (int i = 1; i < data_list.size(); i++)
-            data_list[i].clear();// clear all food
-
-        //try to reset snake
-        data_list[0].set_vertices(data_list[0].OV);// OV keeping the first vertics we had to the snake
-
-        //retrieve original values of the snake, original vertices kept in OV variable
-        for (int i = 0; i < snake_skeleton.size(); i++) {
-            snake_skeleton.at(i) = origin_snake_skeleton.at(i);
-            vT.at(i) = origin_vT.at(i);
-            vQ.at(i) = origin_vQ.at(i);
-        }
-        //reset moving direction
-        right = true;
-        left = false;
-        up = false;
-        down = false;
-        in = false;
-        out = false;
+        reset_game();
         PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
         //PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
     }
@@ -231,6 +213,28 @@ void SandBox::levelk()
         target_generator(level);
         targets_movement(level);
     }
+}
+void SandBox::reset_game()
+{
+    for (int i = 1; i < data_list.size(); i++)
+        data_list[i].clear();// clear all food
+
+                             //try to reset snake
+    data_list[0].set_vertices(data_list[0].OV);// OV keeping the first vertics we had to the snake
+
+                                               //retrieve original values of the snake, original vertices kept in OV variable
+    for (int i = 0; i < snake_skeleton.size(); i++) {
+        snake_skeleton.at(i) = origin_snake_skeleton.at(i);
+        vT.at(i) = origin_vT.at(i);
+        vQ.at(i) = origin_vQ.at(i);
+    }
+    //reset moving direction
+    right = true;
+    left = false;
+    up = false;
+    down = false;
+    in = false;
+    out = false;
 }
 //end comment Project
 

@@ -12,6 +12,8 @@
 //end comment project
 using namespace std; 
 
+int acc_time = 0;
+
 
 static void drawDotsAndLines(igl::opengl::glfw::Viewer& viewer) {
 
@@ -51,6 +53,17 @@ static bool all_button_actions(const char* id, SandBox& viewer) {
 		window_appirance = false;
 		isButtuned = false;
 	}
+	else if (!viewer.isNextLevel && viewer.loose) {
+		if (ImGui::Button("             Play Again             ")) {
+			viewer.isActive = true;
+			isButtuned = true;
+			acc_time = static_cast<int>(glfwGetTime());
+			viewer.score = 0;
+			viewer.isGameStarted = true;
+			viewer.loose = false;
+			viewer.reset_game();
+		}
+	}
 	else if (viewer.isNextLevel) { 
 		if (ImGui::Button("             START OVER             ")) {
 			window_appirance = true;
@@ -58,6 +71,7 @@ static bool all_button_actions(const char* id, SandBox& viewer) {
 			viewer.isNextLevel = false;
 			viewer.isActive = true;
 			viewer.score = 0;
+			acc_time = static_cast<int>(glfwGetTime());
 		}
 		if (ImGui::Button("             NEXT LEVEL             ")) {
 			window_appirance = true;
@@ -66,6 +80,7 @@ static bool all_button_actions(const char* id, SandBox& viewer) {
 			viewer.isActive = true;
 			viewer.score = 0;
 			viewer.level += 1;
+			acc_time = static_cast<int>(glfwGetTime());
 		}
 	}
 	else if (viewer.isResume){
@@ -80,12 +95,13 @@ static bool all_button_actions(const char* id, SandBox& viewer) {
 	}
 	else
 	{
-		if (ImGui::Button("             Let's Start             "))
+		if (ImGui::Button("             Let's Start             ")) {
 			isButtuned = true;
+			acc_time = static_cast<int>(glfwGetTime());
+		}
 	}
 	return window_appirance;
 }
-
 
 
 //end project
@@ -115,8 +131,31 @@ int main(int argc, char *argv[])
 	  ImGui::SetNextWindowPos(ImVec2(0.f * menu.menu_scaling(), 0), ImGuiCond_Always);
 	  ImGui::SetNextWindowSize(ImVec2(400, 1000), ImGuiCond_Always);
 	  static bool showWindow = true;
+	  if (!viewer.isNextLevel && static_cast<int>(glfwGetTime()) - acc_time > 10) {
+		  viewer.isActive = false;
+		  viewer.loose = true;
+		  if (!ImGui::Begin(
+			  "Times up you failed", &showWindow,
+			  ImGuiWindowFlags_NoSavedSettings
+		  )) {
+			  ImGui::End();
+		  }
+		  else {
 
-	  if (showWindow && viewer.level == 1) {
+			  ImGui::SetWindowFontScale(1.5f);
+			  // Expose the same variable directly ...
+			  ImGui::PushItemWidth(-100);
+			  ImGui::Text("\n\n\n\n");
+			  ImGui::Text("               Score: %d", viewer.score);
+			  ImGui::Text("               Level: %d", viewer.level);
+			  ImGui::PopItemWidth();
+
+			  showWindow = all_button_actions("Play Again", viewer);
+
+			  ImGui::End();
+		  }
+	  }
+	  else if (showWindow && viewer.level == 1) {
 		  viewer.isGameStarted = false;
 		  if (!ImGui::Begin(
 			  "Start Playin'", &showWindow,
@@ -128,14 +167,15 @@ int main(int argc, char *argv[])
 			  ImGui::SetWindowFontScale(1.5f);
 			  ImGui::PushItemWidth(-100); 
 			  ImGui::Text("\n\n\n\n");
-			  ImGui::Text("               Score: %d", viewer.score);
-			  ImGui::Text("               Level: %d", viewer.level);
+			  ImGui::Text("               Score: %d\n", viewer.score);
+			  ImGui::Text("               Level: %d\n", viewer.level);
 			  ImGui::Text("               ");
 			  ImGui::PopItemWidth();
 			  showWindow = all_button_actions("Start Playin'", viewer);
 			  ImGui::End();
 		  }
 	  }
+	   
 	  else if(viewer.isNextLevel)
 	  {
 		  viewer.isGameStarted = false;
@@ -150,8 +190,8 @@ int main(int argc, char *argv[])
 
 			  ImGui::PushItemWidth(-100);
 			  ImGui::Text("Press NEXT LVL or START OVER\n\n");
-			  ImGui::Text("               Score: %d", viewer.score);
-			  ImGui::Text("               Level: %d", viewer.level);
+			  ImGui::Text("               Score: %d\n", viewer.score);
+			  ImGui::Text("               Level: %d\n", viewer.level);
 			  ImGui::PopItemWidth();
 
 			  showWindow = all_button_actions("NEXT LVL", viewer);
@@ -171,8 +211,8 @@ int main(int argc, char *argv[])
 			  // Expose the same variable directly ...
 			  ImGui::PushItemWidth(-100);
 			  ImGui::Text("\n\n\n\n");
-			  ImGui::Text("               Score: %d", viewer.score);
-			  ImGui::Text("               Level: %d", viewer.level);
+			  ImGui::Text("               Score: %d\n", viewer.score);
+			  ImGui::Text("               Level: %d\n", viewer.level);
 			  ImGui::Text("");
 			  ImGui::PopItemWidth();
 
@@ -195,8 +235,10 @@ int main(int argc, char *argv[])
 			  viewer.isGameStarted = true;
 			  ImGui::PushItemWidth(-100);
 			  ImGui::Text("\n\n\n\n");
-			  ImGui::Text("               Score: %d", viewer.score);
-			  ImGui::Text("               Level: %d", viewer.level);
+			  ImGui::Text("               Score: %d\n", viewer.score);
+			  ImGui::Text("               Level: %d\n", viewer.level);
+
+			  ImGui::Text("               Timer: %d\n", static_cast<int>(glfwGetTime()) - acc_time);
 
 			  ImGui::PopItemWidth();
 			  ImGui::End();

@@ -30,6 +30,7 @@ public:
 	double calc_related_distance(int i);
 
 	void levelk();
+	void reset_game();
 	/////////////////
 	//----------------------------------Project----------------------------------
 
