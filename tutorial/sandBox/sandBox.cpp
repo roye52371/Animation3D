@@ -50,9 +50,11 @@ void SandBox::Init(const std::string &config)
     //Initialize vT, vQ
     vT.resize(17);
     vQ.resize(17);
+    //snake_links.resize(16); //we have 16 links and 17 dots
     origin_snake_skeleton.resize(joints_num + 1);
     origin_vT.resize(17);
     origin_vQ.resize(17);
+    snakejointBoxvec.resize(joints_num);//we need 16 box and not 17 cause we have 17 points
 
 
     nameFileout.open(config);
@@ -97,6 +99,22 @@ void SandBox::Init(const std::string &config)
     data().MyRotate(Eigen::Vector3d(0, 1, 0), 3.14 / 2);//rotating the snake to horizontal poistion
 
 
+    //snake_links.emplace_back();
+    //snake_links.at(0).MyTranslate(snake_skeleton.at(0), true);
+    //Joints.at(0).SetCenterOfRotation(Eigen::Vector3d(0, 0, -0.8));
+    //parentsJoints[0] = -1;
+    //the 16 other joint that have parents
+    printf("before changing snake links\n");
+    for (int i = 0; i < 16; i++)
+    {
+        //parentsJoints[i + 1] = i;
+        snake_links.emplace_back();
+        snake_links.at(i).MyTranslate(snake_skeleton.at(i), true);
+        //snake_links.at(i).SetCenterOfRotation(Eigen::Vector3d(0, 0, -0.8));// check if needed
+        //std::cout << parents[i + 1] <<"\n";
+    }
+    printf("after changing snake links\n");
+
     target_pose = snake_skeleton[joints_num];
     U = V;
 
@@ -107,7 +125,8 @@ void SandBox::Init(const std::string &config)
         origin_vQ.at(i) = vQ.at(i);
     }
 
-
+    initBoundingBoxofSnakeJoints();
+    printf("got to the end of init in sandBox\n");
     //end comment Project  
 }
 
@@ -201,7 +220,7 @@ double SandBox::calc_related_distance(int i) {
 void SandBox::levelk() 
 {
     if (score >= targetScore * level) {
-
+        score = 0;
         isNextLevel = true;
         isActive = false;
         isGameStarted = false;
@@ -232,6 +251,54 @@ void SandBox::levelk()
         targets_movement(level);
     }
 }
+void SandBox::initBoundingBoxofSnakeJoints() {
+    for (int i = 1; i < joints_num+1; i++)
+    {
+        Eigen::Vector3d pos = snake_skeleton[i - 1];
+        Eigen::Vector3d m = pos + Eigen::Vector3d(-0.4, -0.4, -0.4);
+        Eigen::Vector3d M = pos + Eigen::Vector3d(0.4, 0.4, 0.4);
+        Eigen::AlignedBox<double, 3> boxforcurrJoint;
+        boxforcurrJoint = Eigen::AlignedBox<double, 3>(m, M);
+        snakejointBoxvec[i - 1] = boxforcurrJoint;
+        //drawsnakejointBox(snakejointBoxvec[i - 1], 0);
+
+
+    }
+}
+
+void SandBox::drawsnakejointBox(Eigen::AlignedBox<double, 3> box, int color) {
+    /*point_size = 10;
+    line_width = 2;*/
+    Eigen::RowVector3d colorVec;
+    if (color == 1) {
+        colorVec = Eigen::RowVector3d(255, 255, 255);//white
+    }
+    else
+        colorVec = Eigen::RowVector3d(0, 255, 0);//green
+    //parameters in order to minimize run-time
+    Eigen::RowVector3d BottomRightCeil = box.corner(box.BottomRightCeil);
+    Eigen::RowVector3d BottomRightFloor = box.corner(box.BottomRightFloor);
+    Eigen::RowVector3d BottomLeftCeil = box.corner(box.BottomLeftCeil);
+    Eigen::RowVector3d BottomLeftFloor = box.corner(box.BottomLeftFloor);
+    Eigen::RowVector3d TopRightCeil = box.corner(box.TopRightCeil);
+    Eigen::RowVector3d TopRightFloor = box.corner(box.TopRightFloor);
+    Eigen::RowVector3d TopLeftCeil = box.corner(box.TopLeftCeil);
+    Eigen::RowVector3d TopLeftFloor = box.corner(box.TopLeftFloor);
+
+    //add_edges(n1,n2,col)- draws edge from n1 to n2 in color col
+    data_list[0].add_edges(BottomLeftCeil, BottomRightCeil, colorVec);
+    data_list[0].add_edges(BottomLeftCeil, BottomLeftFloor, colorVec);
+    data_list[0].add_edges(BottomRightCeil, BottomRightFloor, colorVec);
+    data_list[0].add_edges(BottomLeftFloor, BottomRightFloor, colorVec);
+    data_list[0].add_edges(TopLeftCeil, TopRightCeil, colorVec);
+    data_list[0].add_edges(TopRightCeil, TopRightFloor, colorVec);
+    data_list[0].add_edges(TopLeftCeil, TopLeftFloor, colorVec);
+    data_list[0].add_edges(TopLeftFloor, TopRightFloor, colorVec);
+    data_list[0].add_edges(TopLeftCeil, BottomLeftCeil, colorVec);
+    data_list[0].add_edges(TopRightFloor, BottomRightFloor, colorVec);
+    data_list[0].add_edges(TopRightCeil, BottomRightCeil, colorVec);
+    data_list[0].add_edges(TopLeftFloor, BottomLeftFloor, colorVec);
+}
 //end comment Project
 
 void SandBox::Animate()
@@ -257,15 +324,28 @@ void SandBox::Animate()
         calc_next_pos();//find current vT values
         igl::dqs(V, W, vQ, vT, U);
         data_list.at(0).set_vertices(U);
+        printf("print vT[0]\n");
+        cout << vT.at(0) << endl;
+        for (int i = 0; i < snake_links.size(); i++)
+        {
+            //do translationns
+            snake_links.at(i).MyTranslate(vT.at(i), true);
+            Eigen::Quaterniond quat = Eigen::Quaterniond::FromTwoVectors( vT[i], snake_skeleton[i]);//vT is new tranlate and snake_skeleton still hold the old translate 
+            snake_links.at(i).MyRotate(quat);
+            //std::cout << parents[i + 1] <<"\n";
+        }
         //update skelton
         for (int i = 0; i < snake_skeleton.size(); i++)
             snake_skeleton[i] = vT[i];
-        counter++;
-        if (counter == 50) {
-            counter = 0;
-            creating_tree_and_box(0);//0- snake index
-            checkCollision();
-        }
+        //counter++;
+        //if (counter == 50) {
+        //    counter = 0;
+        //    creating_tree_and_box(0);//0- snake index
+        //    checkCollision();
+        //}
+        initBoundingBoxofSnakeJoints();
+        printf("Before collision\n");
+        checkCollision();
 
         levelk();
         //end bonus bouncy targets object

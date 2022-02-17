@@ -107,8 +107,9 @@ namespace glfw
     void initTreesAndDrawForCollision();
     void setMovingButton();
     void checkCollision();//main checkeer
-    bool recursiveCheckCollision(igl::AABB<Eigen::MatrixXd, 3>* node1, igl::AABB<Eigen::MatrixXd, 3>* node2,int i);//recursive checker,called by main checker
-    bool checkTermsForBoxesCollision(Eigen::AlignedBox<double, 3>& box1, Eigen::AlignedBox<double, 3>& box2, int i);//check 15 terms for boxes collision, called by recursive checker
+    //bool recursiveCheckCollision(igl::AABB<Eigen::MatrixXd, 3>* node1, igl::AABB<Eigen::MatrixXd, 3>* node2,int i);//recursive checker,called by main checker
+    
+    //bool checkTermsForBoxesCollision(Eigen::AlignedBox<double, 3>& box1, Eigen::AlignedBox<double, 3>& box2, int i);//check 15 terms for boxes collision, called by recursive checker
     //end comment Ass 2
 
     //Ass 3
@@ -129,6 +130,16 @@ namespace glfw
         Eigen::Vector3d getTarget();
         Eigen::Vector3d getTipbyindex(int index);
     // end Ass3
+    
+   //project comment
+   bool recursiveCheckCollision(Eigen::AlignedBox<double, 3>* node1, igl::AABB<Eigen::MatrixXd, 3>* node2, int i, int snake_link_index);//recursive checker,called by main checker
+   std::vector<Movable> snake_links;
+ //end project comment
+
+   //project comment
+   bool Viewer::checkTermsForBoxesCollision(Eigen::AlignedBox<double, 3>& box1, Eigen::AlignedBox<double, 3>& box2, int i, int snake_link_index);
+   //end project comment
+
    
     ////////////////////////
     // Multi-mesh methods //
@@ -206,7 +217,7 @@ public:
     bool isGameStarted = false;
     int score=0;
     int level = 1;
-    int targetScore = 2;// start target score
+    int targetScore = 8;// start target score
     bool isCollisionTarget;
     bool isCollisionSnake;
     bool start;
@@ -214,6 +225,7 @@ public:
     bool gameLost;
     double snakeVelocity = 0.1;// maybe put 0.03 for start
     double DiversityFactor_forVtCalc = 3;
+    std::vector<Eigen::AlignedBox<double, 3>> snakejointBoxvec;
 
     //target and bonus stuff
     int snake_size;

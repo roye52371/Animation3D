@@ -32,7 +32,7 @@ public:
 
 	//-------------------------------------------------------project----------------------------------------------------------
 
-
+	Eigen::Vector3d GetTranslation() const { return (Tout * Tin).matrix().block(0, 3, 3, 1); }
 	void MyScale(Eigen::Vector3d amt);
 
 	void SetCenterOfRotation(Eigen::Vector3d amt);

@@ -30,6 +30,7 @@ public:
 	double calc_related_distance(int i);
 
 	void levelk();
+	void initBoundingBoxofSnakeJoints();
 	/////////////////
 	//----------------------------------Project----------------------------------
 
@@ -41,7 +42,7 @@ public:
 	int scale;
 	int joints_num;
 	std::vector<Eigen::Vector3d>snake_skeleton;
-	std::vector<Movable> Joints;
+	//std::vector<Movable> Joints;
 	//boolean variable for movment
 	bool up;
 	bool down;
@@ -71,6 +72,9 @@ public:
 	RotationList origin_vQ;
 	std::vector<Eigen::Vector3d> origin_vT;
 	std::vector<Eigen::Vector3d>origin_snake_skeleton;
+	//std::vector<Movable> snake_links;
+	void drawsnakejointBox(Eigen::AlignedBox<double, 3> box, int color);
+	//std::vector<Eigen::AlignedBox<double, 3>> snakejointBoxvec;
 
 
 
