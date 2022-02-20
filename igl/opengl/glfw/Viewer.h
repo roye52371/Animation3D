@@ -134,6 +134,8 @@ namespace glfw
    //project comment
    bool recursiveCheckCollision(Eigen::AlignedBox<double, 3>* node1, igl::AABB<Eigen::MatrixXd, 3>* node2, int i, int snake_link_index);//recursive checker,called by main checker
    std::vector<Movable> snake_links;
+   Eigen::Vector3d target_pose;
+
  //end project comment
 
    //project comment
@@ -233,6 +235,9 @@ public:
     float prev_tic;
     void targets_movement(int level);
     void target_generator(int level);
+    typedef std::vector<Eigen::Quaterniond, Eigen::aligned_allocator<Eigen::Quaterniond> > RotationList;
+    RotationList vQ;
+    std::vector<Eigen::Vector3d> vT;
     //end project comment
 
     

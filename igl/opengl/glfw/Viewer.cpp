@@ -771,10 +771,10 @@ namespace glfw
       A << Ax[0], Ay[0], Az[0],
           Ax[1], Ay[1], Az[1],
           Ax[2], Ay[2], Az[2];
-      printf("A rotation mat link 0\n");
+      /*printf("A rotation mat link 0\n");
       cout << A<< endl;
       printf("A translation of link 0\n");
-      cout << snake_links[snake_link_index].GetTranslation() << endl;
+      cout << snake_links[snake_link_index].GetTranslation() << endl;*/
       
 
 
@@ -1116,11 +1116,11 @@ namespace glfw
       for (int i = 1; i < data_list.size() && (score < (targetScore * level)); i++)
       {
           //Project comment
-          //for (int curr_box = 0; curr_box < snakejointBoxvec.size(); curr_box++)
-          //{
+          for (int curr_box = 0; curr_box < snakejointBoxvec.size(); curr_box++)
+          {
               
-              //if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree, i)) {
-              if (recursiveCheckCollision(&snakejointBoxvec[0], &data_list[i].tree, i, 0)) {
+              //if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree, i, curr_box)) {
+              if (recursiveCheckCollision(&snakejointBoxvec[curr_box], &data_list[i].tree, i, curr_box)) {
                   PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
                   data_list[i].hasCollisioned = true;
                   data_list[i].set_visible(false, 0);
@@ -1129,9 +1129,10 @@ namespace glfw
                   data_list[i].clear();
                   cout << "Nice Score!" << endl;
                   cout << "Your current score is: " << score << endl;
+                  //break;// collide in the specific food, dont need to keep check it with other links
               }
               //project comment
-          //}
+          }
          
       } 
   }
@@ -1393,7 +1394,7 @@ namespace glfw
 
               //project comment
               current_obj_index = data_list.size() - 1;
-              data_list[current_obj_index].MyScale(Eigen::Vector3d(0.5, 0.5, 0.5));
+              //data_list[current_obj_index].MyScale(Eigen::Vector3d(0.5, 0.5, 0.5));
               if (data_list.size() > parents.size())
                   update_for_new_data(savedIndx);
               creating_tree_and_box(current_obj_index);
@@ -1404,7 +1405,7 @@ namespace glfw
               this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
               //project comment
               current_obj_index = data_list.size() - 1;
-              data_list[current_obj_index].MyScale(Eigen::Vector3d(0.8, 0.8, 0.8));
+              //data_list[current_obj_index].MyScale(Eigen::Vector3d(0.8, 0.8, 0.8));
               if (data_list.size() > parents.size())
                   update_for_new_data(savedIndx);
               creating_tree_and_box(current_obj_index);

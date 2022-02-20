@@ -4,7 +4,8 @@
 #include "igl/look_at.h"
 
 Renderer::Renderer() : selected_core_index(0),
-next_core_id(2)
+next_core_id(2),
+change_camera(0)
 {
 	core_list.emplace_back(igl::opengl::ViewerCore());
 	core_list.front().id = 1;
@@ -72,12 +73,23 @@ IGL_INLINE void Renderer::draw(GLFWwindow* window)
 			if (mesh.is_visible & core.id)
 			{// for kinematic chain change scn->MakeTrans to parent matrix
 				//Project comment
-				if (selected_core_index == 0) {
+				//if (selected_core_index == 0) {
+				if(change_camera!=0){
 					//new camera
-					Eigen::Matrix4d headTransMat = scn->MakeTransd() * scn->CalcParentsTrans(0) * scn->data(0).MakeTransd();
-					core.camera_translation = (headTransMat * Eigen::Vector4d(0, 0.8, 0.8, -1)).block(0, 0, 3, 1).cast<float>();
-					core.camera_eye = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, -1, 0)).block(0, 0, 3, 1).cast<float>();
-					core.camera_up = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, 0, -1)).block(0, 0, 3, 1).cast<float>();
+					//Eigen::Matrix4d headTransMat = scn->MakeTransd() * scn->CalcParentsTrans(0) * scn->data(0).MakeTransd();
+					//Eigen::Vector3d curr_vt = scn->vT[scn->vT.size() - 1]; //(headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, -1, 0)).block(0, 0, 3, 1).cast<float>();
+					//core.camera_eye = Eigen::Vector3d(curr_vt(2), curr_vt(1), curr_vt(0)).cast<float>();
+					core.camera_eye = scn->target_pose.cast<float>();
+					core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();// ](headTransMat* Eigen::Vector4d(0, 0.8, 0.8, -1)).block(0, 0, 3, 1).cast<float>();
+				    //core.camera_up = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, 0, -1)).block(0, 0, 3, 1).cast<float>();
+					/*printf("curr camera eye\n");
+					cout << core.camera_eye << endl;
+					printf("curr camera translation\n");
+					cout << core.camera_translation << endl;
+					printf("snake head position\n");
+					cout << scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>() << endl;
+					printf("printf vt of head\n");
+					cout << Eigen::Vector3d(curr_vt(2), curr_vt(1), curr_vt(0)) << endl;*/
 				}
 				else {
 					core.camera_translation = prev_camera_translation;

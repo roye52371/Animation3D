@@ -203,7 +203,14 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case '[':
 		case ']':
 		{
-			rndr->ChangeCamera(key);
+			//rndr->ChangeCamera(key);
+			//project comment
+			if (rndr->change_camera == 0)
+				rndr->change_camera = 1;
+			else
+				rndr->change_camera = 0;
+
+			//end project comment
 			break;
 		}
 		case ';':
@@ -376,11 +383,17 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			break;
 			//end project
 		case 'k':
-		case 'K':		
+		case 'K':
+			printf("curr camera eye\n");
+			cout << rndr->core_list[rndr->selected_core_index].camera_eye << endl;
+			printf("curr camera translation\n");
+			cout << rndr->core_list[rndr->selected_core_index].camera_translation << endl;
 			break;
 
 		case 'j':
 		case 'J':
+			printf("snake head position\n");
+			cout << scn->snake_links[scn->snake_links.size() - 1].GetTranslation() << endl;
 			break;
 
 		case'P':

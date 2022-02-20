@@ -37,7 +37,7 @@ public:
 	//-------------------------------Project-------------------------------
 
 
-	Eigen::Vector3d target_pose;
+	//Eigen::Vector3d target_pose;
 
 	int scale;
 	int joints_num;
@@ -65,8 +65,8 @@ public:
 	Eigen::MatrixXd V, W, C, U, M;
 	Eigen::MatrixXi F, BE;
 	Eigen::VectorXi P;
-	RotationList vQ;
-	std::vector<Eigen::Vector3d> vT;
+	//RotationList vQ;
+	//std::vector<Eigen::Vector3d> vT;
 
 
 	RotationList origin_vQ;

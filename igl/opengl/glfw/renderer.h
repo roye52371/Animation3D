@@ -116,6 +116,7 @@ public:
 	//project
 	int selected_core_index;
 	std::vector<igl::opengl::ViewerCore> core_list;
+	int change_camera = 0;
 	//end project
 
 	

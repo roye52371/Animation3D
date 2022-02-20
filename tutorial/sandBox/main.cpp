@@ -207,6 +207,7 @@ int main(int argc, char *argv[])
   Init(*disp, &menu);
   renderer.init(&viewer, 3, &menu);
   renderer.selected_core_index = 1;
+  renderer.change_camera = 0;//set to default
 
   disp->launch_rendering(true);
   
