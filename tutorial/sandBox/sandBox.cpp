@@ -109,7 +109,9 @@ void SandBox::Init(const std::string &config)
     {
         //parentsJoints[i + 1] = i;
         snake_links.emplace_back();
-        snake_links.at(i).MyTranslate(Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0)), true);
+        Eigen::Vector3d currect_snake_skeleton = Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0)); //snake_skeleton.at(i);// Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));
+        snake_links.at(i).MyTranslate(currect_snake_skeleton, true);
+        
         //snake_links.at(i).SetCenterOfRotation(Eigen::Vector3d(0, 0, -0.8));// check if needed
         //std::cout << parents[i + 1] <<"\n";
     }
@@ -330,8 +332,8 @@ void SandBox::Animate()
         for (int i = 0; i < snake_links.size(); i++)
         {
             //do translationns
-            Eigen::Vector3d currect_vt = Eigen::Vector3d(vT.at(i)(2), vT.at(i)(1), vT.at(i)(0));
-            Eigen::Vector3d currect_snake_skeleton = Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));
+            Eigen::Vector3d currect_vt = Eigen::Vector3d(vT.at(i)(2), vT.at(i)(1), vT.at(i)(0));//vT.at(i);// 
+            Eigen::Vector3d currect_snake_skeleton = Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));//snake_skeleton.at(i);// Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));
             snake_links.at(i).MyTranslate(currect_vt- currect_snake_skeleton, true);
             Eigen::Quaterniond quat = Eigen::Quaterniond::FromTwoVectors(currect_vt, currect_snake_skeleton);//vT is new tranlate and snake_skeleton still hold the old translate 
             snake_links.at(i).MyRotate(quat);
