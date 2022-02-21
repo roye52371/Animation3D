@@ -114,7 +114,7 @@ void SandBox::Init(const std::string &config)
 
         Eigen::Vector3d currect_snake_skeleton = Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0)); //snake_skeleton.at(i);// Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));
         snake_links.at(i).MyTranslate(currect_snake_skeleton, true);
-
+        //snake_links.at(i).MyRotate(Eigen::Vector3d(0,0, 1), 3.14 / 2);
         //Eigen::Quaterniond quat = Eigen::Quaterniond::FromTwoVectors(currect_snake_skeleton, Eigen::Vector3d(-3, -1, 0));//currect_snake_skeleton is new translate and Eigen::Vector3d(-3, -1, 0) still hold the old translate 
         //snake_links.at(i).MyRotate(quat);
 

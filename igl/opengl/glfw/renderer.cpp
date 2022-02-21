@@ -79,7 +79,10 @@ IGL_INLINE void Renderer::draw(GLFWwindow* window)
 					//Eigen::Matrix4d headTransMat = scn->MakeTransd() * scn->CalcParentsTrans(0) * scn->data(0).MakeTransd();
 					//Eigen::Vector3d curr_vt = scn->vT[scn->vT.size() - 1]; //(headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, -1, 0)).block(0, 0, 3, 1).cast<float>();
 					//core.camera_eye = Eigen::Vector3d(curr_vt(2), curr_vt(1), curr_vt(0)).cast<float>();
-					core.camera_eye = scn->target_pose.cast<float>();
+					//Eigen::Vector3d rot = GetScene()->snake_links[14].GetTranslation() - GetScene()->snake_links[15].GetTranslation();
+					//rot = Eigen::Vector3d(rot[2], rot[1], rot[0]);
+
+					core.camera_eye = scn->target_pose.cast<float>() +Eigen::Vector3f(0, 0, M_PI / 2);// rot.cast<float>();// scn->target_pose.cast<float>();
 					core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();// ](headTransMat* Eigen::Vector4d(0, 0.8, 0.8, -1)).block(0, 0, 3, 1).cast<float>();
 				    //core.camera_up = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, 0, -1)).block(0, 0, 3, 1).cast<float>();
 					/*printf("curr camera eye\n");
