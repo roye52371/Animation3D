@@ -70,7 +70,7 @@ void SandBox::Init(const std::string &config)
             std::cout << "openning " << item_name << std::endl;
             load_mesh_from_file(item_name);
 
-            data_list[0].MyTranslate(Eigen::Vector3d(-3, -1, 0), true);
+            //data_list[0].MyTranslate(Eigen::Vector3d(-3, -1, 0), true);
             parents.push_back(-1);
             data().show_overlay_depth = false;
             data().point_size = 10;
@@ -109,8 +109,16 @@ void SandBox::Init(const std::string &config)
     {
         //parentsJoints[i + 1] = i;
         snake_links.emplace_back();
+
+        //snake_links.at(i).MyTranslate(Eigen::Vector3d(-3, -1, 0), true);
+
         Eigen::Vector3d currect_snake_skeleton = Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0)); //snake_skeleton.at(i);// Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));
         snake_links.at(i).MyTranslate(currect_snake_skeleton, true);
+
+        //Eigen::Quaterniond quat = Eigen::Quaterniond::FromTwoVectors(currect_snake_skeleton, Eigen::Vector3d(-3, -1, 0));//currect_snake_skeleton is new translate and Eigen::Vector3d(-3, -1, 0) still hold the old translate 
+        //snake_links.at(i).MyRotate(quat);
+
+        //snake_links.at(i).MyRotate(Eigen::Vector3d(0, 1, 0), 3.14 / 2);//rotating the snake to horizontal poistion
         
         //snake_links.at(i).SetCenterOfRotation(Eigen::Vector3d(0, 0, -0.8));// check if needed
         //std::cout << parents[i + 1] <<"\n";
