@@ -82,8 +82,8 @@ IGL_INLINE void Renderer::draw(GLFWwindow* window)
 					//Eigen::Vector3d rot = GetScene()->snake_links[14].GetTranslation() - GetScene()->snake_links[15].GetTranslation();
 					//rot = Eigen::Vector3d(rot[2], rot[1], rot[0]);
 
-					core.camera_eye = scn->target_pose.cast<float>() +Eigen::Vector3f(0, 0, M_PI / 2);// rot.cast<float>();// scn->target_pose.cast<float>();
-					core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();// ](headTransMat* Eigen::Vector4d(0, 0.8, 0.8, -1)).block(0, 0, 3, 1).cast<float>();
+					//core.camera_eye = scn->target_pose.cast<float>() +Eigen::Vector3f(0, 0, M_PI / 2);// rot.cast<float>();// scn->target_pose.cast<float>();
+					//core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();// ](headTransMat* Eigen::Vector4d(0, 0.8, 0.8, -1)).block(0, 0, 3, 1).cast<float>();
 				    //core.camera_up = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, 0, -1)).block(0, 0, 3, 1).cast<float>();
 					/*printf("curr camera eye\n");
 					cout << core.camera_eye << endl;
@@ -93,6 +93,27 @@ IGL_INLINE void Renderer::draw(GLFWwindow* window)
 					cout << scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>() << endl;
 					printf("printf vt of head\n");
 					cout << Eigen::Vector3d(curr_vt(2), curr_vt(1), curr_vt(0)) << endl;*/
+					
+					if (scn->target_pose(2) > 0) { // right
+						core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();
+						core.camera_eye = scn->target_pose.cast<float>() + Eigen::Vector3f(-M_PI * 1.25, 0, M_PI / 2);
+						core.camera_up = Eigen::Vector3f(M_PI / 2, 0, 0);
+					}
+					else if (scn->target_pose(2) < 0) { // left
+						core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();
+						core.camera_eye = scn->target_pose.cast<float>() + Eigen::Vector3f(M_PI * 1.25, 0, M_PI / 2);
+						core.camera_up = Eigen::Vector3f(-M_PI, 0, 0);
+					}
+					else if (scn->target_pose(1) > 0) { // up
+						core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();
+						core.camera_eye = scn->target_pose.cast<float>() + Eigen::Vector3f(0, -M_PI * 1.25, M_PI / 2);
+						core.camera_up = Eigen::Vector3f(0, M_PI, 0);
+					}
+					else if (scn->target_pose(1) < 0) { //down
+						core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();
+						core.camera_eye = scn->target_pose.cast<float>() + Eigen::Vector3f(0, M_PI * 1.25, M_PI / 2);
+						core.camera_up = Eigen::Vector3f(0, -M_PI, 0);
+					}
 				}
 				else {
 					core.camera_translation = prev_camera_translation;
