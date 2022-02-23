@@ -31,18 +31,19 @@ public:
 
 	void levelk();
 	void reset_game();
+	void initBoundingBoxofSnakeJoints();
 	/////////////////
 	//----------------------------------Project----------------------------------
 
 	//-------------------------------Project-------------------------------
 
 
-	Eigen::Vector3d target_pose;
+	//Eigen::Vector3d target_pose;
 
 	int scale;
 	int joints_num;
 	std::vector<Eigen::Vector3d>snake_skeleton;
-	std::vector<Movable> Joints;
+	//std::vector<Movable> Joints;
 	//boolean variable for movment
 	bool up;
 	bool down;
@@ -65,13 +66,16 @@ public:
 	Eigen::MatrixXd V, W, C, U, M;
 	Eigen::MatrixXi F, BE;
 	Eigen::VectorXi P;
-	RotationList vQ;
-	std::vector<Eigen::Vector3d> vT;
+	//RotationList vQ;
+	//std::vector<Eigen::Vector3d> vT;
 
 
 	RotationList origin_vQ;
 	std::vector<Eigen::Vector3d> origin_vT;
 	std::vector<Eigen::Vector3d>origin_snake_skeleton;
+	//std::vector<Movable> snake_links;
+	void drawsnakejointBox(Eigen::AlignedBox<double, 3> box, int color);
+	//std::vector<Eigen::AlignedBox<double, 3>> snakejointBoxvec;
 
 
 
@@ -83,12 +87,11 @@ public:
 private:
 	//Project comment
 	// Prepare array-based edge data structures and priority queue
-	
+
 	//double calc_related_distance(int i);
 	//void add_weights();
 
 	//end Project comment
-	
+
 	void Animate();
 };
-

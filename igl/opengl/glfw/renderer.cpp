@@ -4,7 +4,8 @@
 #include "igl/look_at.h"
 
 Renderer::Renderer() : selected_core_index(0),
-next_core_id(2)
+next_core_id(2),
+change_camera(0)
 {
 	core_list.emplace_back(igl::opengl::ViewerCore());
 	core_list.front().id = 1;
@@ -72,12 +73,47 @@ IGL_INLINE void Renderer::draw(GLFWwindow* window)
 			if (mesh.is_visible & core.id)
 			{// for kinematic chain change scn->MakeTrans to parent matrix
 				//Project comment
-				if (selected_core_index == 0) {
+				//if (selected_core_index == 0) {
+				if (change_camera != 0) {
 					//new camera
-					Eigen::Matrix4d headTransMat = scn->MakeTransd() * scn->CalcParentsTrans(0) * scn->data(0).MakeTransd();
-					core.camera_translation = (headTransMat * Eigen::Vector4d(0, 0.8, 0.8, -1)).block(0, 0, 3, 1).cast<float>();
-					core.camera_eye = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, -1, 0)).block(0, 0, 3, 1).cast<float>();
-					core.camera_up = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, 0, -1)).block(0, 0, 3, 1).cast<float>();
+					//Eigen::Matrix4d headTransMat = scn->MakeTransd() * scn->CalcParentsTrans(0) * scn->data(0).MakeTransd();
+					//Eigen::Vector3d curr_vt = scn->vT[scn->vT.size() - 1]; //(headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, -1, 0)).block(0, 0, 3, 1).cast<float>();
+					//core.camera_eye = Eigen::Vector3d(curr_vt(2), curr_vt(1), curr_vt(0)).cast<float>();
+					//Eigen::Vector3d rot = GetScene()->snake_links[14].GetTranslation() - GetScene()->snake_links[15].GetTranslation();
+					//rot = Eigen::Vector3d(rot[2], rot[1], rot[0]);
+
+					//core.camera_eye = scn->target_pose.cast<float>() +Eigen::Vector3f(0, 0, M_PI / 2);// rot.cast<float>();// scn->target_pose.cast<float>();
+					//core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();// ](headTransMat* Eigen::Vector4d(0, 0.8, 0.8, -1)).block(0, 0, 3, 1).cast<float>();
+					//core.camera_up = (headTransMat.block(0, 0, 3, 3) * Eigen::Vector3d(0, 0, -1)).block(0, 0, 3, 1).cast<float>();
+					/*printf("curr camera eye\n");
+					cout << core.camera_eye << endl;
+					printf("curr camera translation\n");
+					cout << core.camera_translation << endl;
+					printf("snake head position\n");
+					cout << scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>() << endl;
+					printf("printf vt of head\n");
+					cout << Eigen::Vector3d(curr_vt(2), curr_vt(1), curr_vt(0)) << endl;*/
+
+					if (scn->target_pose(2) > 0) { // right
+						core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();
+						core.camera_eye = scn->target_pose.cast<float>() + Eigen::Vector3f(-M_PI * 1.25, 0, M_PI / 2);
+						core.camera_up = Eigen::Vector3f(M_PI / 2, 0, 0);
+					}
+					else if (scn->target_pose(2) < 0) { // left
+						core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();
+						core.camera_eye = scn->target_pose.cast<float>() + Eigen::Vector3f(M_PI * 1.25, 0, M_PI / 2);
+						core.camera_up = Eigen::Vector3f(-M_PI, 0, 0);
+					}
+					else if (scn->target_pose(1) > 0) { // up
+						core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();
+						core.camera_eye = scn->target_pose.cast<float>() + Eigen::Vector3f(0, -M_PI * 1.25, M_PI / 2);
+						core.camera_up = Eigen::Vector3f(0, M_PI, 0);
+					}
+					else if (scn->target_pose(1) < 0) { //down
+						core.camera_translation = -scn->snake_links[scn->snake_links.size() - 1].GetTranslation().cast<float>();
+						core.camera_eye = scn->target_pose.cast<float>() + Eigen::Vector3f(0, M_PI * 1.25, M_PI / 2);
+						core.camera_up = Eigen::Vector3f(0, -M_PI, 0);
+					}
 				}
 				else {
 					core.camera_translation = prev_camera_translation;
@@ -127,7 +163,7 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer, int coresNum, 
 			core().toggle(scn->data_list[i].show_faces);
 			core().toggle(scn->data_list[i].show_lines);
 			core().toggle(scn->data_list[i].show_texture);
-			
+
 			//Ass 2 comment
 			core().toggle(scn->data_list[i].show_overlay);
 			core().toggle(scn->data_list[i].show_overlay_depth);
@@ -179,7 +215,7 @@ void Renderer::MouseProcessing(int button) {
 			scn->data().MyTranslateInSystem(scn->GetRotation(), Eigen::Vector3d(0, yToMove, 0));
 			//end comment Project
 			scn->WhenTranslate();
-			
+
 		}
 		else
 		{
@@ -229,7 +265,7 @@ void Renderer::RotateCamera(float amtX, float amtY) {
 
 }
 
-Renderer::~Renderer(){ }
+Renderer::~Renderer() { }
 
 
 //Ass 2 comment
@@ -272,15 +308,15 @@ void Renderer::changeRotateAxis(int rotate) {
 			scn->data().MyRotate(Eigen::Vector3d(1, 0, 0), 0.1, false);
 			break;
 		case GLFW_KEY_LEFT:
-			scn->data().MyRotate(Eigen::Vector3d(0, 0, 1), -0.1,true);
+			scn->data().MyRotate(Eigen::Vector3d(0, 0, 1), -0.1, true);
 			break;
 		case GLFW_KEY_RIGHT:
-			scn->data().MyRotate(Eigen::Vector3d(0, 0, 1), 0.1,true);
+			scn->data().MyRotate(Eigen::Vector3d(0, 0, 1), 0.1, true);
 			break;
 		default:
 			break;
 		}
-		
+
 	}
 	else {
 		switch (rotate)
@@ -289,7 +325,7 @@ void Renderer::changeRotateAxis(int rotate) {
 			scn->MyRotate(Eigen::Vector3d(1, 0, 0), -0.1, false);
 			break;
 		case GLFW_KEY_DOWN:
-			scn->MyRotate(Eigen::Vector3d(1, 0, 0), 0.1,false);
+			scn->MyRotate(Eigen::Vector3d(1, 0, 0), 0.1, false);
 			break;
 		case GLFW_KEY_LEFT:
 			scn->MyRotate(Eigen::Vector3d(0, 0, 1), -0.1, true);
@@ -300,7 +336,7 @@ void Renderer::changeRotateAxis(int rotate) {
 		default:
 			break;
 		}
-		
+
 	}
 }
 //end Ass3

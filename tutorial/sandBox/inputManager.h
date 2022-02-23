@@ -138,7 +138,7 @@ void glfw_window_size(GLFWwindow* window, int width, int height)
 	Renderer* rndr = (Renderer*)glfwGetWindowUserPointer(window);
 	//igl::opengl::glfw::Viewer* scn = rndr->GetScene();
 
-    rndr->post_resize(window,width, height);
+	rndr->post_resize(window, width, height);
 
 }
 
@@ -154,12 +154,12 @@ void glfw_window_size(GLFWwindow* window, int width, int height)
 
 static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int modifier)
 {
-	Renderer* rndr = (Renderer*) glfwGetWindowUserPointer(window);
+	Renderer* rndr = (Renderer*)glfwGetWindowUserPointer(window);
 	SandBox* scn = (SandBox*)rndr->GetScene();
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 
-	else if(action == GLFW_PRESS || action == GLFW_REPEAT)
+	else if (action == GLFW_PRESS || action == GLFW_REPEAT)
 		switch (key)
 		{
 		case 'A':
@@ -203,7 +203,14 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case '[':
 		case ']':
 		{
-			rndr->ChangeCamera(key);
+			//rndr->ChangeCamera(key);
+			//project comment
+			if (rndr->change_camera == 0)
+				rndr->change_camera = 1;
+			else
+				rndr->change_camera = 0;
+
+			//end project comment
 			break;
 		}
 		case ';':
@@ -213,7 +220,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			scn->data().show_faceid = !scn->data().show_faceid;
 			break;
 		case 'w':
-		case 'W':			
+		case 'W':
 			//Project comment
 			//W is in movment to the screen
 			if (scn->isGameStarted) {
@@ -268,7 +275,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			}
 			//end comment Project
 			break;
-		//Project comment
+			//Project comment
 		case GLFW_KEY_UP:
 			if (scn->isGameStarted) {
 				if (scn->right) {
@@ -365,7 +372,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 					scn->right = false;
 			}
 			break;
-		//end comment Project
+			//end comment Project
 
 		case ' ':
 			//project
@@ -376,15 +383,21 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			break;
 			//end project
 		case 'k':
-		case 'K':		
+		case 'K':
+			printf("curr camera eye\n");
+			cout << rndr->core_list[rndr->selected_core_index].camera_eye << endl;
+			printf("curr camera translation\n");
+			cout << rndr->core_list[rndr->selected_core_index].camera_translation << endl;
 			break;
 
 		case 'j':
 		case 'J':
+			printf("snake head position\n");
+			cout << scn->snake_links[scn->snake_links.size() - 1].GetTranslation() << endl;
 			break;
 
 		case'P':
-		case 'p': 
+		case 'p':
 			break;
 		case 'D':
 		case 'd':
@@ -397,11 +410,11 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			break;
 		}
 		//end Ass3
-		default: 
+		default:
 			Eigen::Vector3f shift;
 			float scale;
 			rndr->core().get_scale_and_shift_to_fit_mesh(scn->data().V, scn->data().F, scale, shift);
-			
+
 			std::cout << "near " << rndr->core().camera_dnear << std::endl;
 			std::cout << "far " << rndr->core().camera_dfar << std::endl;
 			std::cout << "angle " << rndr->core().camera_view_angle << std::endl;
@@ -415,7 +428,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 }
 
 
-void Init(Display& display, igl::opengl::glfw::imgui::ImGuiMenu *menu)
+void Init(Display& display, igl::opengl::glfw::imgui::ImGuiMenu* menu)
 {
 	display.AddKeyCallBack(glfw_key_callback);
 	//Project comment cube map

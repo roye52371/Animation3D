@@ -54,6 +54,7 @@ static bool all_button_actions(const char* id, SandBox& viewer) {
 		isButtuned = false;
 	}
 	else if (!viewer.isNextLevel && viewer.loose) {
+		viewer.reset_game();
 		if (ImGui::Button("             Play Again             ")) {
 			viewer.isActive = true;
 			isButtuned = true;
@@ -61,10 +62,11 @@ static bool all_button_actions(const char* id, SandBox& viewer) {
 			viewer.score = 0;
 			viewer.isGameStarted = true;
 			viewer.loose = false;
-			viewer.reset_game();
+			//viewer.reset_game();
 		}
 	}
-	else if (viewer.isNextLevel) { 
+	else if (viewer.isNextLevel) {
+		viewer.reset_game();
 		if (ImGui::Button("             START OVER             ")) {
 			window_appirance = true;
 			isButtuned = true;
@@ -131,7 +133,7 @@ int main(int argc, char *argv[])
 	  ImGui::SetNextWindowPos(ImVec2(0.f * menu.menu_scaling(), 0), ImGuiCond_Always);
 	  ImGui::SetNextWindowSize(ImVec2(400, 1000), ImGuiCond_Always);
 	  static bool showWindow = true;
-	  if (!viewer.isNextLevel && static_cast<int>(glfwGetTime()) - acc_time > 10) {
+	  if (!viewer.isNextLevel && static_cast<int>(glfwGetTime()) - acc_time > 30) {
 		  viewer.isActive = false;
 		  viewer.loose = true;
 		  if (!ImGui::Begin(
@@ -249,6 +251,7 @@ int main(int argc, char *argv[])
   Init(*disp, &menu);
   renderer.init(&viewer, 3, &menu);
   renderer.selected_core_index = 1;
+  renderer.change_camera = 0;//set to default
 
   disp->launch_rendering(true);
   

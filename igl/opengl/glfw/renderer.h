@@ -10,14 +10,14 @@
 struct GLFWwindow;
 
 
-class Renderer 
+class Renderer
 {
 public:
 	Renderer();
 	~Renderer();
-	IGL_INLINE void draw( GLFWwindow* window);
-	IGL_INLINE void init(igl::opengl::glfw::Viewer* scn,int coresNum, igl::opengl::glfw::imgui::ImGuiMenu *_menu);
-	
+	IGL_INLINE void draw(GLFWwindow* window);
+	IGL_INLINE void init(igl::opengl::glfw::Viewer* scn, int coresNum, igl::opengl::glfw::imgui::ImGuiMenu* _menu);
+
 	//IGL_INLINE bool key_pressed(unsigned int unicode_key, int modifiers);
 
 		// Returns **true** if action should be cancelled.
@@ -84,10 +84,10 @@ public:
 	// IGL_INLINE void select_hovered_core();
 
 	// Callbacks
-	 double Picking(double x, double y);
-	 inline void Animate() { scn->Animate(); };
+	double Picking(double x, double y);
+	inline void Animate() { scn->Animate(); };
 	IGL_INLINE bool key_pressed(unsigned int unicode_key, int modifier);
-	IGL_INLINE void resize(GLFWwindow* window,int w, int h); // explicitly set window size
+	IGL_INLINE void resize(GLFWwindow* window, int w, int h); // explicitly set window size
 	IGL_INLINE void post_resize(GLFWwindow* window, int w, int h); // external resize due to user interaction
 	void SetScene(igl::opengl::glfw::Viewer* scn);
 	void UpdatePosition(double xpos, double ypos);
@@ -105,7 +105,7 @@ public:
 	//Ass 2 comment
 	void changeMovingDirection(int dir);//changing moving direction of object according to direction vector and initial velocity
 	//end comment Ass 2
-	
+
 	//Ass3
 	void changeRotateAxis(int rotate);
 	//end Ass3
@@ -116,9 +116,10 @@ public:
 	//project
 	int selected_core_index;
 	std::vector<igl::opengl::ViewerCore> core_list;
+	int change_camera = 0;
 	//end project
 
-	
+
 private:
 	// Stores all the viewing options
 	igl::opengl::glfw::Viewer* scn;
@@ -137,4 +138,3 @@ private:
 	Eigen::Vector3f prev_camera_up;
 	//end comment Project
 };
-
