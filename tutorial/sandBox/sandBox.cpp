@@ -79,6 +79,12 @@ void SandBox::Init(const std::string& config)
 
             if (selected_data_index == 0)
                 V = data().V;
+
+            //data().set_colors(Eigen::RowVector3d(1, 0.55, 0));
+            //data().image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake1.png");
+            data().image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake1.png");
+            //data().image_texture("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/textures/snake.jpg");
+            //data().image_texture("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/textures/snake.jpg");
         }
         nameFileout.close();
     }
