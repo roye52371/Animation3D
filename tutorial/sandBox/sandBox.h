@@ -39,7 +39,9 @@ public:
 
 
 	//Eigen::Vector3d target_pose;
-
+	double snake_length = 1.6;
+	double snake_tail_first_pos = -0.8;
+	double snake_link_len;
 	int scale;
 	int joints_num;
 	std::vector<Eigen::Vector3d>snake_skeleton;

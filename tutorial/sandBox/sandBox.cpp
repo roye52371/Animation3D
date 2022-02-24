@@ -48,12 +48,12 @@ void SandBox::Init(const std::string& config)
     snake_skeleton.resize(joints_num + 1);
     scale = 1;
     //Initialize vT, vQ
-    vT.resize(17);
-    vQ.resize(17);
+    vT.resize(joints_num + 1);
+    vQ.resize(joints_num + 1);
     //snake_links.resize(16); //we have 16 links and 17 dots
     origin_snake_skeleton.resize(joints_num + 1);
-    origin_vT.resize(17);
-    origin_vQ.resize(17);
+    origin_vT.resize(joints_num + 1);
+    origin_vQ.resize(joints_num + 1);
     snakejointBoxvec.resize(joints_num);//we need 16 box and not 17 cause we have 17 points
 
 
@@ -85,10 +85,11 @@ void SandBox::Init(const std::string& config)
     MyTranslate(Eigen::Vector3d(0, 0, -1), true);
 
     //Find points for skelton
-    double z = -0.8 * scale;
+    double z = snake_tail_first_pos * scale;
+    snake_link_len = snake_length / joints_num;
     for (int i = 0; i < snake_skeleton.size(); i++) {
         snake_skeleton.at(i) = Eigen::Vector3d(0, 0, z);
-        z += 0.1 * scale;
+        z += snake_link_len * scale;
     }
 
 
@@ -96,7 +97,7 @@ void SandBox::Init(const std::string& config)
     calc_all_weights();
     //add_weights();
 
-    data().MyRotate(Eigen::Vector3d(0, 1, 0), 3.14 / 2);//rotating the snake to horizontal poistion
+    data().MyRotate(Eigen::Vector3d(0, 1, 0), M_PI / 2);//rotating the snake to horizontal poistion
 
 
     //snake_links.emplace_back();
@@ -105,7 +106,7 @@ void SandBox::Init(const std::string& config)
     //parentsJoints[0] = -1;
     //the 16 other joint that have parents
     printf("before changing snake links\n");
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < joints_num; i++)
     {
         //parentsJoints[i + 1] = i;
         snake_links.emplace_back();
