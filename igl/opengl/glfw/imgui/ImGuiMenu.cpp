@@ -58,13 +58,13 @@ IGL_INLINE void ImGuiMenu::init(Display* disp)
 IGL_INLINE void ImGuiMenu::all_button_actions(const char* id, Viewer& viewer) {
 
     if (viewer.isNextLevel && ImGui::Button("                    Level Up                     ")) {
-        viewer.menu_start = false;
+        //viewer.menu_start = false;
         viewer.isActive = true;
         viewer.isNextLevel = false;
         viewer.start_level();
     }
     else if (viewer.loose && ImGui::Button("                 Play Again?                    ")) {
-        viewer.menu_start = false;
+        //viewer.menu_start = false;
         viewer.loose = false;
         viewer.isGameStarted = true;
         viewer.level = 1;
@@ -74,13 +74,13 @@ IGL_INLINE void ImGuiMenu::all_button_actions(const char* id, Viewer& viewer) {
     }
     else if (!viewer.isNextLevel && viewer.isGameStarted && !viewer.loose) {
         if (!viewer.isPaused && ImGui::Button("                       Pause                         ")) {
-            viewer.menu_start = false;
+            //viewer.menu_start = false;
             viewer.isPaused = true;
             viewer.isActive = false;
             viewer.pause_time = static_cast<int>(glfwGetTime());
         }
         else if (viewer.isPaused && ImGui::Button("                       Resume                      ")) {
-            viewer.menu_start = false;
+            //viewer.menu_start = false;
             viewer.isPaused = false;
             viewer.isActive = true;
             viewer.resume_time = static_cast<int>(glfwGetTime());
@@ -89,7 +89,7 @@ IGL_INLINE void ImGuiMenu::all_button_actions(const char* id, Viewer& viewer) {
         }
 
     }
-    else if (viewer.menu_start &&!viewer.isNextLevel && !viewer.loose && ImGui::Button("                       Start                        ")) {
+    else if (!viewer.isNextLevel && !viewer.loose && ImGui::Button("                       Start                        ")) {
         //std::cout << "b" << std::endl;
         viewer.isGameStarted = true;
         viewer.start_level();
@@ -155,7 +155,7 @@ IGL_INLINE void ImGuiMenu::display_stats(Viewer& viewer)
             viewer.update_timer();
 
         if (viewer.timer <= 5 && viewer.timer % 2 == 1)
-            ImGui::TextColored(ImVec4(1, 0, 0, 1), "	     Time: %d", viewer.timer);
+            ImGui::TextColored(ImVec4(1, 0, 0, 1), "	     Time: %d", viewer.timer); //last 5 seconds in red!!
         else
             ImGui::Text("	     Time: %d", viewer.timer);
     }

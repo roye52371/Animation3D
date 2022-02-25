@@ -133,6 +133,7 @@ namespace igl
 
                //project comment
                 //maybe to delete this
+                void Viewer::check_level_up();
                 void Viewer::clean_data_list();
                 void move_targets();
 

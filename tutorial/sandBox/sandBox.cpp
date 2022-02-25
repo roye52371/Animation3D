@@ -406,7 +406,8 @@ void SandBox::Animate()
         clean_data_list();
         //end comment maybe add into levelk
 
-        levelk();
+        //levelk();
+        check_level_up();
         //end bonus bouncy targets object
 
         //end project comment  

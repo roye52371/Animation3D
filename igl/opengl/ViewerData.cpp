@@ -120,8 +120,8 @@ IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int obj_amount)
     double y = (distr(gen) - 25.0) / 50.0;
     double z = 0;
 
-    double prob = distr(gen);
-    prob < 10 ? z = 0.5 : z = 0;
+    //double prob = distr(gen);
+    //prob < 10 ? z = 0.5 : z = 0;
 
     if (type == BEZIER) {
         srand((unsigned)time(0));

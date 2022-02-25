@@ -1534,6 +1534,19 @@ namespace igl
                 }
             }
 
+            IGL_INLINE void Viewer::check_level_up() {
+                if (score >= targetScore * level) {
+                    level++;
+                    isNextLevel = true;
+                    isActive = false;
+                    score = 0;
+                    timer = 0;
+
+                    creation_gap = 2;
+
+                    //PlaySound(TEXT("C:/Users/pijon/OneDrive/Desktop/animation3D/tutorial/sounds/nextLevel.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+                }
+            }
 
             
             //end comment maybe to delete new target control mangers
