@@ -132,6 +132,19 @@ namespace igl
                 // end Ass3
 
                //project comment
+                //maybe to delete this
+                void Viewer::clean_data_list();
+                void move_targets();
+
+                void generate_target();
+
+                void start_level();
+
+                void update_timer();
+                //comment end, maybe to delete this
+
+
+
                 bool recursiveCheckCollision(Eigen::AlignedBox<double, 3>* node1, igl::AABB<Eigen::MatrixXd, 3>* node2, int i, int snake_link_index);//recursive checker,called by main checker
                 std::vector<Movable> snake_links;
                 Eigen::Vector3d target_pose;
@@ -215,11 +228,27 @@ namespace igl
                 void Viewer::updateScore(ViewerData obj);
                 void Viewer::showCorrectMenu();
 
-                bool isResume = false;
+
+                //maybe to delete this
+                bool isPaused;
+                int pause_time;
+                int resume_time;
+                int paused_time;
+                int TTL;
+                int timer;
+                int start_time;
+                double p; // probability to generate target of type 1
+                int target2_creation;
+                int level1_obj_amount;     
+                int creation_gap;
+                //end comment maybe to delete this
+
+                //bool isResume = false;
                 bool isGameStarted = false;
                 int score = 0;
                 int level = 1;
-                int targetScore = 4;// start target score
+                int old_level = 1;
+                int targetScore = 40;// start target score
                 bool isCollisionTarget;
                 bool isCollisionSnake;
                 bool start;

@@ -37,6 +37,11 @@
 // See this thread for a more detailed discussion:
 // https://github.com/libigl/libigl/pull/1029
 //
+
+//maybe to delete this
+enum type { NONE, BASIC, BOUNCY, BEZIER };
+//end comment , maybe to delete this
+
 namespace igl
 {
 
@@ -191,12 +196,30 @@ namespace igl
             //target movment 
             Eigen::Vector3d speed;
             // 0 - none, 1- basic, 2- bouncy, 4- bezier
-            unsigned int type;
+            //unsigned int type; maybe return from comment
 
-            void speed_change();
+            //maybe to delete this
+            float creation_time;
+            bool isTerminated;
+            double t;
+            Eigen::Matrix <double, 4, 3> MG;
+            Eigen::RowVector4d T;
+            Eigen::Vector3d final_dir;
+            Eigen::Vector3d last_pos;
+            Eigen::Vector3d curr_pos;
+            Eigen::Matrix <double, 4, 3> bezier_points;
+            type type;
+            void igl::opengl::ViewerData::move();
+            void igl::opengl::ViewerData::update_movement_type(enum type new_type);
+            void igl::opengl::ViewerData::calcT();
+            void igl::opengl::ViewerData::initiate_speed(int obj_amount);
+            //end comment maybe to delete this
+
+
+           /* void speed_change();
             double random_speed();
             void update_movement_type(unsigned int);
-            void speed_for_all_types(int level);
+            void speed_for_all_types(int level);*/
             //end Project comment
 
             // Per face attributes

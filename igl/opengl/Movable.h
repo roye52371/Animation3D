@@ -44,6 +44,14 @@ public:
 	//Project comment
 	void Movable::MyRotate(const Eigen::Quaterniond rot);
 	void Movable::RotateInSystem(const Eigen::Matrix3d& mat, const Eigen::Quaterniond rot);
+
+	//maybe to delete this
+	void SetTranslation(Eigen::Vector3d position);
+
+	void LookAt(Eigen::Vector3d forward);
+	//end comment maybe to delete this
+	void Movable::resetTranslation();
+
 	//end Project commnet
 
 	Eigen::Matrix3d GetRotation() const { return Tout.rotation().matrix(); }

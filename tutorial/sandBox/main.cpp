@@ -15,31 +15,31 @@ using namespace std;
 int acc_time = 0;
 
 
-static void drawDotsAndLines(igl::opengl::glfw::Viewer& viewer) {
-
-	for (int i = 1; i <= 4; i++) {
-
-		int savedIndx = viewer.selected_data_index;
-		viewer.load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
-		//viewer.load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
-		if (viewer.data_list.size() > viewer.parents.size())
-		{
-			viewer.parents.push_back(-1);
-			viewer.data_list.back().set_visible(false, 1);
-			viewer.data_list.back().set_visible(true, 2);
-			//viewer.data_list.back().show_faces = 3;
-			viewer.selected_data_index = savedIndx;
-			//Ass3
-			if(i!=1) // below does not needed because we don't want to connect sphere to zcylinders
-			//(we dont want sphere to be father of zcylinder in index 1)
-			{ 
-				int last_index = viewer.data_list.size() - 1;
-				viewer.parents[last_index] = last_index - 1;
-			 }
-			//end Ass3
-		}
-	}
-}
+//static void drawDotsAndLines(igl::opengl::glfw::Viewer& viewer) {
+//
+//	for (int i = 1; i <= 4; i++) {
+//
+//		int savedIndx = viewer.selected_data_index;
+//		viewer.load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/zcylinder.obj");
+//		//viewer.load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/zcylinder.obj");
+//		if (viewer.data_list.size() > viewer.parents.size())
+//		{
+//			viewer.parents.push_back(-1);
+//			viewer.data_list.back().set_visible(false, 1);
+//			viewer.data_list.back().set_visible(true, 2);
+//			//viewer.data_list.back().show_faces = 3;
+//			viewer.selected_data_index = savedIndx;
+//			//Ass3
+//			if(i!=1) // below does not needed because we don't want to connect sphere to zcylinders
+//			//(we dont want sphere to be father of zcylinder in index 1)
+//			{ 
+//				int last_index = viewer.data_list.size() - 1;
+//				viewer.parents[last_index] = last_index - 1;
+//			 }
+//			//end Ass3
+//		}
+//	}
+//}
 
 //project
 
@@ -47,8 +47,9 @@ static bool all_button_actions(const char* id, SandBox& viewer) {
 
 	static bool isButtuned = false;//checking if any buttoned is pressed
 	bool window_appirance = true;
-
+	printf("in here1\n");
 	if (isButtuned == true) {
+		printf("in here2\n");
 		viewer.isActive = true;
 		window_appirance = false;
 		isButtuned = false;
@@ -56,12 +57,26 @@ static bool all_button_actions(const char* id, SandBox& viewer) {
 	else if (!viewer.isNextLevel && viewer.loose) {
 		viewer.reset_game();
 		if (ImGui::Button("             Play Again             ")) {
-			viewer.isActive = true;
+			printf("in here\n");
+			viewer.level = viewer.old_level;
+			//viewer.isActive = true;
 			isButtuned = true;
-			acc_time = static_cast<int>(glfwGetTime());
+			//acc_time = static_cast<int>(glfwGetTime());
 			viewer.score = 0;
 			viewer.isGameStarted = true;
 			viewer.loose = false;
+			//maybe to delete
+			//viewer.timer = 0;
+			//viewer.update_timer();
+			if (viewer.level == 1) {
+				viewer.creation_gap = 0;
+				viewer.level1_obj_amount = 0;
+				//viewer.target2_creation = 2;
+				//viewer.prev_tic = 0;
+			}
+			viewer.start_level();
+			viewer.isActive = true;
+			//end comment maybe to delete
 			//viewer.reset_game();
 		}
 	}
@@ -70,10 +85,22 @@ static bool all_button_actions(const char* id, SandBox& viewer) {
 		if (ImGui::Button("             START OVER             ")) {
 			window_appirance = true;
 			isButtuned = true;
+			//viewer.level = viewer.old_level;
 			viewer.isNextLevel = false;
 			viewer.isActive = true;
 			viewer.score = 0;
-			acc_time = static_cast<int>(glfwGetTime());
+			//maybe to delete
+			//viewer.timer = 0;
+			//viewer.update_timer();
+			if (viewer.level == 1) {
+				viewer.creation_gap = 0;
+				viewer.level1_obj_amount = 0;
+				//viewer.target2_creation = 2;
+				//viewer.prev_tic = 0;
+			}
+			viewer.start_level();
+			//end comment maybe to delete
+			//acc_time = static_cast<int>(glfwGetTime());
 		}
 		if (ImGui::Button("             NEXT LEVEL             ")) {
 			window_appirance = true;
@@ -81,25 +108,42 @@ static bool all_button_actions(const char* id, SandBox& viewer) {
 			viewer.isNextLevel = false;
 			viewer.isActive = true;
 			viewer.score = 0;
+			viewer.old_level = viewer.level;
 			viewer.level += 1;
-			acc_time = static_cast<int>(glfwGetTime());
+			//acc_time = static_cast<int>(glfwGetTime());
+			//maybe to delete
+			//viewer.timer = 0;
+			//viewer.update_timer();
+			viewer.start_level();
+			//end comment maybe to delete
 		}
 	}
-	else if (viewer.isResume){
+	else if (viewer.isPaused){
 		if (ImGui::Button("              RESUME              ")) {
 			window_appirance = true;
 			isButtuned = true;
 			viewer.isActive = true;//it ruined the movment
-			viewer.isResume = false;
+			viewer.isPaused = false;
 			viewer.isGameStarted = true;
 			viewer.isNextLevel = false;
+			viewer.resume_time = static_cast<int>(glfwGetTime());
+
+			viewer.paused_time += (viewer.resume_time - viewer.pause_time);
+			//maybe to delete
+			//viewer.update_timer();
+			//end comment maybe to delete
 		}
 	}
 	else
 	{
 		if (ImGui::Button("             Let's Start             ")) {
 			isButtuned = true;
-			acc_time = static_cast<int>(glfwGetTime());
+			//acc_time = static_cast<int>(glfwGetTime());
+			//maybe to delete
+			//viewer.update_timer();
+			viewer.start_level();
+			viewer.isActive = true;
+			//end comment maybe to delete
 		}
 	}
 	return window_appirance;
@@ -133,7 +177,10 @@ int main(int argc, char *argv[])
 	  ImGui::SetNextWindowPos(ImVec2(0.f * menu.menu_scaling(), 0), ImGuiCond_Always);
 	  ImGui::SetNextWindowSize(ImVec2(400, 1000), ImGuiCond_Always);
 	  static bool showWindow = true;
-	  if (!viewer.isNextLevel && static_cast<int>(glfwGetTime()) - acc_time > 30) {
+	  //maybe to delete
+	  viewer.update_timer();
+	  //end comment maybe to delete
+	  if (!viewer.isNextLevel && viewer.timer ==0){// static_cast<int>(glfwGetTime()) - acc_time > 30) {
 		  viewer.isActive = false;
 		  viewer.loose = true;
 		  if (!ImGui::Begin(
@@ -151,7 +198,7 @@ int main(int argc, char *argv[])
 			  ImGui::Text("               Score: %d", viewer.score);
 			  ImGui::Text("               Level: %d", viewer.level);
 			  ImGui::PopItemWidth();
-
+			  viewer.isActive = false;
 			  showWindow = all_button_actions("Play Again", viewer);
 
 			  ImGui::End();
@@ -200,7 +247,7 @@ int main(int argc, char *argv[])
 			  ImGui::End();
 		  }
 	  }
-	  else if (viewer.isResume) {
+	  else if (viewer.isPaused) {
 		  viewer.isGameStarted = false;
 		  if (!ImGui::Begin(
 			  "Resume When Ready To Play", &showWindow,
@@ -235,12 +282,14 @@ int main(int argc, char *argv[])
 			  ImGui::SetWindowFontScale(1.5f);
 			  // Expose the same variable directly ...
 			  viewer.isGameStarted = true;
+			  /*viewer.start_level();
+			  viewer.isActive = true;*/
 			  ImGui::PushItemWidth(-100);
 			  ImGui::Text("\n\n\n\n");
 			  ImGui::Text("               Score: %d\n", viewer.score);
 			  ImGui::Text("               Level: %d\n", viewer.level);
 
-			  ImGui::Text("               Timer: %d\n", static_cast<int>(glfwGetTime()) - acc_time);
+			  ImGui::Text("               Timer: %d\n", viewer.timer);// static_cast<int>(glfwGetTime()) - acc_time);
 
 			  ImGui::PopItemWidth();
 			  ImGui::End();

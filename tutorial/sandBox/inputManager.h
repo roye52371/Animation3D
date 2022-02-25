@@ -2,6 +2,9 @@
 #include "igl/opengl/glfw/Display.h"
 #include "igl/opengl/glfw/Renderer.h"
 #include "sandBox.h"
+
+#include <igl/get_seconds.h>
+#include <external/glfw/include/GLFW/glfw3.h>
 //#include <igl/opengl/glfw/imgui/ImGuiMenu.h>
 //#include <igl/opengl/glfw/imgui/ImGuiHelpers.h>
 //#include <../imgui/imgui.h>
@@ -376,9 +379,13 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 
 		case ' ':
 			//project
-			if (scn->isGameStarted) {
+			//if (scn->isGameStarted) {
+			if(!scn->isNextLevel&& scn->isGameStarted && !scn->loose){
 				scn->isActive = false;//it ruined the movment
-				scn->isResume = true;
+				scn->isPaused = true;
+				//maybe to delete
+				scn->pause_time = static_cast<int>(glfwGetTime());
+				//end comment maybe to delete
 			}
 			break;
 			//end project

@@ -104,7 +104,22 @@ namespace igl
                 current_picked(-1),
                 snake_size(1),
                 snake_view(false),
+
+                //maybe to delete this
+                TTL(25),
+                start_time(0),
+                target2_creation(2),
+                isPaused(false),
+                timer(0),
+                pause_time(0),
+                resume_time(0),
+                paused_time(0),
+                level1_obj_amount(0),
+                creation_gap(0),
+                //end comment maybe to delete this
+
                 prev_tic(0),
+
                 level(1),
                 score(0),
                 isCollisionSnake(false),
@@ -149,10 +164,12 @@ namespace igl
 
             //Ass4
             void Viewer::updateScore(ViewerData obj) {
-                if (obj.type == 2)
-                    score = score + 2;
-                else
-                    score = score + 1;
+                obj.type == BASIC ? score += 10 :
+                obj.type == BOUNCY ? score += 20 :
+                obj.type == BEZIER ? score += 30 :
+                score += 0;
+                //PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+                PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
             }
 
 
@@ -239,48 +256,52 @@ namespace igl
                 size_t file_name_idx = mesh_file_name_string.rfind('/');
                 std::string name = mesh_file_name_string.substr(file_name_idx + 1);
 
-                if (name == "sphere.obj") {
-                    data().update_movement_type(2);
+                //if (name == "sphere.obj") {
+                //    data().update_movement_type(2);
 
-                    if (data().type == 2)
-                        data().set_colors(Eigen::RowVector3d(1, 0, 0));
-                    else
-                        data().set_colors(Eigen::RowVector3d(0, 1, 0));
+                //    if (data().type == 2)
+                //        data().set_colors(Eigen::RowVector3d(1, 0, 0));
+                //    else
+                //        data().set_colors(Eigen::RowVector3d(0, 1, 0));
 
-                    // if current object is a target then init its speed vector
-                    if (data().type > 0)
-                        data().speed_for_all_types(level);
-                }
+                //    // if current object is a target then init its speed vector
+                //    if (data().type > 0)
+                //        data().speed_for_all_types(level);
+                //}
 
-                if (name == "cube.obj") {
-                    data().update_movement_type(1);
+                //if (name == "cube.obj") {
+                //    data().update_movement_type(1);
 
-                    if (data().type == 1)
-                        data().set_colors(Eigen::RowVector3d(1, 0, 0));
-                    else
-                        data().set_colors(Eigen::RowVector3d(0, 1, 0));
+                //    if (data().type == 1)
+                //        data().set_colors(Eigen::RowVector3d(1, 0, 0));
+                //    else
+                //        data().set_colors(Eigen::RowVector3d(0, 1, 0));
 
-                    // if current object is a target then init its speed vector
-                    if (data().type > 0)
-                        data().speed_for_all_types(level);
-                }
+                //    // if current object is a target then init its speed vector
+                //    if (data().type > 0)
+                //        data().speed_for_all_types(level);
+                //}
 
-                if (name == "bunny.off") {
-                    data().update_movement_type(1);
+                //if (name == "bunny.off") {
+                //    data().update_movement_type(1);
 
-                    if (data().type == 1)
-                        data().set_colors(Eigen::RowVector3d(1, 0, 1));
-                    else
-                        data().set_colors(Eigen::RowVector3d(0, 1, 0));
+                //    if (data().type == 1)
+                //        data().set_colors(Eigen::RowVector3d(1, 0, 1));
+                //    else
+                //        data().set_colors(Eigen::RowVector3d(0, 1, 0));
 
-                    // if current object is a target then init its speed vector
-                    if (data().type > 0)
-                        data().speed_for_all_types(level);
-                }
+                //    // if current object is a target then init its speed vector
+                //    if (data().type > 0)
+                //        data().speed_for_all_types(level);
+                //}
 
 
                 //end comment project
-
+                
+                //maybe to delete this
+                int current_obj_index = data_list.size() - 1;
+                creating_tree_and_box(current_obj_index);//maybe does not needed for snake so not to do when index is 0
+                //end comment maybe to delete this
 
                 initMeshdata();// reset- init data
                 //end comment Ass1
@@ -1121,7 +1142,6 @@ namespace igl
 
                         //if (recursiveCheckCollision(&data_list[0].tree, &data_list[i].tree, i, curr_box)) {
                         if (recursiveCheckCollision(&snakejointBoxvec[curr_box], &data_list[i].tree, i, curr_box)) {
-                            PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
                             data_list[i].hasCollisioned = true;
                             data_list[i].set_visible(false, 0);
                             updateScore(data_list[i]);
@@ -1342,18 +1362,18 @@ namespace igl
             //end Ass3 comment
 
             //project comment , bonus part connetcted to target 
-            void Viewer::targets_movement(int level) {
-                for (auto& data : data_list)
-                    if (data.type > 0)
-                        data.speed_change();
-            }
+            //void Viewer::targets_movement(int level) {
+            //    for (auto& data : data_list)
+            //        if (data.type > 0)
+            //            data.speed_change();
+            //}
             void Viewer::update_for_new_data(int savedIndx) {
 
                 parents.push_back(-1);
                 data_list.back().set_visible(false, 1);// delete shadow/ hishtakpoot
                 data_list.back().set_visible(true, 2);
                 data_list.back().show_faces = 3;
-                selected_data_index = savedIndx;
+               selected_data_index = savedIndx;
 
                 int last_index = data_list.size() - 1;
             }
@@ -1413,6 +1433,109 @@ namespace igl
                 }
             }
 
+
+
+
+            //maybe to delete new target control managers
+            IGL_INLINE void Viewer::start_level() {
+
+                start_time = static_cast<int>(glfwGetTime());
+                prev_tic = static_cast<int>(glfwGetTime());
+                paused_time = 0;
+
+                p = 1.0 / level + 0.33;
+            }
+
+            IGL_INLINE void Viewer::update_timer() {
+                if (!isNextLevel) {
+                    int offset = static_cast<int>(glfwGetTime()) - start_time;
+                    timer = (level * 30) - offset + paused_time;
+                }
+
+                if (timer == 0 && !isNextLevel) {
+                    //isGameOver = true;
+                    loose = true;
+                    //PlaySound(TEXT("C:/Users/pijon/OneDrive/Desktop/animation3D/tutorial/sounds/gameOver.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+                }
+            }
+
+            IGL_INLINE void Viewer::clean_data_list() {
+                // attempt to use erase_mesh ended up with failure
+
+                if (!isGameStarted || isPaused || loose)
+                    return;
+
+                float tic = static_cast<float>(glfwGetTime());
+                for (auto& mesh : data_list) {
+                    if (mesh.type != NONE && !mesh.isTerminated && tic - mesh.creation_time > TTL) {
+                        mesh.is_visible = false;
+                        mesh.update_movement_type(NONE);
+                        mesh.isTerminated = true;
+                    }
+                }
+
+            }
+
+            IGL_INLINE void Viewer::move_targets()
+            {
+                for (auto& data : data_list)
+                    if (data.type != NONE)
+                        data.move();
+            }
+
+            IGL_INLINE void Viewer::generate_target()
+            {
+                if (!isGameStarted || isPaused || loose)
+                    return;
+
+                if (level == 1 && level1_obj_amount > 3)
+                    return;
+
+                float tic = static_cast<float>(glfwGetTime());
+
+                if (tic - prev_tic > creation_gap) {
+                    prev_tic = tic;
+
+                    std::this_thread::sleep_for(std::chrono::microseconds(5));
+
+                    //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
+                    this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+                    if (data_list.size() > parents.size())
+                    {
+                        parents.push_back(-1);
+                        data_list.back().set_visible(false, 1);
+                        data_list.back().set_visible(true, 2);
+                        data_list.back().show_faces = 3;
+                    }
+
+                    if (level == 1) {
+                        data().update_movement_type(BASIC);
+                    }
+                    else if (target2_creation == 0) { // generate different targets according to level
+                        data().update_movement_type(BEZIER);
+                        target2_creation = 3;
+                    }
+                    else {
+                        double target_proba = (double)(rand() % 10) / 10;
+
+                        target_proba < p ? data().update_movement_type(BASIC) :
+                            data().update_movement_type(BOUNCY);
+
+                        target2_creation--;
+                    }
+
+                    data().type == BEZIER ? data().set_colors(Eigen::RowVector3d(0, 0, 1)) : //blue is bezier
+                        data().type == BOUNCY ? data().set_colors(Eigen::RowVector3d(1, 0, 0)) : // red is bouncy
+                        data().set_colors(Eigen::RowVector3d(0, 1, 0)); //green is basic
+
+                    data().initiate_speed(level1_obj_amount);
+                    level1_obj_amount++;
+                }
+            }
+
+
+            
+            //end comment maybe to delete new target control mangers
 
 
             //end comment project

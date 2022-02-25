@@ -22,6 +22,19 @@
 #define gravity 0.005
 // end project comment
 
+//maybe to detele this
+#include <igl/get_seconds.h>
+#include "external/glfw/include/GLFW/glfw3.h"
+#include <random>
+
+
+#include <igl/get_seconds.h>
+#include "external/glfw/include/GLFW/glfw3.h"
+#include <random>
+
+#define g 0.05
+//end comment maybe to delete this
+
 
 IGL_INLINE igl::opengl::ViewerData::ViewerData()
     : dirty(MeshGL::DIRTY_ALL),
@@ -40,11 +53,161 @@ IGL_INLINE igl::opengl::ViewerData::ViewerData()
     shininess(35.0f),
     id(-1),
     is_visible(1),
-    type(0), // type of object, 0 not moving , 1 move in straight line, 2 move obj in bouncy way
-    speed(Eigen::Vector3d(0, 0, 0))
+    type(NONE), // type of object, NONE is not food
+    speed(Eigen::Vector3d(0, 0, 0)),
+    creation_time(static_cast<float>(glfwGetTime())),
+    isTerminated(false)
 {
     clear();
 };
+
+// PROJECT , MAYBE TO DELETE THIS COMMENT
+IGL_INLINE void igl::opengl::ViewerData::move()
+{
+
+    if (type == BEZIER) {
+        double velocity = 0.5;
+        t += 0.05 * velocity / 2;
+
+        if (t <= 1) {
+            calcT();
+            curr_pos = T * MG;
+            Eigen::Vector3d tangent = (curr_pos - last_pos).normalized();
+            LookAt(tangent);
+            SetTranslation(curr_pos);
+        }
+        else
+            MyTranslate(final_dir * velocity * 0.05, true);
+
+        last_pos = curr_pos;
+    }
+    if (type == BOUNCY) {
+        MyTranslateInSystem(GetRotation(), speed);
+
+        speed.y() -= g;
+
+        if (Tout.matrix()(1, 3) < -4) {
+            speed.y() = -speed.y();
+        }
+
+        // streching the ball
+        speed.y() < 0 ? MyScale(Eigen::Vector3d(1, 1.05, 1)) :
+            MyScale(Eigen::Vector3d(1, 0.95, 1));
+
+    }
+    else
+        MyTranslateInSystem(GetRotation(), speed);
+
+
+}
+
+IGL_INLINE void igl::opengl::ViewerData::update_movement_type(enum type new_type)
+{
+    type = new_type;
+}
+
+IGL_INLINE void igl::opengl::ViewerData::calcT() {
+    T << powf(t, 3), powf(t, 2), t, 1;
+}
+
+IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int obj_amount)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(0, 50);
+
+    double x = (distr(gen) - 25.0) / 50.0;
+    double y = (distr(gen) - 25.0) / 50.0;
+    double z = 0;
+
+    double prob = distr(gen);
+    prob < 10 ? z = 0.5 : z = 0;
+
+    if (type == BEZIER) {
+        srand((unsigned)time(0));
+        Eigen::Vector3d spawner_positions[4];
+        spawner_positions[0] = Eigen::Vector3d(8, 0, 8);
+        spawner_positions[1] = Eigen::Vector3d(-8, 0, 8);
+        spawner_positions[2] = Eigen::Vector3d(-8, 0, -8);
+        spawner_positions[3] = Eigen::Vector3d(8, 0, -8);
+
+        speed = Eigen::Vector3d::Zero();
+        int iSpawner = (rand() % 4);
+        double spawnerX = spawner_positions[iSpawner].x();
+        double spawnerZ = spawner_positions[iSpawner].z();
+
+        int angle = (rand() % 270) - 90;
+
+        Eigen::Matrix <double, 4, 3> spline_points = Eigen::Matrix <double, 4, 3>::Zero();
+
+        Eigen::Vector4d p0, p1, p2, p3;
+        p0 = p1 = p2 = p3 = Eigen::Vector4d::UnitW();
+
+        for (int i = 0; i < 3; ++i) {
+            p1[i] = rand() % 15 - 2;
+            p2[i] = rand() % 15 - 2;
+            p3[i] = rand() % 15 - 2;
+        }
+
+        double angel_rad = angle * M_PI / 180;
+
+        Eigen::Matrix <double, 3, 4> trans;		//	x rotation and translation to spawner
+        trans << cosf(angel_rad), 0, -sinf(angel_rad), spawnerX,
+            0, 1, 0, 0,
+            sinf(angel_rad), 0, cosf(angel_rad), spawnerZ;
+
+        spline_points.row(0) = trans * p0;
+        spline_points.row(1) = trans * p1;
+        spline_points.row(2) = trans * p2;
+        spline_points.row(3) = trans * p3;
+
+        bezier_points = spline_points;
+        Eigen::Matrix4d	M;					// Blending functions matrix
+        M << -1, 3, -3, 1,
+            3, -6, 3, 0,
+            -3, 3, 0, 0,
+            1, 0, 0, 0;
+
+        MG = M * bezier_points;
+        T << 0, 0, 0, 1;
+
+        t = 0;
+        final_dir = (bezier_points.row(3) - bezier_points.row(2)).normalized();
+    }
+    if (type == BOUNCY) {
+        speed = Eigen::Vector3d(x / 4.0, y / 20.0, -z);
+
+        x > 0 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(-6, 0, 0)) :
+            MyTranslateInSystem(GetRotation(), Eigen::Vector3d(6, 0, 0));
+    }
+    else {
+
+        if (obj_amount < 4) { // when in level 1 basic is not moviing cause under 4
+            speed = Eigen::Vector3d::Zero();
+            set_colors(Eigen::RowVector3d(rand() % 2, rand() % 2, rand() % 2));
+            obj_amount == 0 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(-3, -3, 0)) :
+                obj_amount == 1 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(-3, 3, 0)) :
+                obj_amount == 2 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(3, -3, 0)) :
+                MyTranslateInSystem(GetRotation(), Eigen::Vector3d(3, 3, 0));
+        }
+        else { //else basic is moving regulary
+            speed = Eigen::Vector3d(x / 8.0, z != 0 ? 0.25 : y / 5.0, -z);
+
+            std::random_device pos_rd;
+            std::mt19937 pos_gen(pos_rd());
+            std::uniform_int_distribution<> pos_distr(0, 50);
+
+            double pos_x = (pos_distr(pos_gen) - 25.0) / 5.0;
+            double pos_y = (pos_distr(pos_gen) - 25.0) / 5.0;
+
+            z != 0 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(pos_x, -4, 0)) :
+                MyTranslateInSystem(GetRotation(), Eigen::Vector3d(pos_x, pos_y, 0));
+        }
+
+    }
+}
+//end comment project, maybe to delete this
+
 
 IGL_INLINE void igl::opengl::ViewerData::set_face_based(bool newvalue)
 {
@@ -103,6 +266,7 @@ void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& aligned
 
 
 //project comment
+/*
 void igl::opengl::ViewerData::speed_change() {
 
     MyTranslateInSystem(GetRotation(), speed);
@@ -131,6 +295,7 @@ void igl::opengl::ViewerData::speed_for_all_types(int level)
     else//cube or bunny- use linear movement
         speed = (0.08 * level) * Eigen::Vector3d(x / 10, y / 10, z);
 }
+*/
 //end project
 
 //Ass2 comment

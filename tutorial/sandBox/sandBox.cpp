@@ -111,7 +111,7 @@ void SandBox::Init(const std::string& config)
     //Joints.at(0).SetCenterOfRotation(Eigen::Vector3d(0, 0, -0.8));
     //parentsJoints[0] = -1;
     //the 16 other joint that have parents
-    printf("before changing snake links\n");
+    //printf("before changing snake links\n");
     for (int i = 0; i < joints_num; i++)
     {
         //parentsJoints[i + 1] = i;
@@ -130,7 +130,7 @@ void SandBox::Init(const std::string& config)
         //snake_links.at(i).SetCenterOfRotation(Eigen::Vector3d(0, 0, -0.8));// check if needed
         //std::cout << parents[i + 1] <<"\n";
     }
-    printf("after changing snake links\n");
+    //printf("after changing snake links\n");
 
     target_pose = snake_skeleton[joints_num];
     U = V;
@@ -143,7 +143,14 @@ void SandBox::Init(const std::string& config)
     }
 
     initBoundingBoxofSnakeJoints();
-    printf("got to the end of init in sandBox\n");
+    
+
+    //maybe to delete this code
+    //start_level(); //add this to the part we start the game in menu and not here,
+    //it cause problem because it is set is active here to true and start time, when we want to start time only when we start the game
+    //isActive = true;
+    //end comment maybe to deletet this code
+
     //end comment Project  
 }
 
@@ -241,13 +248,15 @@ void SandBox::levelk()
         isNextLevel = true;
         isActive = false;
         isGameStarted = false;
+        creation_gap = 2;
+        timer = 0;
         reset_game();
-        PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
-        //PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+        //PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+        PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
     }
     else {
-        target_generator(level);
-        targets_movement(level);
+        //target_generator(level);
+        //targets_movement(level);
     }
 }
 void SandBox::reset_game()
@@ -264,6 +273,21 @@ void SandBox::reset_game()
         vT.at(i) = origin_vT.at(i);
         vQ.at(i) = origin_vQ.at(i);
     }
+    //reset links snake translation tin tout, tout also affect rotation as well
+    for (int i = 0; i < joints_num; i++)
+    {
+        snake_links.at(i).resetTranslation();
+    }
+    for (int i = 0; i < joints_num; i++)
+    {
+        Eigen::Vector3d currect_snake_skeleton = Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0)); //snake_skeleton.at(i);// Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));
+        snake_links.at(i).MyTranslate(currect_snake_skeleton, true);
+        
+    }
+    //printf("after changing snake links\n");
+
+    target_pose = snake_skeleton[joints_num];
+    
     //reset moving direction
     right = true;
     left = false;
@@ -363,11 +387,17 @@ void SandBox::SnakeMovementAndSkining() {
 
 void SandBox::Animate()
 {
-    if (isActive && !isResume)
+    if (isActive && !isPaused)
     {
         SnakeMovementAndSkining();
         
         checkCollision();
+
+        //maybe add into levelk
+        generate_target();
+        move_targets();
+        clean_data_list();
+        //end comment maybe add into levelk
 
         levelk();
         //end bonus bouncy targets object
