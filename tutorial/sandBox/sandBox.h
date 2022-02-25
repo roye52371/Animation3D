@@ -32,6 +32,7 @@ public:
 	void levelk();
 	void reset_game();
 	void initBoundingBoxofSnakeJoints();
+	void SnakeMovementAndSkining();
 	/////////////////
 	//----------------------------------Project----------------------------------
 

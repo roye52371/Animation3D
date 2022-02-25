@@ -321,54 +321,52 @@ void SandBox::drawsnakejointBox(Eigen::AlignedBox<double, 3> box, int color) {
     data_list[0].add_edges(TopRightCeil, BottomRightCeil, colorVec);
     data_list[0].add_edges(TopLeftFloor, BottomLeftFloor, colorVec);
 }
+
+void SandBox::SnakeMovementAndSkining() {
+    //Project comment
+    if (left)
+        target_pose = Eigen::Vector3d(0, 0, -snakeVelocity);
+    else if (right)
+        target_pose = Eigen::Vector3d(0, 0, snakeVelocity);
+    else if (up)
+        target_pose = Eigen::Vector3d(0, snakeVelocity, 0);
+    else if (down)
+        target_pose = Eigen::Vector3d(0, -snakeVelocity, 0);
+    else if (in)
+        target_pose = Eigen::Vector3d(snakeVelocity, 0, 0);
+    else if (out)
+        target_pose = Eigen::Vector3d(-snakeVelocity, 0, 0);
+    else {}
+
+    //Move The Snake
+    calc_next_pos();//find current vT values
+    igl::dqs(V, W, vQ, vT, U);
+    data_list.at(0).set_vertices(U);
+    /* printf("print vT[0]\n");
+     cout << vT.at(0) << endl;*/
+    for (int i = 0; i < snake_links.size(); i++)
+    {
+        //do translationns
+        Eigen::Vector3d currect_vt = Eigen::Vector3d(vT.at(i)(2), vT.at(i)(1), vT.at(i)(0));//vT.at(i);// 
+        Eigen::Vector3d currect_snake_skeleton = Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));//snake_skeleton.at(i);// Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));
+        snake_links.at(i).MyTranslate(currect_vt - currect_snake_skeleton, true);
+        Eigen::Quaterniond quat = Eigen::Quaterniond::FromTwoVectors(currect_vt, currect_snake_skeleton);//vT is new tranlate and snake_skeleton still hold the old translate 
+        snake_links.at(i).MyRotate(quat);
+        //std::cout << parents[i + 1] <<"\n";
+    }
+    //update skelton
+    for (int i = 0; i < snake_skeleton.size(); i++)
+        snake_skeleton[i] = vT[i];
+}
 //end comment Project
+
 
 void SandBox::Animate()
 {
     if (isActive && !isResume)
     {
-        //Project comment
-        if (left)
-            target_pose = Eigen::Vector3d(0, 0, -snakeVelocity);
-        else if (right)
-            target_pose = Eigen::Vector3d(0, 0, snakeVelocity);
-        else if (up)
-            target_pose = Eigen::Vector3d(0, snakeVelocity, 0);
-        else if (down)
-            target_pose = Eigen::Vector3d(0, -snakeVelocity, 0);
-        else if (in)
-            target_pose = Eigen::Vector3d(snakeVelocity, 0, 0);
-        else if (out)
-            target_pose = Eigen::Vector3d(-snakeVelocity, 0, 0);
-        else {}
-
-        //Move The Snake
-        calc_next_pos();//find current vT values
-        igl::dqs(V, W, vQ, vT, U);
-        data_list.at(0).set_vertices(U);
-        /* printf("print vT[0]\n");
-         cout << vT.at(0) << endl;*/
-        for (int i = 0; i < snake_links.size(); i++)
-        {
-            //do translationns
-            Eigen::Vector3d currect_vt = Eigen::Vector3d(vT.at(i)(2), vT.at(i)(1), vT.at(i)(0));//vT.at(i);// 
-            Eigen::Vector3d currect_snake_skeleton = Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));//snake_skeleton.at(i);// Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));
-            snake_links.at(i).MyTranslate(currect_vt - currect_snake_skeleton, true);
-            Eigen::Quaterniond quat = Eigen::Quaterniond::FromTwoVectors(currect_vt, currect_snake_skeleton);//vT is new tranlate and snake_skeleton still hold the old translate 
-            snake_links.at(i).MyRotate(quat);
-            //std::cout << parents[i + 1] <<"\n";
-        }
-        //update skelton
-        for (int i = 0; i < snake_skeleton.size(); i++)
-            snake_skeleton[i] = vT[i];
-        //counter++;
-        //if (counter == 50) {
-        //    counter = 0;
-        //    creating_tree_and_box(0);//0- snake index
-        //    checkCollision();
-        //}
-        //initBoundingBoxofSnakeJoints();
-        //printf("Before collision\n");
+        SnakeMovementAndSkining();
+        
         checkCollision();
 
         levelk();
