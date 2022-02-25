@@ -245,10 +245,11 @@ void SandBox::levelk()
 {
     if (score >= targetScore * level) {
         score = 0;
+        level++;
         isNextLevel = true;
         isActive = false;
         isGameStarted = false;
-        creation_gap = 2;
+        creation_gap = 4;
         timer = 0;
         reset_game();
         //PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
@@ -348,6 +349,12 @@ void SandBox::drawsnakejointBox(Eigen::AlignedBox<double, 3> box, int color) {
 
 void SandBox::SnakeMovementAndSkining() {
     //Project comment
+    //double snake_speed = 0.15;
+
+    if (!isGameStarted || isPaused || loose) {
+        target_pose = Eigen::Vector3d::Zero();
+        return;
+    }
     if (left)
         target_pose = Eigen::Vector3d(0, 0, -snakeVelocity);
     else if (right)

@@ -241,6 +241,7 @@ namespace igl
                 int target2_creation;
                 int level1_obj_amount;     
                 int creation_gap;
+                bool menu_start = true;
                 //end comment maybe to delete this
 
                 //bool isResume = false;

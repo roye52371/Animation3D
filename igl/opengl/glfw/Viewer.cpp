@@ -1444,6 +1444,7 @@ namespace igl
                 paused_time = 0;
 
                 p = 1.0 / level + 0.33;
+                isActive = true;
             }
 
             IGL_INLINE void Viewer::update_timer() {

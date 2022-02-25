@@ -21,6 +21,9 @@
 
 // Forward declarations
 struct ImGuiContext;
+struct ImFont;
+
+
 
 namespace igl
 {
@@ -45,9 +48,19 @@ protected:
   ImGuiContext * context_ = nullptr;
 
 public:
+    //menu
+    ImFont* font;
+    IGL_INLINE void all_button_actions(const char* id, Viewer& viewer);
+
     IGL_INLINE virtual void init(Display* disp);// override;
 
-  IGL_INLINE virtual void reload_font(int font_size = 13);
+    IGL_INLINE virtual void init_callback(Viewer&);
+
+    IGL_INLINE virtual void display_stats(Viewer&);
+    
+
+  IGL_INLINE virtual void reload_font(int font_size = 32); //change font size
+  //end menu
 
   IGL_INLINE virtual void shutdown();// override;
 
