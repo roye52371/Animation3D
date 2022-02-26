@@ -19,6 +19,8 @@
 //#include <imgui_fonts_droid_sans.h>
 //#include <GLFW/glfw3.h>
 #include <iostream>
+
+
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace igl
@@ -72,7 +74,7 @@ IGL_INLINE void ImGuiMenu::all_button_actions(const char* id, Viewer& viewer) {
     }
 
     else if (viewer.loose && ImGui::Button("                 You Lost, Play Again?                    ")) {
-        viewer.reset_game();// we reset only when we pass level , in levelk , so we reset here after lost for new game
+        viewer.reset_game();// we reset only when we pass level , in check_levelk , so we reset here after lost for new game
         //viewer.menu_start = false;
         viewer.loose = false;
         viewer.isGameStarted = true;
@@ -121,30 +123,15 @@ IGL_INLINE void ImGuiMenu::init_callback(Viewer& viewer)
         //if (viewer.level == 1) {
             //viewer.isGameStarted = false;
 
-        if (!ImGui::Begin("   Roye&Dekel Snake Game", &isVisibleWindow, ImGuiWindowFlags_NoSavedSettings)) {
+        if (!ImGui::Begin("   Roye&Dekel Snake Menu", &isVisibleWindow, ImGuiWindowFlags_NoSavedSettings)) {
             ImGui::End();
         }
         else {
             display_stats(viewer);
-            all_button_actions("   Game in Progress     ", viewer);
+            all_button_actions("   Playing     ", viewer);
             ImGui::End();
         }
-        //}
-        //else if (viewer.isNewLevel)
-        //{
-        //    //viewer.isGameStarted = false;
-        //    if (!ImGui::Begin("		   Level up		   ", &isVisibleWindow, ImGuiWindowFlags_NoSavedSettings)) {
-        //        ImGui::End();
-        //    }
-        //    else {
-
-        //        //ImGui::Text("Press NEXT LVL or START OVER\n\n");
-        //        display_stats(viewer);
-
-        //        all_button_actions("		   Level up		   ", viewer);
-        //        ImGui::End();
-        //    }
-        //}
+        
     };
 }
 
@@ -170,7 +157,7 @@ IGL_INLINE void ImGuiMenu::display_stats(Viewer& viewer)
     }
     else if (viewer.loose) {
         ImGui::Text("	     Game Is Over, You Lost\n");
-        ImGui::Text("	     You Reached Level: %d\n", viewer.level);
+        ImGui::Text("	     You Lost In Level: %d\n", viewer.level);
     }
 
     ImGui::Text("\n\n");

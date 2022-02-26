@@ -29,7 +29,7 @@ public:
 	void add_weights();
 	double calc_related_distance(int i);
 
-	void levelk();
+	void check_levelk();
 	//void reset_game();
 	void initBoundingBoxofSnakeJoints();
 	void SnakeMovementAndSkining();

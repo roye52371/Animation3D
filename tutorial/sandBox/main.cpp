@@ -7,7 +7,7 @@
 
 int main(int argc, char* argv[])
 {
-	Display* disp = new Display(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, "Animation3D - Final Project");
+	Display* disp = new Display(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, "Animation3D - Snake Final Project");
 	Renderer renderer;
 	SandBox viewer;
 	igl::opengl::glfw::imgui::ImGuiMenu menu;
@@ -18,6 +18,10 @@ int main(int argc, char* argv[])
 	Eigen::AlignedBox<double, 3> box_first = tree_first.m_box;
 	Init(*disp, &menu);
 	renderer.init(&viewer, 2, &menu);
+	//camera init
+	renderer.selected_core_index = 1;
+	renderer.change_camera = 0;//set to default
+	//end camer init
 
 	disp->SetRenderer(&renderer);
 	menu.init_callback(viewer);
