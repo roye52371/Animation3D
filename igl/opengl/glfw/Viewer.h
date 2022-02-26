@@ -137,7 +137,7 @@ namespace igl
                 void Viewer::clean_data_list();
                 void move_targets();
 
-                void generate_target();
+                void Manger_Targets_Creators();
 
                 void start_level();
 
@@ -242,8 +242,7 @@ namespace igl
                 int timer;
                 int start_time;
                 double p; // probability to generate target of type 1
-                int target2_creation;
-                int level1_obj_amount;     
+                int target2_creation;    
                 int creation_gap;
                 bool menu_start = true;
                 //end comment maybe to delete this

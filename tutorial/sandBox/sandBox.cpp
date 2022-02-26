@@ -313,7 +313,7 @@ void SandBox::Animate()
         //project comment
         SnakeMovementAndSkining();
         checkCollision();
-        generate_target();
+        Manger_Targets_Creators();
         move_targets();
         clean_data_list();//clean sometimes part of objects to prenet to many obj rendering on screen
         check_levelk();

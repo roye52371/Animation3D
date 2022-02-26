@@ -110,18 +110,12 @@ IGL_INLINE void igl::opengl::ViewerData::calcT() {
     T << powf(t, 3), powf(t, 2), t, 1;
 }
 
-IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int obj_amount)
+IGL_INLINE void igl::opengl::ViewerData::init_speed_and_position()
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(0, 50);
-
-    double x = (distr(gen) - 25.0) / 50.0;
-    double y = (distr(gen) - 25.0) / 50.0;
+    double x = genrate_speed_from_uniform_dist();
+    double y = genrate_speed_from_uniform_dist();
     double z = 0;
 
-    //double prob = distr(gen);
-    //prob < 10 ? z = 0.5 : z = 0;
 
     if (type == BEZIER) {
         srand((unsigned)time(0));
@@ -175,39 +169,46 @@ IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int obj_amount)
         final_dir = (bezier_points.row(3) - bezier_points.row(2)).normalized();
     }
     if (type == BOUNCY) {
-        speed = Eigen::Vector3d(x / 4.0, y / 20.0, -z);
+        speed = Eigen::Vector3d(x / 4.0, y / 20.0, 0);// bouncy and basic are z=0
 
-        x > 0 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(-6, 0, 0)) :
+        if (x > 0)
+            MyTranslateInSystem(GetRotation(), Eigen::Vector3d(-6, 0, 0));
+        else
             MyTranslateInSystem(GetRotation(), Eigen::Vector3d(6, 0, 0));
     }
     else {
-        /*
-        if (obj_amount < 4) { // when in level 1 basic is not moviing cause under 4
-            speed = Eigen::Vector3d::Zero();
-            set_colors(Eigen::RowVector3d(rand() % 2, rand() % 2, rand() % 2));
-            obj_amount == 0 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(-3, -3, 0)) :
-                obj_amount == 1 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(-3, 3, 0)) :
-                obj_amount == 2 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(3, -3, 0)) :
-                MyTranslateInSystem(GetRotation(), Eigen::Vector3d(3, 3, 0));
-        }
-        
-        else {
-        */
         //else basic is moving regulary
-            speed = Eigen::Vector3d(x / 8.0, z != 0 ? 0.25 : y / 5.0, -z);
+            speed = Eigen::Vector3d(x / 8.0, y / 5.0, 0);// bouncy and basic are z=0
 
-            std::random_device pos_rd;
-            std::mt19937 pos_gen(pos_rd());
-            std::uniform_int_distribution<> pos_distr(0, 50);
 
-            double pos_x = (pos_distr(pos_gen) - 25.0) / 5.0;
-            double pos_y = (pos_distr(pos_gen) - 25.0) / 5.0;
+            double pos_x = genrate_basic_trans_from_uniform_dist();
+            double pos_y = genrate_basic_trans_from_uniform_dist();
 
-            z != 0 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(pos_x, -4, 0)) :
-                MyTranslateInSystem(GetRotation(), Eigen::Vector3d(pos_x, pos_y, 0));
-        //}
+            MyTranslateInSystem(GetRotation(), Eigen::Vector3d(pos_x, pos_y, 0));
+        
 
     }
+}
+
+IGL_INLINE double igl::opengl::ViewerData::genrate_basic_trans_from_uniform_dist() {
+    std::random_device pos_rd;
+    std::mt19937 pos_gen(pos_rd());
+    std::uniform_int_distribution<> pos_distr(0, 50);
+
+    return (pos_distr(pos_gen) - 25.0) / 5.0;
+    
+   // return 0;
+
+}
+IGL_INLINE double igl::opengl::ViewerData::genrate_speed_from_uniform_dist() {
+    std::random_device rd;
+    std::mt19937 pos_gen(rd());
+    std::uniform_int_distribution<> distr(0, 50);
+
+    return (distr(pos_gen) - 25.0) / 50.0;
+
+    // return 0;
+
 }
 //end comment project, maybe to delete this
 

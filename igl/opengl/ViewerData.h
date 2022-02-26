@@ -212,7 +212,9 @@ namespace igl
             void igl::opengl::ViewerData::move();
             void igl::opengl::ViewerData::update_movement_type(enum type new_type);
             void igl::opengl::ViewerData::calcT();
-            void igl::opengl::ViewerData::initiate_speed(int obj_amount);
+            void igl::opengl::ViewerData::init_speed_and_position();
+            double igl::opengl::ViewerData::genrate_basic_trans_from_uniform_dist();
+            double igl::opengl::ViewerData::genrate_speed_from_uniform_dist();
             //end comment maybe to delete this
 
 

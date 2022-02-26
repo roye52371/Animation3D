@@ -114,7 +114,6 @@ namespace igl
                 pause_time(0),
                 resume_time(0),
                 paused_time(0),
-                level1_obj_amount(0),
                 creation_gap(2),
                 //end comment maybe to delete this
 
@@ -1493,13 +1492,10 @@ namespace igl
                         data.move();
             }
 
-            IGL_INLINE void Viewer::generate_target()
+            IGL_INLINE void Viewer::Manger_Targets_Creators()
             {
                 if (!isGameStarted || isPaused || loose)
                     return;
-
-                //if (level == 1 && level1_obj_amount > 3)
-                //    return;
 
                 float tic = static_cast<float>(glfwGetTime());
 
@@ -1583,11 +1579,7 @@ namespace igl
                     data().type == Energy_Drink ? data().set_colors(Eigen::RowVector3d(1, 1, 1)) : //energy drink power is white
                     data().set_colors(Eigen::RowVector3d(1, 0, 0)); //red is basic
 
-                data().initiate_speed(level1_obj_amount);
-                level1_obj_amount++;
-
-                
-            
+                data().init_speed_and_position();
             }
 
             IGL_INLINE void Viewer::check_level_up() {
