@@ -498,13 +498,13 @@ void mouse_callback(GLFWwindow* window, int button, int action, int modifier)
 				scn->current_picked = i;
 				savedIndx = i;
 				closestZ = depth;
-				std::cout << "--- found " << depth << std::endl;
+				//std::cout << "--- found " << depth << std::endl;
 			}
 		}
 		scn->selected_data_index = savedIndx;
-		scn->data().set_colors(Eigen::RowVector3d(0.2, 0.7, 0.8));
+		//scn->data().set_colors(Eigen::RowVector3d(0.2, 0.7, 0.8));
 		if (lastIndx != savedIndx)
-			scn->data_list[lastIndx].set_colors(Eigen::RowVector3d(255.0 / 255.0, 228.0 / 255.0, 58.0 / 255.0));
+			//scn->data_list[lastIndx].set_colors(Eigen::RowVector3d(255.0 / 255.0, 228.0 / 255.0, 58.0 / 255.0));
 
 		if (scn->current_picked == prev_picked) {
 			scn->current_picked = -1;

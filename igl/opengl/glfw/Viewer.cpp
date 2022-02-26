@@ -1532,17 +1532,29 @@ namespace igl
                 if (level == 1) {
                     data().update_movement_type(BASIC);
                 }
-                else if (target2_creation == 0) { // generate different targets according to level
-                    data().update_movement_type(BEZIER);
-                    target2_creation = 3;
-                }
+                //else if (target2_creation == 0) { // generate different targets according to level
+                //    data().update_movement_type(BEZIER);
+                //    target2_creation = 3;
+                //}
+                //else {
+                //    double target_proba = (double)(rand() % 10) / 10;
+
+                //    target_proba < p ? data().update_movement_type(BASIC) :
+                //        data().update_movement_type(BOUNCY);
+
+                //    target2_creation--;
+                //}
                 else {
-                    double target_proba = (double)(rand() % 10) / 10;
-
-                    target_proba < p ? data().update_movement_type(BASIC) :
+                    int what_to_choose = rand() % 3;
+                    if (what_to_choose == 0) {
+                        data().update_movement_type(BASIC);
+                    }
+                    else if (what_to_choose == 1) {
                         data().update_movement_type(BOUNCY);
-
-                    target2_creation--;
+                    }
+                    else { //what_to_choose == 2
+                        data().update_movement_type(BEZIER);
+                    }
                 }
 
                 data().type == BEZIER ? data().set_colors(Eigen::RowVector3d(0, 0, 1)) : //blue is bezier
