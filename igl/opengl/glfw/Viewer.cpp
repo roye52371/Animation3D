@@ -115,7 +115,7 @@ namespace igl
                 resume_time(0),
                 paused_time(0),
                 level1_obj_amount(0),
-                creation_gap(0),
+                creation_gap(2),
                 //end comment maybe to delete this
 
                 prev_tic(0),
@@ -1134,7 +1134,7 @@ namespace igl
             void Viewer::checkCollision() {
 
                 //for (int i = 1; i < data_list.size() && (score < (targetScore * level)); i++)
-                for (int i = 1; i < data_list.size() && (score < (targetScore * level)); i++)
+                for (int i = 1; i < data_list.size() && (score < (targetScore * level)) && !(loose); i++)
                 {
                     //Project comment
                     for (int curr_box = 0; curr_box < snakejointBoxvec.size(); curr_box++)
@@ -1454,9 +1454,9 @@ namespace igl
                 }
 
                 if (timer == 0 && !isNextLevel) {
-                    //isGameOver = true;
+                    
                     loose = true;
-                    //PlaySound(TEXT("C:/Users/pijon/OneDrive/Desktop/animation3D/tutorial/sounds/gameOver.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+                    
                 }
             }
 
@@ -1489,8 +1489,8 @@ namespace igl
                 if (!isGameStarted || isPaused || loose)
                     return;
 
-                if (level == 1 && level1_obj_amount > 3)
-                    return;
+                //if (level == 1 && level1_obj_amount > 3)
+                //    return;
 
                 float tic = static_cast<float>(glfwGetTime());
 
@@ -1499,39 +1499,59 @@ namespace igl
 
                     std::this_thread::sleep_for(std::chrono::microseconds(5));
 
-                    //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
-                    this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
-                    if (data_list.size() > parents.size())
-                    {
-                        parents.push_back(-1);
-                        data_list.back().set_visible(false, 1);
-                        data_list.back().set_visible(true, 2);
-                        data_list.back().show_faces = 3;
-                    }
-
                     if (level == 1) {
-                        data().update_movement_type(BASIC);
-                    }
-                    else if (target2_creation == 0) { // generate different targets according to level
-                        data().update_movement_type(BEZIER);
-                        target2_creation = 3;
-                    }
-                    else {
-                        double target_proba = (double)(rand() % 10) / 10;
-
-                        target_proba < p ? data().update_movement_type(BASIC) :
-                            data().update_movement_type(BOUNCY);
-
-                        target2_creation--;
+                        //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/cube.obj");
+                        this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
+                        initiate_the_generate_objects();
                     }
 
-                    data().type == BEZIER ? data().set_colors(Eigen::RowVector3d(0, 0, 1)) : //blue is bezier
-                        data().type == BOUNCY ? data().set_colors(Eigen::RowVector3d(1, 0, 0)) : // red is bouncy
-                        data().set_colors(Eigen::RowVector3d(0, 1, 0)); //green is basic
-
-                    data().initiate_speed(level1_obj_amount);
-                    level1_obj_amount++;
+                    if (level > 1) {
+                        int what_to_choose = rand()%2;
+                        if (what_to_choose == 0) {
+                            //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/sphere.obj");
+                            this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/sphere.obj");
+                        }
+                        else {
+                            //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/cube.obj");
+                            this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/cube.obj");
+                        }
+                        initiate_the_generate_objects();
+                    }
                 }
+            }
+
+            void Viewer::initiate_the_generate_objects() {
+                if (data_list.size() > parents.size())
+                {
+                    parents.push_back(-1);
+                    data_list.back().set_visible(false, 1);
+                    data_list.back().set_visible(true, 2);
+                    data_list.back().show_faces = 3;
+                }
+
+                if (level == 1) {
+                    data().update_movement_type(BASIC);
+                }
+                else if (target2_creation == 0) { // generate different targets according to level
+                    data().update_movement_type(BEZIER);
+                    target2_creation = 3;
+                }
+                else {
+                    double target_proba = (double)(rand() % 10) / 10;
+
+                    target_proba < p ? data().update_movement_type(BASIC) :
+                        data().update_movement_type(BOUNCY);
+
+                    target2_creation--;
+                }
+
+                data().type == BEZIER ? data().set_colors(Eigen::RowVector3d(0, 0, 1)) : //blue is bezier
+                    data().type == BOUNCY ? data().set_colors(Eigen::RowVector3d(1, 0, 0)) : // red is bouncy
+                    data().set_colors(Eigen::RowVector3d(0, 1, 0)); //green is basic
+
+                data().initiate_speed(level1_obj_amount);
+                level1_obj_amount++;
+            
             }
 
             IGL_INLINE void Viewer::check_level_up() {
@@ -1551,7 +1571,43 @@ namespace igl
             
             //end comment maybe to delete new target control mangers
 
+            void Viewer::reset_game()
+            {
+                for (int i = 1; i < data_list.size(); i++)
+                    data_list[i].clear();// clear all food
 
+                                         //try to reset snake
+                data_list[0].set_vertices(data_list[0].OV);// OV keeping the first vertics we had to the snake
+
+                                                           //retrieve original values of the snake, original vertices kept in OV variable
+                for (int i = 0; i < snake_skeleton.size(); i++) {
+                    snake_skeleton.at(i) = origin_snake_skeleton.at(i);
+                    vT.at(i) = origin_vT.at(i);
+                    vQ.at(i) = origin_vQ.at(i);
+                }
+                //reset links snake translation tin tout, tout also affect rotation as well
+                for (int i = 0; i < joints_num; i++)
+                {
+                    snake_links.at(i).resetTranslation();
+                }
+                for (int i = 0; i < joints_num; i++)
+                {
+                    Eigen::Vector3d currect_snake_skeleton = Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0)); //snake_skeleton.at(i);// Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));
+                    snake_links.at(i).MyTranslate(currect_snake_skeleton, true);
+
+                }
+                //printf("after changing snake links\n");
+
+                target_pose = snake_skeleton[joints_num];
+
+                //reset moving direction
+                right = true;
+                left = false;
+                up = false;
+                down = false;
+                in = false;
+                out = false;
+            }
             //end comment project
 
 

@@ -181,7 +181,7 @@ IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int obj_amount)
             MyTranslateInSystem(GetRotation(), Eigen::Vector3d(6, 0, 0));
     }
     else {
-
+        /*
         if (obj_amount < 4) { // when in level 1 basic is not moviing cause under 4
             speed = Eigen::Vector3d::Zero();
             set_colors(Eigen::RowVector3d(rand() % 2, rand() % 2, rand() % 2));
@@ -190,7 +190,10 @@ IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int obj_amount)
                 obj_amount == 2 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(3, -3, 0)) :
                 MyTranslateInSystem(GetRotation(), Eigen::Vector3d(3, 3, 0));
         }
-        else { //else basic is moving regulary
+        
+        else {
+        */
+        //else basic is moving regulary
             speed = Eigen::Vector3d(x / 8.0, z != 0 ? 0.25 : y / 5.0, -z);
 
             std::random_device pos_rd;
@@ -202,7 +205,7 @@ IGL_INLINE void igl::opengl::ViewerData::initiate_speed(int obj_amount)
 
             z != 0 ? MyTranslateInSystem(GetRotation(), Eigen::Vector3d(pos_x, -4, 0)) :
                 MyTranslateInSystem(GetRotation(), Eigen::Vector3d(pos_x, pos_y, 0));
-        }
+        //}
 
     }
 }

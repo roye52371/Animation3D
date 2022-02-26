@@ -142,6 +142,7 @@ namespace igl
                 void start_level();
 
                 void update_timer();
+                void Viewer::initiate_the_generate_objects();
                 //comment end, maybe to delete this
 
 
@@ -225,12 +226,14 @@ namespace igl
                 //project comment
                 void Viewer::Initialize_Tree(int index);
 
-
+                void Viewer::reset_game();
                 void Viewer::updateScore(ViewerData obj);
                 void Viewer::showCorrectMenu();
 
 
                 //maybe to delete this
+                int joints_num;
+                std::vector<Eigen::Vector3d>snake_skeleton;
                 bool isPaused;
                 int pause_time;
                 int resume_time;
@@ -259,7 +262,12 @@ namespace igl
                 double snakeVelocity = 0.1;// maybe put 0.03 for start
                 double DiversityFactor_forVtCalc = 3;
                 std::vector<Eigen::AlignedBox<double, 3>> snakejointBoxvec;
-
+                bool up;
+                bool down;
+                bool right;
+                bool left;
+                bool in;
+                bool out;
                 //target and bonus stuff
                 bool loose = false;
                 int snake_size;
@@ -270,6 +278,9 @@ namespace igl
                 typedef std::vector<Eigen::Quaterniond, Eigen::aligned_allocator<Eigen::Quaterniond> > RotationList;
                 RotationList vQ;
                 std::vector<Eigen::Vector3d> vT;
+                RotationList origin_vQ;
+                std::vector<Eigen::Vector3d> origin_vT;
+                std::vector<Eigen::Vector3d>origin_snake_skeleton;
                 //end project comment
 
 

@@ -64,6 +64,7 @@ IGL_INLINE void ImGuiMenu::all_button_actions(const char* id, Viewer& viewer) {
         viewer.start_level();
     }
     else if (viewer.loose && ImGui::Button("                 Play Again?                    ")) {
+        viewer.reset_game();// we reset only when we pass level , in levelk , so we reset here after lost for new game
         //viewer.menu_start = false;
         viewer.loose = false;
         viewer.isGameStarted = true;

@@ -30,7 +30,7 @@ public:
 	double calc_related_distance(int i);
 
 	void levelk();
-	void reset_game();
+	//void reset_game();
 	void initBoundingBoxofSnakeJoints();
 	void SnakeMovementAndSkining();
 	/////////////////
@@ -44,16 +44,18 @@ public:
 	double snake_tail_first_pos = -0.8;
 	double snake_link_len;
 	int scale;
-	int joints_num;
-	std::vector<Eigen::Vector3d>snake_skeleton;
+	//int joints_num;
+	//std::vector<Eigen::Vector3d>snake_skeleton;
 	//std::vector<Movable> Joints;
 	//boolean variable for movment
+	/*
 	bool up;
 	bool down;
 	bool right;
 	bool left;
 	bool in;
 	bool out;
+	*/
 
 
 	typedef
@@ -73,9 +75,9 @@ public:
 	//std::vector<Eigen::Vector3d> vT;
 
 
-	RotationList origin_vQ;
-	std::vector<Eigen::Vector3d> origin_vT;
-	std::vector<Eigen::Vector3d>origin_snake_skeleton;
+	//RotationList origin_vQ;
+	//std::vector<Eigen::Vector3d> origin_vT;
+	//std::vector<Eigen::Vector3d>origin_snake_skeleton;
 	//std::vector<Movable> snake_links;
 	void drawsnakejointBox(Eigen::AlignedBox<double, 3> box, int color);
 	//std::vector<Eigen::AlignedBox<double, 3>> snakejointBoxvec;

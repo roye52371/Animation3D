@@ -380,6 +380,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case ' ':
 			//project
 			//if (scn->isGameStarted) {
+			/*
 			if(!scn->isNextLevel&& scn->isGameStarted && !scn->loose){
 				scn->isActive = false;//it ruined the movment
 				scn->isPaused = true;
@@ -388,20 +389,24 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 				//end comment maybe to delete
 			}
 			break;
+			*/
 			//end project
 		case 'k':
 		case 'K':
+			/*
 			printf("curr camera eye\n");
 			cout << rndr->core_list[rndr->selected_core_index].camera_eye << endl;
 			printf("curr camera translation\n");
 			cout << rndr->core_list[rndr->selected_core_index].camera_translation << endl;
 			break;
-
+			*/
 		case 'j':
 		case 'J':
+			/*
 			printf("snake head position\n");
 			cout << scn->snake_links[scn->snake_links.size() - 1].GetTranslation() << endl;
 			break;
+			*/
 
 		case'P':
 		case 'p':

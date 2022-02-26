@@ -244,13 +244,14 @@ double SandBox::calc_related_distance(int i) {
 void SandBox::levelk()
 {
     if (score >= targetScore * level) {
-        score = 0;
         level++;
         isNextLevel = true;
         isActive = false;
-        isGameStarted = false;
-        creation_gap = 4;
+        score = 0;
         timer = 0;
+
+        creation_gap = 3;
+
         reset_game();
         //PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
         PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
@@ -260,43 +261,7 @@ void SandBox::levelk()
         //targets_movement(level);
     }
 }
-void SandBox::reset_game()
-{
-    for (int i = 1; i < data_list.size(); i++)
-        data_list[i].clear();// clear all food
 
-                             //try to reset snake
-    data_list[0].set_vertices(data_list[0].OV);// OV keeping the first vertics we had to the snake
-
-                                               //retrieve original values of the snake, original vertices kept in OV variable
-    for (int i = 0; i < snake_skeleton.size(); i++) {
-        snake_skeleton.at(i) = origin_snake_skeleton.at(i);
-        vT.at(i) = origin_vT.at(i);
-        vQ.at(i) = origin_vQ.at(i);
-    }
-    //reset links snake translation tin tout, tout also affect rotation as well
-    for (int i = 0; i < joints_num; i++)
-    {
-        snake_links.at(i).resetTranslation();
-    }
-    for (int i = 0; i < joints_num; i++)
-    {
-        Eigen::Vector3d currect_snake_skeleton = Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0)); //snake_skeleton.at(i);// Eigen::Vector3d(snake_skeleton.at(i)(2), snake_skeleton.at(i)(1), snake_skeleton.at(i)(0));
-        snake_links.at(i).MyTranslate(currect_snake_skeleton, true);
-        
-    }
-    //printf("after changing snake links\n");
-
-    target_pose = snake_skeleton[joints_num];
-    
-    //reset moving direction
-    right = true;
-    left = false;
-    up = false;
-    down = false;
-    in = false;
-    out = false;
-}
 void SandBox::initBoundingBoxofSnakeJoints() {
     for (int i = 1; i < joints_num + 1; i++)
     {
@@ -406,8 +371,8 @@ void SandBox::Animate()
         clean_data_list();
         //end comment maybe add into levelk
 
-        //levelk();
-        check_level_up();
+        levelk();
+        //check_level_up();
         //end bonus bouncy targets object
 
         //end project comment  
