@@ -121,7 +121,7 @@ IGL_INLINE void ImGuiMenu::init_callback(Viewer& viewer)
         //if (viewer.level == 1) {
             //viewer.isGameStarted = false;
 
-        if (!ImGui::Begin("   The Best Snake Game", &isVisibleWindow, ImGuiWindowFlags_NoSavedSettings)) {
+        if (!ImGui::Begin("   Roye&Dekel Snake Game", &isVisibleWindow, ImGuiWindowFlags_NoSavedSettings)) {
             ImGui::End();
         }
         else {

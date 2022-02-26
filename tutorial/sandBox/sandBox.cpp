@@ -252,6 +252,7 @@ void SandBox::levelk()
         timer = 0;
 
         creation_gap = 3;
+       
 
         reset_game();
         //PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/levelcomplete.wav"), NULL, SND_NODEFAULT | SND_ASYNC);

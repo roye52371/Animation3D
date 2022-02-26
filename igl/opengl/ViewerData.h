@@ -39,7 +39,7 @@
 //
 
 //maybe to delete this
-enum type { NONE, BASIC, BOUNCY, BEZIER };
+enum type { NONE, BASIC, BOUNCY, BEZIER,Energy_Drink };
 //end comment , maybe to delete this
 
 namespace igl

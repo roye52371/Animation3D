@@ -249,6 +249,8 @@ namespace igl
                 //end comment maybe to delete this
 
                 //bool isResume = false;
+                float speedsnake_tic=0;
+                float last_energy_drink = 0;
                 bool isGameStarted = false;
                 int score = 0;
                 int level = 1;

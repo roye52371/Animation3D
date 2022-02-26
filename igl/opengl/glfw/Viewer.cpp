@@ -168,6 +168,12 @@ namespace igl
                 obj.type == BOUNCY ? score += 20 :
                 obj.type == BEZIER ? score += 30 :
                 score += 0;
+                if (obj.type == Energy_Drink)
+                {
+                    snakeVelocity = 0.3;
+                    speedsnake_tic = static_cast<float>(glfwGetTime());
+
+                }
                 //PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
                 PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
             }
@@ -1458,6 +1464,9 @@ namespace igl
                     loose = true;
                     
                 }
+                if (static_cast<int>(glfwGetTime()) - speedsnake_tic > 5) {
+                    snakeVelocity = 0.1;
+                }
             }
 
             IGL_INLINE void Viewer::clean_data_list() {
@@ -1480,7 +1489,7 @@ namespace igl
             IGL_INLINE void Viewer::move_targets()
             {
                 for (auto& data : data_list)
-                    if (data.type != NONE)
+                    if (data.type != NONE && data.type != Energy_Drink)
                         data.move();
             }
 
@@ -1517,6 +1526,16 @@ namespace igl
                         }
                         initiate_the_generate_objects();
                     }
+                    if (level > 2) {
+                        if (static_cast<float>(glfwGetTime()) - last_energy_drink > TTL) //maybe add more time, we dont want much of it, TTL-we want only want energy on board each time
+                        { 
+                            //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/bunny.off");
+                            this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/bunny.off");
+                            data().update_movement_type(Energy_Drink);//we want it static not moving, as special power to speed more the snake and not for points
+                            initiate_the_generate_objects();
+                            last_energy_drink = static_cast<float>(glfwGetTime());
+                        }
+                    }
                 }
             }
 
@@ -1544,7 +1563,8 @@ namespace igl
 
                 //    target2_creation--;
                 //}
-                else {
+                
+                else if (data().type != Energy_Drink) {// because bunny intiailize before this code with Energy_Drink
                     int what_to_choose = rand() % 3;
                     if (what_to_choose == 0) {
                         data().update_movement_type(BASIC);
@@ -1560,10 +1580,13 @@ namespace igl
 
                 data().type == BEZIER ? data().set_colors(Eigen::RowVector3d(0, 1, 0)) : //green is bezier
                     data().type == BOUNCY ? data().set_colors(Eigen::RowVector3d(0, 0, 1)) : // blue is bouncy
+                    data().type == Energy_Drink ? data().set_colors(Eigen::RowVector3d(1, 1, 1)) : //energy drink power is white
                     data().set_colors(Eigen::RowVector3d(1, 0, 0)); //red is basic
 
                 data().initiate_speed(level1_obj_amount);
                 level1_obj_amount++;
+
+                
             
             }
 
@@ -1620,6 +1643,7 @@ namespace igl
                 down = false;
                 in = false;
                 out = false;
+                snakeVelocity = 0.1;
             }
             //end comment project
 
