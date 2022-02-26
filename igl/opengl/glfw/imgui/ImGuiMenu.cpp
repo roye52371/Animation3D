@@ -57,13 +57,21 @@ IGL_INLINE void ImGuiMenu::init(Display* disp)
 
 IGL_INLINE void ImGuiMenu::all_button_actions(const char* id, Viewer& viewer) {
 
-    if (viewer.isNextLevel && ImGui::Button("                    Level Up                     ")) {
+    if (viewer.isNextLevel && ImGui::Button("                         Level Up                          ")) {
         //viewer.menu_start = false;
         viewer.isActive = true;
         viewer.isNextLevel = false;
         viewer.start_level();
     }
-    else if (viewer.loose && ImGui::Button("                 Play Again?                    ")) {
+    else if (viewer.isNextLevel && ImGui::Button("                Restart Same Level                 ")) {
+        //viewer.menu_start = false;
+        viewer.level = viewer.old_level;
+        viewer.isActive = true;
+        viewer.isNextLevel = false;
+        viewer.start_level();
+    }
+
+    else if (viewer.loose && ImGui::Button("                 You Lost, Play Again?                    ")) {
         viewer.reset_game();// we reset only when we pass level , in levelk , so we reset here after lost for new game
         //viewer.menu_start = false;
         viewer.loose = false;
@@ -74,13 +82,13 @@ IGL_INLINE void ImGuiMenu::all_button_actions(const char* id, Viewer& viewer) {
         viewer.start_level();
     }
     else if (!viewer.isNextLevel && viewer.isGameStarted && !viewer.loose) {
-        if (!viewer.isPaused && ImGui::Button("                       Pause                         ")) {
+        if (!viewer.isPaused && ImGui::Button("                         Pause                           ")) {
             //viewer.menu_start = false;
             viewer.isPaused = true;
             viewer.isActive = false;
             viewer.pause_time = static_cast<int>(glfwGetTime());
         }
-        else if (viewer.isPaused && ImGui::Button("                       Resume                      ")) {
+        else if (viewer.isPaused && ImGui::Button("                         Resume                        ")) {
             //viewer.menu_start = false;
             viewer.isPaused = false;
             viewer.isActive = true;
@@ -90,7 +98,7 @@ IGL_INLINE void ImGuiMenu::all_button_actions(const char* id, Viewer& viewer) {
         }
 
     }
-    else if (!viewer.isNextLevel && !viewer.loose && ImGui::Button("                       Start                        ")) {
+    else if (!viewer.isNextLevel && !viewer.loose && ImGui::Button("                          Start                           ")) {
         //std::cout << "b" << std::endl;
         viewer.isGameStarted = true;
         viewer.start_level();
@@ -161,7 +169,7 @@ IGL_INLINE void ImGuiMenu::display_stats(Viewer& viewer)
             ImGui::Text("	     Time: %d", viewer.timer);
     }
     else if (viewer.loose) {
-        ImGui::Text("	     You Lost :(\n");
+        ImGui::Text("	     Game Is Over, You Lost\n");
         ImGui::Text("	     You Reached Level: %d\n", viewer.level);
     }
 

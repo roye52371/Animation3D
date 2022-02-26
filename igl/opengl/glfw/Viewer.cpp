@@ -1555,11 +1555,12 @@ namespace igl
                     else { //what_to_choose == 2
                         data().update_movement_type(BEZIER);
                     }
+                    
                 }
 
-                data().type == BEZIER ? data().set_colors(Eigen::RowVector3d(0, 0, 1)) : //blue is bezier
-                    data().type == BOUNCY ? data().set_colors(Eigen::RowVector3d(1, 0, 0)) : // red is bouncy
-                    data().set_colors(Eigen::RowVector3d(0, 1, 0)); //green is basic
+                data().type == BEZIER ? data().set_colors(Eigen::RowVector3d(0, 1, 0)) : //green is bezier
+                    data().type == BOUNCY ? data().set_colors(Eigen::RowVector3d(0, 0, 1)) : // blue is bouncy
+                    data().set_colors(Eigen::RowVector3d(1, 0, 0)); //red is basic
 
                 data().initiate_speed(level1_obj_amount);
                 level1_obj_amount++;

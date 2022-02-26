@@ -244,6 +244,7 @@ double SandBox::calc_related_distance(int i) {
 void SandBox::levelk()
 {
     if (score >= targetScore * level) {
+        old_level = level;
         level++;
         isNextLevel = true;
         isActive = false;
