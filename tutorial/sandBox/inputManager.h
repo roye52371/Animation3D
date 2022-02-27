@@ -226,7 +226,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case 'W':
 			//Project comment
 			//W is in movment to the screen
-			if (scn->isGameStarted) {
+			/*if (scn->isGameStarted) {
 				if (scn->up) {
 					scn->up = false;
 				}
@@ -247,14 +247,14 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 					scn->in = true;
 				else
 					scn->in = false;
-			}
+			}*/
 			// end Project comment
 			break;
 		case 's':
 		case 'S':
 			//Project comment
 			//S is out movment
-			if (scn->isGameStarted) {
+			/*if (scn->isGameStarted) {
 				if (scn->up) {
 					scn->up = false;
 				}
@@ -275,7 +275,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 					scn->out = true;
 				else
 					scn->out = false;
-			}
+			}*/
 			//end comment Project
 			break;
 			//Project comment
@@ -290,12 +290,12 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 				if (scn->left) {
 					scn->left = false;
 				}
-				if (scn->in) {
+				/*if (scn->in) {
 					scn->in = false;
 				}
 				if (scn->out) {
 					scn->out = false;
-				}
+				}*/
 
 				if (!scn->up)
 					scn->up = true;
@@ -314,12 +314,12 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 				if (scn->right) {
 					scn->right = false;
 				}
-				if (scn->in) {
+				/*if (scn->in) {
 					scn->in = false;
 				}
 				if (scn->out) {
 					scn->out = false;
-				}
+				}*/
 
 				if (!scn->down)
 					scn->down = true;
@@ -338,12 +338,12 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 				if (scn->right) {
 					scn->right = false;
 				}
-				if (scn->in) {
+				/*if (scn->in) {
 					scn->in = false;
 				}
 				if (scn->out) {
 					scn->out = false;
-				}
+				}*/
 
 				if (!scn->left)
 					scn->left = true;
@@ -362,12 +362,12 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 				if (scn->left) {
 					scn->left = false;
 				}
-				if (scn->in) {
+				/*if (scn->in) {
 					scn->in = false;
 				}
 				if (scn->out) {
 					scn->out = false;
-				}
+				}*/
 
 				if (!scn->right)
 					scn->right = true;

@@ -277,10 +277,10 @@ void SandBox::SnakeMovementAndSkining() {
         target_pose = Eigen::Vector3d(0, snakeVelocity, 0);
     else if (down)
         target_pose = Eigen::Vector3d(0, -snakeVelocity, 0);
-    else if (in)
+    /*else if (in)
         target_pose = Eigen::Vector3d(snakeVelocity, 0, 0);
     else if (out)
-        target_pose = Eigen::Vector3d(-snakeVelocity, 0, 0);
+        target_pose = Eigen::Vector3d(-snakeVelocity, 0, 0);*/
     else {}
 
     //Move The Snake
