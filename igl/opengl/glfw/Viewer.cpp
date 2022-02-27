@@ -106,7 +106,7 @@ namespace igl
                 snake_view(false),
 
                 //maybe to delete this
-                TTL(25),
+                TargetLifeTime(25),
                 start_time(0),
                 target2_creation(2),
                 isPaused(false),
@@ -163,18 +163,24 @@ namespace igl
 
             //Ass4
             void Viewer::updateScore(ViewerData obj) {
-                obj.type == BASIC ? score += 10 :
-                obj.type == BOUNCY ? score += 20 :
-                obj.type == BEZIER ? score += 30 :
-                score += 0;
-                if (obj.type == Energy_Drink)
+                if (obj.type == Energy_Drink && level >2)
                 {
                     snakeVelocity = 0.3;
                     speedsnake_tic = static_cast<float>(glfwGetTime());
+                    //PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/power-boost.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+                    PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/power-boost.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
 
                 }
-                //PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
-                PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+                else {
+                    obj.type == BASIC ? score += 10 :
+                        obj.type == BOUNCY ? score += 20 :
+                        obj.type == BEZIER ? score += 30 :
+                        score += 0;
+
+                    //PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+                    PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/SnakeSound.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+                }
+
             }
 
 
@@ -262,7 +268,7 @@ namespace igl
                 std::string name = mesh_file_name_string.substr(file_name_idx + 1);
 
                 //if (name == "sphere.obj") {
-                //    data().update_movement_type(2);
+                //    data().set_move_type(2);
 
                 //    if (data().type == 2)
                 //        data().set_colors(Eigen::RowVector3d(1, 0, 0));
@@ -275,7 +281,7 @@ namespace igl
                 //}
 
                 //if (name == "cube.obj") {
-                //    data().update_movement_type(1);
+                //    data().set_move_type(1);
 
                 //    if (data().type == 1)
                 //        data().set_colors(Eigen::RowVector3d(1, 0, 0));
@@ -288,7 +294,7 @@ namespace igl
                 //}
 
                 //if (name == "bunny.off") {
-                //    data().update_movement_type(1);
+                //    data().set_move_type(1);
 
                 //    if (data().type == 1)
                 //        data().set_colors(Eigen::RowVector3d(1, 0, 1));
@@ -1455,20 +1461,22 @@ namespace igl
             IGL_INLINE void Viewer::update_timer() {
                 if (!isNextLevel) {
                     int offset = static_cast<int>(glfwGetTime()) - start_time;
-                    timer = (level * 30) - offset + paused_time;
+                    timer = (level * targetTimePerLevel) - offset + paused_time;
                 }
 
                 if (timer == 0 && !isNextLevel) {
                     
                     loose = true;
+                    //PlaySound(TEXT("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/sandBox/game-over-arcade.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
+                    PlaySound(TEXT("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/sandBox/game-over-arcade.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
                     
                 }
-                if (static_cast<int>(glfwGetTime()) - speedsnake_tic > 5) {
+                if (level>2 && static_cast<int>(glfwGetTime()) - speedsnake_tic > 5) {
                     snakeVelocity = 0.1;
                 }
             }
 
-            IGL_INLINE void Viewer::clean_data_list() {
+            IGL_INLINE void Viewer::CleanTargets_After_DefinedTime() {
                 // attempt to use erase_mesh ended up with failure
 
                 if (!isGameStarted || isPaused || loose)
@@ -1476,20 +1484,20 @@ namespace igl
 
                 float tic = static_cast<float>(glfwGetTime());
                 for (auto& mesh : data_list) {
-                    if (mesh.type != NONE && !mesh.isTerminated && tic - mesh.creation_time > TTL) {
+                    if (mesh.type != NONE && !mesh.isTerminated && tic - mesh.creation_time > TargetLifeTime) {
                         mesh.is_visible = false;
-                        mesh.update_movement_type(NONE);
+                        mesh.set_move_type(NONE);
                         mesh.isTerminated = true;
                     }
                 }
 
             }
 
-            IGL_INLINE void Viewer::move_targets()
+            IGL_INLINE void Viewer::Manage_Targets_Moves()
             {
                 for (auto& data : data_list)
-                    if (data.type != NONE && data.type != Energy_Drink)
-                        data.move();
+                    if (data.type != NONE && data.type != Energy_Drink) //drink energy is speical power we want not to move
+                        data.move_target();
             }
 
             IGL_INLINE void Viewer::Manger_Targets_Creators()
@@ -1523,11 +1531,11 @@ namespace igl
                         initiate_the_generate_objects();
                     }
                     if (level > 2) {
-                        if (static_cast<float>(glfwGetTime()) - last_energy_drink > TTL) //maybe add more time, we dont want much of it, TTL-we want only want energy on board each time
+                        if (static_cast<float>(glfwGetTime()) - last_energy_drink > TargetLifeTime) //maybe add more time, we dont want much of it, TargetLifeTime-we want only want energy on board each time
                         { 
                             //this->load_mesh_from_file("C:/Users/97254/Desktop/run_animation2/Animation3D/tutorial/data/bunny.off");
                             this->load_mesh_from_file("C:/Users/roi52/Desktop/ThreeDAnimationCourse/EngineForAnimationCourse/tutorial/data/bunny.off");
-                            data().update_movement_type(Energy_Drink);//we want it static not moving, as special power to speed more the snake and not for points
+                            data().set_move_type(Energy_Drink);//we want it static not moving, as special power to speed more the snake and not for points
                             initiate_the_generate_objects();
                             last_energy_drink = static_cast<float>(glfwGetTime());
                         }
@@ -1545,17 +1553,17 @@ namespace igl
                 }
 
                 if (level == 1) {
-                    data().update_movement_type(BASIC);
+                    data().set_move_type(BASIC);
                 }
                 //else if (target2_creation == 0) { // generate different targets according to level
-                //    data().update_movement_type(BEZIER);
+                //    data().set_move_type(BEZIER);
                 //    target2_creation = 3;
                 //}
                 //else {
                 //    double target_proba = (double)(rand() % 10) / 10;
 
-                //    target_proba < p ? data().update_movement_type(BASIC) :
-                //        data().update_movement_type(BOUNCY);
+                //    target_proba < p ? data().set_move_type(BASIC) :
+                //        data().set_move_type(BOUNCY);
 
                 //    target2_creation--;
                 //}
@@ -1563,13 +1571,13 @@ namespace igl
                 else if (data().type != Energy_Drink) {// because bunny intiailize before this code with Energy_Drink
                     int what_to_choose = rand() % 3;
                     if (what_to_choose == 0) {
-                        data().update_movement_type(BASIC);
+                        data().set_move_type(BASIC);
                     }
                     else if (what_to_choose == 1) {
-                        data().update_movement_type(BOUNCY);
+                        data().set_move_type(BOUNCY);
                     }
                     else { //what_to_choose == 2
-                        data().update_movement_type(BEZIER);
+                        data().set_move_type(BEZIER);
                     }
                     
                 }
@@ -1580,20 +1588,6 @@ namespace igl
                     data().set_colors(Eigen::RowVector3d(1, 0, 0)); //red is basic
 
                 data().init_speed_and_position();
-            }
-
-            IGL_INLINE void Viewer::check_level_up() {
-                if (score >= targetScore * level) {
-                    level++;
-                    isNextLevel = true;
-                    isActive = false;
-                    score = 0;
-                    timer = 0;
-
-                    creation_gap = 2;
-
-                    //PlaySound(TEXT("C:/Users/pijon/OneDrive/Desktop/animation3D/tutorial/sounds/nextLevel.wav"), NULL, SND_NODEFAULT | SND_ASYNC);
-                }
             }
 
             

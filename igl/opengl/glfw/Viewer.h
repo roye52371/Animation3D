@@ -132,10 +132,8 @@ namespace igl
                 // end Ass3
 
                //project comment
-                //maybe to delete this
-                void Viewer::check_level_up();
-                void Viewer::clean_data_list();
-                void move_targets();
+                void Viewer::CleanTargets_After_DefinedTime();
+                void Manage_Targets_Moves();
 
                 void Manger_Targets_Creators();
 
@@ -143,7 +141,7 @@ namespace igl
 
                 void update_timer();
                 void Viewer::initiate_the_generate_objects();
-                //comment end, maybe to delete this
+
 
 
 
@@ -231,21 +229,21 @@ namespace igl
                 void Viewer::showCorrectMenu();
 
 
-                //maybe to delete this
+                int targetTimePerLevel = 30;
                 int joints_num;
                 std::vector<Eigen::Vector3d>snake_skeleton;
                 bool isPaused;
                 int pause_time;
                 int resume_time;
                 int paused_time;
-                int TTL;
+                int TargetLifeTime;
                 int timer;
                 int start_time;
                 double p; // probability to generate target of type 1
                 int target2_creation;    
                 int creation_gap;
                 bool menu_start = true;
-                //end comment maybe to delete this
+                
 
                 //bool isResume = false;
                 float speedsnake_tic=0;

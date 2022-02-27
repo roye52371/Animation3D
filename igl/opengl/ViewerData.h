@@ -198,7 +198,7 @@ namespace igl
             // 0 - none, 1- basic, 2- bouncy, 4- bezier
             //unsigned int type; maybe return from comment
 
-            //maybe to delete this
+            //project comment
             float creation_time;
             bool isTerminated;
             double t;
@@ -209,19 +209,16 @@ namespace igl
             Eigen::Vector3d curr_pos;
             Eigen::Matrix <double, 4, 3> bezier_points;
             type type;
-            void igl::opengl::ViewerData::move();
-            void igl::opengl::ViewerData::update_movement_type(enum type new_type);
+            void igl::opengl::ViewerData::move_target();
+            void igl::opengl::ViewerData::set_move_type(enum type new_type);
             void igl::opengl::ViewerData::calcT();
             void igl::opengl::ViewerData::init_speed_and_position();
             double igl::opengl::ViewerData::genrate_basic_trans_from_uniform_dist();
             double igl::opengl::ViewerData::genrate_speed_from_uniform_dist();
-            //end comment maybe to delete this
+            //end comment project
 
 
-           /* void speed_change();
-            double random_speed();
-            void update_movement_type(unsigned int);
-            void speed_for_all_types(int level);*/
+           
             //end Project comment
 
             // Per face attributes

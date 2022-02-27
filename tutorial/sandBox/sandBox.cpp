@@ -314,8 +314,8 @@ void SandBox::Animate()
         SnakeMovementAndSkining();
         checkCollision();
         Manger_Targets_Creators();
-        move_targets();
-        clean_data_list();//clean sometimes part of objects to prenet to many obj rendering on screen
+        Manage_Targets_Moves();
+        CleanTargets_After_DefinedTime();//clean sometimes part of objects to prenet to many obj rendering on screen
         check_levelk();
         
 

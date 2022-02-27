@@ -32,7 +32,7 @@
 #include "external/glfw/include/GLFW/glfw3.h"
 #include <random>
 
-#define g 0.05
+#define gravity 0.05
 //end comment maybe to delete this
 
 
@@ -61,8 +61,8 @@ IGL_INLINE igl::opengl::ViewerData::ViewerData()
     clear();
 };
 
-// PROJECT , MAYBE TO DELETE THIS COMMENT
-IGL_INLINE void igl::opengl::ViewerData::move()
+// comment project
+IGL_INLINE void igl::opengl::ViewerData::move_target()
 {
 
     if (type == BEZIER) {
@@ -84,24 +84,24 @@ IGL_INLINE void igl::opengl::ViewerData::move()
     if (type == BOUNCY) {
         MyTranslateInSystem(GetRotation(), speed);
 
-        speed.y() -= g;
+        speed.y() -= gravity;
 
         if (Tout.matrix()(1, 3) < -4) {
             speed.y() = -speed.y();
         }
 
-        // streching the ball
+        // making streching of the object
         speed.y() < 0 ? MyScale(Eigen::Vector3d(1, 1.05, 1)) :
-            MyScale(Eigen::Vector3d(1, 0.95, 1));
+            MyScale(Eigen::Vector3d(1, 0.95, 1)); //when minus stretch more cause on the wat to the ground, when hit it goes up become positive so strech less
 
     }
-    else
+    else //basic movement
         MyTranslateInSystem(GetRotation(), speed);
 
 
 }
 
-IGL_INLINE void igl::opengl::ViewerData::update_movement_type(enum type new_type)
+IGL_INLINE void igl::opengl::ViewerData::set_move_type(enum type new_type)
 {
     type = new_type;
 }
@@ -210,7 +210,7 @@ IGL_INLINE double igl::opengl::ViewerData::genrate_speed_from_uniform_dist() {
     // return 0;
 
 }
-//end comment project, maybe to delete this
+//end comment project
 
 
 IGL_INLINE void igl::opengl::ViewerData::set_face_based(bool newvalue)
@@ -269,38 +269,6 @@ void igl::opengl::ViewerData::draw_xyzAxis(Eigen::AlignedBox<double, 3>& aligned
 //end Ass3
 
 
-//project comment
-/*
-void igl::opengl::ViewerData::speed_change() {
-
-    MyTranslateInSystem(GetRotation(), speed);
-    if (type == 2) { //bouncing
-        speed(1) -= gravity;//creates the gravity illusion
-        if (Tout.matrix()(1, 3) < -5) //(1,3) its y position of tout matrix, -5 is random number to imaginaite all most touching the floor
-            speed(1) = -speed(1);//creates the bouncing illusion- changing direction on y axis
-    }
-}
-
-void igl::opengl::ViewerData::update_movement_type(unsigned int new_type) {
-    type = new_type;
-}
-double igl::opengl::ViewerData::random_speed() {
-    return (((double)rand() / (RAND_MAX)) - 0.5);
-}
-void igl::opengl::ViewerData::speed_for_all_types(int level)
-{
-    double x = random_speed();
-    double y = random_speed();
-    double z = random_speed();
-
-    //calc velocity depends on the level, multiple by constants(0.06,0.08) to slow it down little bit
-    if (type == 2)//sphere- use gravity
-        speed = (0.06 * level) * Eigen::Vector3d(x / 10, y, 0);
-    else//cube or bunny- use linear movement
-        speed = (0.08 * level) * Eigen::Vector3d(x / 10, y / 10, z);
-}
-*/
-//end project
 
 //Ass2 comment
 void igl::opengl::ViewerData::drawBox(Eigen::AlignedBox<double, 3> box, int color) {
