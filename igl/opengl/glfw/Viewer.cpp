@@ -1158,8 +1158,8 @@ namespace igl
                             updateScore(data_list[i]);
                             data_list[i].MyTranslate(Eigen::Vector3d(0, 0, 100), true);
                             data_list[i].clear();
-                            cout << "Nice Score!" << endl;
-                            cout << "Your current score is: " << score << endl;
+                            //cout << "Nice Score!" << endl;
+                            //cout << "Your current score is: " << score << endl;
                             //break;// collide in the specific food, dont need to keep check it with other links
                         }
                         //project comment
