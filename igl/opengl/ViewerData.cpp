@@ -120,7 +120,7 @@ IGL_INLINE void igl::opengl::ViewerData::init_speed_and_position()
     if (type == BEZIER) {
         //bezier curve needs n+1 vectors(n=3)
         srand((unsigned)time(0));//set the time to 0 to start produce random numbers with rand() func
-        Eigen::Vector3d spawner_positions[4];];//creates box of positions for each bezier object
+        Eigen::Vector3d spawner_positions[4];//creates box of positions for each bezier object
         spawner_positions[0] = Eigen::Vector3d(8, 0, 8);
         spawner_positions[1] = Eigen::Vector3d(-8, 0, 8);
         spawner_positions[2] = Eigen::Vector3d(-8, 0, -8);
