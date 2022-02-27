@@ -71,7 +71,7 @@ IGL_INLINE void igl::opengl::ViewerData::move_target()
 
         if (t <= 1) {
             calcT();
-            curr_pos = T * MG;
+            curr_pos = T * MG;//2 out of 2 from the needed calcs
             Eigen::Vector3d tangent = (curr_pos - last_pos).normalized();
             LookAt(tangent);
             SetTranslation(curr_pos);
@@ -118,8 +118,9 @@ IGL_INLINE void igl::opengl::ViewerData::init_speed_and_position()
 
 
     if (type == BEZIER) {
-        srand((unsigned)time(0));
-        Eigen::Vector3d spawner_positions[4];
+        //bezier curve needs n+1 vectors(n=3)
+        srand((unsigned)time(0));//set the time to 0 to start produce random numbers with rand() func
+        Eigen::Vector3d spawner_positions[4];];//creates box of positions for each bezier object
         spawner_positions[0] = Eigen::Vector3d(8, 0, 8);
         spawner_positions[1] = Eigen::Vector3d(-8, 0, 8);
         spawner_positions[2] = Eigen::Vector3d(-8, 0, -8);
@@ -130,7 +131,7 @@ IGL_INLINE void igl::opengl::ViewerData::init_speed_and_position()
         double spawnerX = spawner_positions[iSpawner].x();
         double spawnerZ = spawner_positions[iSpawner].z();
 
-        int angle = (rand() % 270) - 90;
+        int angle = (rand() % 270) - 90;//makes the angle to be- -90 <= angle < 180
 
         Eigen::Matrix <double, 4, 3> spline_points = Eigen::Matrix <double, 4, 3>::Zero();
 
@@ -145,7 +146,7 @@ IGL_INLINE void igl::opengl::ViewerData::init_speed_and_position()
 
         double angel_rad = angle * M_PI / 180;
 
-        Eigen::Matrix <double, 3, 4> trans;		//	x rotation and translation to spawner
+        Eigen::Matrix <double, 3, 4> trans;	//x rotation and translation to spawner
         trans << cosf(angel_rad), 0, -sinf(angel_rad), spawnerX,
             0, 1, 0, 0,
             sinf(angel_rad), 0, cosf(angel_rad), spawnerZ;
@@ -156,13 +157,13 @@ IGL_INLINE void igl::opengl::ViewerData::init_speed_and_position()
         spline_points.row(3) = trans * p3;
 
         bezier_points = spline_points;
-        Eigen::Matrix4d	M;					// Blending functions matrix
+        Eigen::Matrix4d	M; //Bernstein basis- for bezier curve calc
         M << -1, 3, -3, 1,
             3, -6, 3, 0,
             -3, 3, 0, 0,
             1, 0, 0, 0;
-
-        MG = M * bezier_points;
+        //Full calc is- T(vector of polynom) * M(computational basis matrix) * Points(Bezier geometry matrix)
+        MG = M * bezier_points;//1 out of 2 from the needed calcs
         T << 0, 0, 0, 1;
 
         t = 0;
