@@ -1570,15 +1570,19 @@ namespace igl
                 
                 else if (data().type != Energy_Drink) {// because bunny intiailize before this code with Energy_Drink
                     int what_to_choose = rand() % 3;
-                    if (what_to_choose == 0) {
+                    if (what_to_choose == 2 || target2_creation == 0)
+                    {
+                        target2_creation = 4;
+                        data().set_move_type(BEZIER);
+                    }
+                    else if (what_to_choose == 0) {
                         data().set_move_type(BASIC);
+                        target2_creation--;
                     }
                     else if (what_to_choose == 1) {
                         data().set_move_type(BOUNCY);
-                    }
-                    else { //what_to_choose == 2
-                        data().set_move_type(BEZIER);
-                    }
+                        target2_creation--;
+                    } 
                     
                 }
 
