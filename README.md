@@ -1,15 +1,16 @@
 # EngineForAnimationCourse
 Graphic Engine based on Libigl
 
-For compiling:
+# For compiling:
 1. Clone or download the project
 2. Download Cmake from the link in the site
 3. Run Cmake gui. choose the project folder and destination folder for the cpp project files. choose after pressing configure choose compiler (VS2019 for example). After finish configuration successfully, press configure again and after it finishes press generate. 
 4. If everything pass successfully got to the destination folder and launch the project. 
 5. Copy configuration.txt from tutorial/sandBox to build/tutorial/sandBox sandBox as a startup project and compile the project (it could take few mineutes);   
 
+# Snake 3D Project
 
-About our project:
+# About our project:
 We made the 3D snake skinning and motion in game space-using the main keys: up, down, left, right. 
 We also implemented two points of view – 
 First, is a static top view(regular view). Second, is from head of the snake(moves dynamically with the snake movement).
@@ -21,7 +22,7 @@ when level achieved the menu showing a next level button("level up")  and restar
 when the game over it show's the 'play again' button.
 For each level the player must obtain a growing number of points before the timer is up, otherwise he lost the game. 
 
-There are 4 movement types:
+# There are 4 movement types:
  - Basic movement linear movement (red color).
  - Bouncing and Gravity movement (blue color). 
  - Bezier curve (green color).
@@ -36,7 +37,7 @@ Points order: Basic << Bouncy and Gravity << Bezier.
  
 •	 When losing in any level- the game over and the player can start over from the first level.
 
-Bonuses: 
+# Bonuses: 
 1. moving target object according to Bezier curve.
 2. Interactive user interface using ImGui.
 3. special bunny target object, when snake collide in it the snake grow up, and move faster for 5 seconds.
@@ -47,7 +48,7 @@ Bonuses:
 8. height map.
 9. texture.
 
-Difficulties:
+# Difficulties:
 
 We had several difficulties for each bonus and for the main project itself.
 1.	One of our biggest struggles that took the most time is the entire dealing with the snake from the start of 'taking it apart' all the way through adding the second camera view. And understanding how to move the joints and the skinning.
